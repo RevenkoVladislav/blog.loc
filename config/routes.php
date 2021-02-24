@@ -1,6 +1,6 @@
 <?php
 return
     [
-        'news' => 'news/index' //actionIndex в NewsController
+        'NewsController' => 'news/index' //actionIndex в NewsController
     ];
 
