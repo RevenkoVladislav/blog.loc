@@ -22,7 +22,7 @@ public function run()
     $uri = $this->getUri();
 
     foreach($this->routes as $pattern => $path){
-        if(!preg_match("#$pattern#", $uri)){
+        if(preg_match("#$pattern#", $uri)){
             $segments = explode('/', $path);
             $controllerName = ucfirst(array_shift($segments)) . 'Controller';
             $actionName = 'action' . ucfirst(array_shift($segments));
