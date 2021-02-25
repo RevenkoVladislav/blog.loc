@@ -23,7 +23,10 @@ public function run()
 
     foreach($this->routes as $pattern => $path){
         if(preg_match("#$pattern#", $uri)){
-            $segments = explode('/', $path);
+            $innerPath = preg_replace("#$pattern#", $path, $uri);
+
+            $segments = explode('/', $innerPath);
+
             $controllerName = ucfirst(array_shift($segments)) . 'Controller';
             $actionName = 'action' . ucfirst(array_shift($segments));
 
@@ -33,7 +36,8 @@ public function run()
             }
 
             $controllerObject = new $controllerName;
-            $run = $controllerObject->$actionName();
+            $run = call_user_func_array([$controllerObject, $actionName], $segments);
+
             if($run != null){
                 break;
             }

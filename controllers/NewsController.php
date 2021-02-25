@@ -8,8 +8,8 @@ class NewsController
         return true;
     }
 
-    public function actionView(){
-        echo 'actionView';
+    public function actionView($id){
+        echo 'actionView ' . $id ;
         return true;
     }
 
