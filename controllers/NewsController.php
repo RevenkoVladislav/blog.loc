@@ -1,15 +1,27 @@
 <?php
 
+require_once (ROOT . '/models/News.php');
+
 class NewsController
 {
     public function actionIndex()
     {
-        echo "actionIndex";
+        echo "actionIndex <br>";
+        $news = News::getAllNews();
+        echo "<pre>";
+        print_r($news);
+        echo "</pre>";
         return true;
     }
 
     public function actionView($id){
-        echo 'actionView ' . $id ;
+        if($id) {
+            echo 'actionView ' . $id . "<br>";
+            $newsById = News::getNewsById($id);
+            echo "<pre>";
+            print_r($newsById);
+            echo "</pre>";
+        }
         return true;
     }
 
