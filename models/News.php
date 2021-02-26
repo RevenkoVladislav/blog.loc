@@ -1,6 +1,5 @@
 <?php
 
-require_once (ROOT . '/components/DB.php');
 class News
 {
     public static function getAllNews()
