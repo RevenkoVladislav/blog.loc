@@ -6,11 +6,9 @@ class NewsController
 {
     public function actionIndex()
     {
-        echo "actionIndex <br>";
+        //echo "actionIndex <br>";
         $news = News::getAllNews();
-        echo "<pre>";
-        print_r($news);
-        echo "</pre>";
+        require_once (ROOT . '/views/index.html');
         return true;
     }
 
