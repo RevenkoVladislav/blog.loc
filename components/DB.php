@@ -5,8 +5,12 @@ class DB
 public static function dbConnection()
 {
     $params = require_once (ROOT . '/config/db_params.php');
-    $db = new PDO("mysql:host={$params['host']};dbname={$params['dbname']}", $params['user'], $params['password']);
-    $db->exec('set names utf8');
-    return $db;
+    $dsn = "mysql:host={$params['host']};dbname={$params['dbname']};charset=utf8";
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ];
+    $connection = new PDO($dsn, $params['user'], $params['password'], $options);
+    return $connection;
 }
 }
