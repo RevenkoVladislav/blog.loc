@@ -8,7 +8,7 @@ class NewsController
     {
         //echo "actionIndex <br>";
         $news = News::getAllNews();
-        require_once (ROOT . '/views/index.html');
+        
         return true;
     }
 

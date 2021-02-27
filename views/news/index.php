@@ -66,19 +66,20 @@
 				<!-- Main -->
 					<div id="main">
 						<!-- Post -->
+                        <?php foreach($news as $newsItem):?>
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">Статья</a></h2>
-										<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+										<h2><a href="#"><?=$newsItem['stateName'];?></a></h2>
+										<p><?=$newsItem['stateDescription'];?></p>
 									</div>
 									<div class="meta">
-										<time class="published" datetime="2015-11-01">November 1, 2015</time>
-										<a href="#" class="author"><span class="name">Jane Doe</span><img src="/views/images/avatar.jpg" alt="" /></a>
+										<time class="published" datetime="<?=$newsItem['stateDate'];?>"><?=$newsItem['stateDate'];?></time>
+										<a href="#" class="author"><span class="name"><?=$newsItem['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
 									</div>
 								</header>
 								<a href="#" class="image featured"><img src="/views/images/pic01.jpg" alt="" /></a>
-								<p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+								<p><?=$newsItem['stateDescription'];?>Модифицировать модель и обрезать полную статью после 10-20 слов</p>
 								<footer>
 									<ul class="actions">
 										<li><a href="#" class="button big">Continue Reading</a></li>
@@ -90,6 +91,7 @@
 									</ul>
 								</footer>
 							</article>
+                        <?php endforeach; ?>
 
 						<!-- Pagination -->
 							<ul class="actions pagination">
