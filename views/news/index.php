@@ -1,16 +1,5 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>Blog.loc</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="/views/assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link href="/views/assets/css/main.css" rel="stylesheet">
-		<!--[if lte IE 9]><link rel="stylesheet" href="/views/assets/css/ie9.css" /><![endif]-->
-		<!--[if lte IE 8]><link rel="stylesheet" href="/views/assets/css/ie8.css" /><![endif]-->
-	</head>
+<?php require_once(ROOT . '/views/layouts/header.php');?>
 	<body>
-
 		<!-- Wrapper -->
 			<div id="wrapper">
 				<!-- Header -->
@@ -160,29 +149,4 @@
 									<li><a href="#" class="button">Learn More</a></li>
 								</ul>
 							</section>
-
-						<!-- Footer -->
-							<section id="footer">
-								<ul class="icons">
-									<li><a href="#" class="fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="fa-facebook"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="fa-rss"><span class="label">RSS</span></a></li>
-									<li><a href="#" class="fa-envelope"><span class="label">Email</span></a></li>
-								</ul>
-								<p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
-							</section>
-
-					</section>
-
-			</div>
-
-		<!-- Scripts -->
-			<script src="/views/assets/js/jquery.min.js"></script>
-			<script src="/views/assets/js/skel.min.js"></script>
-			<script src="/views/assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="/views/assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="/views/assets/js/main.js"></script>
-
-	</body>
-</html>
+<?php require_once(ROOT . '/views/layouts/footer.php');?>
