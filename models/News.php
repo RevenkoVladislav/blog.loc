@@ -23,8 +23,8 @@ class News
         if($id){
             $db = DB::dbConnection();
             $result = $db->query("SELECT * FROM `blog.loc`.news WHERE id='$id'");
-            $result->setFetchMode(PDO::FETCH_ASSOC); //чтобы индексы массива не дублировались с числовыми индексами
             $newsById = $result->fetch();
+            //добавить проверку существования по id, если нет то либо редирект, либо просто не открывать статью, либо ошибку 404
             return $newsById;
         }
     }
