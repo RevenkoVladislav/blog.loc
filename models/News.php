@@ -6,6 +6,7 @@ class News
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, stateCategory, likes FROM `blog.loc`.news ORDER BY stateDate LIMIT 5");
+        $news = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
             $news[$i]['id'] = $row['id'];
@@ -30,6 +31,34 @@ class News
             //добавить проверку существования по id, если нет то либо редирект, либо просто не открывать статью, либо ошибку 404
             return $newsById;
         }
+    }
+
+    public static function getHotNews()
+    {
+        $db = DB::dbConnection();
+        $result = $db->query("SELECT id, author, stateName FROM `blog.loc`.news ORDER BY likes LIMIT 5");
+        $hotNews = [];
+
+        for($i = 0; $row = $result->fetch(); $i++){
+            $hotNews[$i]['id'] = $row['id'];
+            $hotNews[$i]['author'] = $row['author'];
+            $hotNews[$i]['stateName'] = $row['stateName'];
+        }
+        return $hotNews;
+    }
+
+    public static function getLatestNews()
+    {
+        $db = DB::dbConnection();
+        $result = $db->query("SELECT id, stateName, stateDate FROM `blog.loc`.news");
+        $latestNews = [];
+
+        for($i = 0; $row = $result->fetch(); $i++){
+            $latestNews[$i]['id'] = $row['id'];
+            $latestNews[$i]['author'] = $row['stateName'];
+            $latestNews[$i]['stateName'] = $row['stateDate'];
+        }
+        return $latestNews;
     }
 
 }
