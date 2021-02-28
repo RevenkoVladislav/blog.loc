@@ -7,11 +7,9 @@
 						<h1><a href="#">Резервированный блок</a></h1>
 						<nav class="links">
 							<ul>
-								<li><a href="#">Категории ?</a></li>
-								<li><a href="#">Регистрация ?</a></li>
-								<li><a href="#">Спорт</a></li>
-								<li><a href="#">Игры</a></li>
-								<li><a href="#">Машины</a></li>
+                                <?php foreach($categories as $category):?>
+								<li><a href="/<?=$category['id'];?>"><?=$category['categoryName'];?></a></li>
+                                <?php endforeach; ?>
 							</ul>
 						</nav>
 						<nav class="main">
