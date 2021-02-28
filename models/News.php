@@ -36,13 +36,14 @@ class News
     public static function getHotNews()
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateName FROM `blog.loc`.news ORDER BY likes LIMIT 5");
+        $result = $db->query("SELECT id, author, stateName, stateDescription FROM `blog.loc`.news ORDER BY likes LIMIT 5");
         $hotNews = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
             $hotNews[$i]['id'] = $row['id'];
             $hotNews[$i]['author'] = $row['author'];
             $hotNews[$i]['stateName'] = $row['stateName'];
+            $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '30') . '...';
         }
         return $hotNews;
     }
