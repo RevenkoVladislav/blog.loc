@@ -5,7 +5,7 @@ class News
     public static function getAllNews()
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, stateCategory FROM `blog.loc`.news ORDER BY stateDate LIMIT 5");
+        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, stateCategory, likes FROM `blog.loc`.news ORDER BY stateDate LIMIT 5");
 
         for($i = 0; $row = $result->fetch(); $i++){
             $news[$i]['id'] = $row['id'];
@@ -15,6 +15,7 @@ class News
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['stateDate'] = $row['stateDate'];
             $news[$i]['stateCategory'] = $row['stateCategory'];
+            $news[$i]['likes'] = $row['likes'];
         }
         return $news;
     }
