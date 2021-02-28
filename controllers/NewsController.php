@@ -1,8 +1,5 @@
 <?php
 
-require_once (ROOT . '/models/News.php');
-require_once (ROOT . '/models/Category.php');
-
 class NewsController
 {
     public function actionIndex()
