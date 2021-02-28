@@ -77,15 +77,17 @@
         <section>
             <h2>Последние новости</h2>
             <ul class="posts">
+                <?php foreach($latestNews as $miniLatestNew): ?>
                 <li>
                     <article>
                         <header>
                             <h3><a href="#">Lorem ipsum fermentum ut nisl vitae</a></h3>
-                            <time class="published" datetime="2015-10-20">October 20, 2015</time>
+                            <time class="published" datetime="2015-10-20"><?=$miniLatestNew['stateDate'];?></time>
                         </header>
                         <a href="#" class="image"><img src="/views/images/pic08.jpg" alt="" /></a>
                     </article>
                 </li>
+                <?php endforeach; ?>
             </ul>
         </section>
 

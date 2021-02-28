@@ -51,13 +51,13 @@ class News
     public static function getLatestNews()
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, stateName, stateDate FROM `blog.loc`.news ORDER BY stateDate LIMIT 3");
+        $result = $db->query("SELECT id, stateName, stateDate FROM `blog.loc`.news ORDER BY stateDate DESC LIMIT 5");
         $latestNews = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
             $latestNews[$i]['id'] = $row['id'];
-            $latestNews[$i]['author'] = $row['stateName'];
-            $latestNews[$i]['stateName'] = $row['stateDate'];
+            $latestNews[$i]['stateName'] = $row['stateName'];
+            $latestNews[$i]['stateDate'] = $row['stateDate'];
         }
         return $latestNews;
     }
