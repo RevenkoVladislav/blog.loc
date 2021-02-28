@@ -6,6 +6,7 @@ class Category
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT id, categoryName FROM `blog.loc`.category WHERE categoryAvailability = '1'");
+        return $result;
     }
 
 }
