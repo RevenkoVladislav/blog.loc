@@ -12,7 +12,7 @@
             <article class="post">
                 <header>
                     <div class="title">
-                        <h2><a href="#"><?=$newsItem['stateName'];?></a></h2>
+                        <h2><a href="/news/<?=$newsItem['id'];?>"><?=$newsItem['stateName'];?></a></h2>
                         <p>Category: <?=$newsItem['stateCategory'];?></p>
                     </div>
                     <div class="meta">
@@ -21,10 +21,10 @@
                     </div>
                 </header>
                 <a href="#" class="image featured"><img src="/views/images/pic01.jpg" alt="" /></a>
-                <p><?=$newsItem['stateDescription'];?>Модифицировать модель и обрезать полную статью после 10-20 слов</p>
+                <p><?=$newsItem['stateDescription'];?></p>
                 <footer>
                     <ul class="actions">
-                        <li><a href="#" class="button big">Continue Reading</a></li>
+                        <li><a href="/news/<?=$newsItem['id'];?>" class="button big">Continue Reading</a></li>
                     </ul>
                     <ul class="stats">
                         <li><a href="#">General</a></li>
