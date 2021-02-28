@@ -1,65 +1,9 @@
-<?php require_once(ROOT . '/views/layouts/header.php');?>
+<?php include(ROOT . '/views/layouts/header.php');?>
     <body>
     <!-- Wrapper -->
 <div id="wrapper">
     <!-- Header -->
-    <header id="header">
-        <h1><a href="#">Резервированный блок</a></h1>
-        <nav class="links">
-            <ul>
-                <?php foreach($categories as $category):?>
-                    <li><a href="/<?=$category['id'];?>"><?=$category['categoryName'];?></a></li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
-        <nav class="main">
-            <ul>
-                <!--<li class="search">
-                    <a class="fa-search" href="#search">Search</a>
-                    <form id="search" method="get" action="#">
-                        <input type="text" name="query" placeholder="Search" />
-                    </form>
-                </li>-->
-                <li class="menu">
-                    <a class="fa-bars" href="#menu">Menu</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Menu -->
-    <section id="menu">
-        <!-- Search -->
-        <!--<section>
-            <form class="search" method="get" action="#">
-                <input type="text" name="query" placeholder="Search" />
-            </form>
-        </section>-->
-        <!-- Links -->
-        <section>
-            <ul class="links">
-                <li>
-                    <a href="#">
-                        <h3>Возможно сюда лк</h3>
-                        <p>Feugiat tempus veroeros dolor</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <h3>Регистрация и т.д</h3>
-                        <p>Sed vitae justo condimentum</p>
-                    </a>
-                </li>
-            </ul>
-        </section>
-
-        <!-- Actions -->
-        <section>
-            <ul class="actions vertical">
-                <li><a href="#" class="button big fit">Log In</a></li>
-            </ul>
-        </section>
-    </section>
+    <?php include (ROOT . '/views/layouts/menu.php');?>
 
     <!-- Main -->
     <div id="main">
@@ -149,4 +93,4 @@
                 <li><a href="#" class="button">Learn More</a></li>
             </ul>
         </section>
-<?php require_once(ROOT . '/views/layouts/footer.php');?>
+<?php include(ROOT . '/views/layouts/footer.php');?>
