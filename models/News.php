@@ -43,7 +43,7 @@ class News
             $hotNews[$i]['id'] = $row['id'];
             $hotNews[$i]['author'] = $row['author'];
             $hotNews[$i]['stateName'] = $row['stateName'];
-            $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '30') . '...';
+            $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '15') . '...';
         }
         return $hotNews;
     }

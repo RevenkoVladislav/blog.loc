@@ -63,7 +63,7 @@
 
                     <header>
                         <h3><a href="/views/<?=$miniNew['id'];?>"><?=$miniNew['stateName'];?></a></h3>
-                        <time class="published" datetime="2015-10-20">October 20, 2015</time>
+                        <p><?=$miniNew['stateDescription'];?></p>
                         <a href="#" class="author"><img src="/views/images/avatar.jpg" alt="" /></a>
                     </header>
                     <a href="#" class="image"><img src="/views/images/pic04.jpg" alt="" /></a>
