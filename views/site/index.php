@@ -81,10 +81,10 @@
                 <li>
                     <article>
                         <header>
-                            <h3><a href="#">Lorem ipsum fermentum ut nisl vitae</a></h3>
-                            <time class="published" datetime="2015-10-20"><?=$miniLatestNew['stateDate'];?></time>
+                            <h3><a href="/news/<?=$miniLatestNew['id'];?>"><?=$miniLatestNew['stateName'];?></a></h3>
+                            <time class="published" datetime="<?=$miniLatestNew['stateDate'];?>"><?=$miniLatestNew['stateDate'];?></time>
                         </header>
-                        <a href="#" class="image"><img src="/views/images/pic08.jpg" alt="" /></a>
+                        <a href="/news/<?=$miniLatestNew['id'];?>" class="image"><img src="/views/images/pic08.jpg" alt="" /></a>
                     </article>
                 </li>
                 <?php endforeach; ?>
@@ -96,7 +96,7 @@
             <h2>About</h2>
             <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at phasellus sed ultricies.</p>
             <ul class="actions">
-                <li><a href="#" class="button">Learn More</a></li>
+                <li><a href="#" class="button">Contact us</a></li>
             </ul>
         </section>
 <?php include(ROOT . '/views/layouts/footer.php');?>
