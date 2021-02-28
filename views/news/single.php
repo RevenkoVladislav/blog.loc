@@ -25,7 +25,7 @@
 								<footer>
 									<ul class="stats">
 										<li><a href="#">General</a></li>
-										<li><a href="#" class="icon fa-heart">28</a></li>
+										<li><a href="#" class="icon fa-heart"><?=$newsById['likes'];?></a></li>
 										<li><a href="#" class="icon fa-comment">128</a></li>
 									</ul>
 								</footer>
