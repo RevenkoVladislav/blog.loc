@@ -7,10 +7,7 @@ class NewsController
 {
     public function actionIndex()
     {
-        $categories = Category::getCategories();
-        $news = News::getAllNews();
-        require_once (ROOT . '/views/news/index.php');
-        return true;
+
     }
 
     public function actionView($id){
