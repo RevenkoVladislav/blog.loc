@@ -62,4 +62,11 @@ class News
         return $latestNews;
     }
 
+    public static function getTotalNewsList(){
+        $db = DB::dbConnection();
+        $result = $db->query("SELECT count(id) AS count FROM `blog.loc`.news WHERE status='1'");
+        $row = $result->fetch();
+        return $row['count'];
+    }
+
 }
