@@ -62,7 +62,7 @@
                 <article class="mini-post">
 
                     <header>
-                        <h3><a href="/views/<?=$miniNew['id'];?>"><?=$miniNew['stateName'];?></a></h3>
+                        <h3><a href="/news/<?=$miniNew['id'];?>"><?=$miniNew['stateName'];?></a></h3>
                         <p><?=$miniNew['stateDescription'];?></p>
                         <a href="#" class="author"><img src="/views/images/avatar.jpg" alt="" /></a>
                     </header>
@@ -75,7 +75,7 @@
 
         <!-- Posts List -->
         <section>
-            <h2>Последние новости (ранжировка из 3-5 статей по дате)</h2>
+            <h2>Последние новости</h2>
             <ul class="posts">
                 <li>
                     <article>
