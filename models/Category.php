@@ -6,7 +6,11 @@ class Category
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT id, categoryName FROM `blog.loc`.category WHERE categoryAvailability = '1'");
-        return $result;
+        for($i = 0; $row = $result->fetch(); $i++){
+            $categories[$i]['id'] = $row['id'];
+            $categories[$i]['categoryName'] = $row['categoryName'];
+        }
+        return $categories;
     }
 
 }
