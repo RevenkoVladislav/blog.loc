@@ -1,5 +1,5 @@
 <header id="header">
-    <h1><a href="#">Резервированный блок</a></h1>
+    <h1><a href="/">Blog.loc</a></h1>
     <nav class="links">
         <ul>
             <?php foreach($categories as $category):?>
