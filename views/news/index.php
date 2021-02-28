@@ -71,7 +71,7 @@
 								<header>
 									<div class="title">
 										<h2><a href="#"><?=$newsItem['stateName'];?></a></h2>
-										<p><?=$newsItem['stateCategory'];?></p>
+										<p>Category: <?=$newsItem['stateCategory'];?></p>
 									</div>
 									<div class="meta">
 										<time class="published" datetime="<?=$newsItem['stateDate'];?>"><?=$newsItem['stateDate'];?></time>
