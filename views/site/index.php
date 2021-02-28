@@ -56,16 +56,20 @@
         <!-- Mini Posts -->
         <section>
             <div class="mini-posts">
-                <h2>Горячие новости (ранжировка 5 статей по кол-ву лайков)</h2>
+                <h2>Горячие новости</h2>
                 <!-- Mini Post -->
+                <?php foreach($hotNews as $miniNew): ?>
                 <article class="mini-post">
+
                     <header>
-                        <h3><a href="#">Vitae sed condimentum</a></h3>
+                        <h3><a href="/views/<?=$miniNew['id'];?>"><?=$miniNew['stateName'];?></a></h3>
                         <time class="published" datetime="2015-10-20">October 20, 2015</time>
                         <a href="#" class="author"><img src="/views/images/avatar.jpg" alt="" /></a>
                     </header>
                     <a href="#" class="image"><img src="/views/images/pic04.jpg" alt="" /></a>
+
                 </article>
+                <?php endforeach; ?>
             </div>
         </section>
 
