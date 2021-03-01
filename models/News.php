@@ -2,10 +2,13 @@
 
 class News
 {
-    public static function getAllNews()
+    const SHOW_NEWS = 3;
+
+    public static function getAllNews($page)
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, stateCategory, likes FROM `blog.loc`.news ORDER BY stateDate LIMIT 5");
+        $offset = ($page - 1) * self::SHOW_NEWS;
+        $result = $db->query("SELECT id,author,stateDescription, stateName, stateCategory, stateDate, likes FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
         $news = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
@@ -62,11 +65,38 @@ class News
         return $latestNews;
     }
 
-    public static function getTotalNewsList(){
+    public static function getTotalNewsList()
+    {
         $db = DB::dbConnection();
         $result = $db->query("SELECT count(id) AS count FROM `blog.loc`.news WHERE status='1'");
         $row = $result->fetch();
-        return $row['count'];
+        $count = ceil($row['count'] / self::SHOW_NEWS);
+        return $count;
     }
 
+    public static function getNextPage($page)
+    {
+        $total = self::getTotalNewsList();
+        $linkNext = '';
+        if($page < $total){
+            ++$page;
+            $linkNext = "<li><a href='/page-$page' class='button big next'>Next Page</a></li>";
+        } elseif ($page == $total){
+            $linkNext = '<li><a href="" class="disabled button big next">Next Page</a></li>';
+        }
+        return $linkNext;
+    }
+
+    public static function getPrevPage($page)
+    {
+        $total = self::getTotalNewsList();
+        $linkPrev = '';
+        if($page != 1){
+            --$page;
+            $linkPrev = "<li><a href='/page-$page' class='button big previous'>Previous Page</a></li>";
+        } elseif ($page == 1){
+            $linkPrev = "<li><a href='' class='disabled button big previous'>Previous Page</a></li>";
+        }
+        return $linkPrev;
+    }
 }

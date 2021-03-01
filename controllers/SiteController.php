@@ -7,11 +7,12 @@ class SiteController
         $categories = Category::getCategories();
         $hotNews = News::getHotNews();
         $latestNews = News::getLatestNews();
-        $news = News::getAllNews();
+        $news = News::getAllNews($page);
 
         //пагинация
-        $total = News::getTotalNewsList();
-        $pagination = new Pagination($total, $page, 3, 'page-');
+        $nextPage = News::getNextPage($page);
+        $prevPage = News::getPrevPage($page);
+
         require_once (ROOT . '/views/site/index.php');
         return true;
     }
