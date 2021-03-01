@@ -6,6 +6,12 @@ class News
 
     public static function getAllNews($page)
     {
+        $page = intval($page);
+
+        if($page >= 0){
+            $page = 1;
+        }
+
         $db = DB::dbConnection();
         $offset = ($page - 1) * self::SHOW_NEWS;
         $result = $db->query("SELECT id,author,stateDescription, stateName, stateCategory, stateDate, likes FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
