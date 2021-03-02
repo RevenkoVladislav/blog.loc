@@ -3442,3 +3442,13 @@
 			}
 
 		}
+
+	a.disabled {
+		pointer-events: none;
+		cursor: none;
+		color: green;
+	}
+
+	li.disabled {
+		color: lightseagreen;
+	}

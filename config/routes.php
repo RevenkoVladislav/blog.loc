@@ -2,6 +2,10 @@
 return
     [
         'news/([0-9]+)' => 'news/view/$1', //actionView в NewsController
+
+        'category/([a-z]+)/page-([0-9])' => 'category/index/$1/$2', //actionIndex в CategoryController
+        'category/([a-z]+)' => 'category/index/$1', //actionIndex в CategoryController
+
         'page-([0-9]+)' => 'site/index/$1', //actionIndex в SiteController
         '' => 'site/index' //actionIndex в SiteController
     ];

@@ -3,7 +3,14 @@
     <nav class="links">
         <ul>
             <?php foreach($categories as $category):?>
-                <li><a href="/<?=$category['id'];?>"><?=$category['categoryName'];?></a></li>
+                <?php $link = "/category/{$category['categoryName']}";
+                if($link == $_SERVER['REQUEST_URI']){
+                    $class = 'disabled';
+                } else {
+                    $class = '';
+                }
+                ?>
+                <li class='<?=$class;?>'><a href="<?=$link;?>" class='<?=$class;?>'><?=$category['categoryName'];?></a></li>
             <?php endforeach; ?>
         </ul>
     </nav>
