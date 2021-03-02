@@ -139,9 +139,9 @@ class News
         $linkNext = '';
         if($page < $total){
             ++$page;
-            $linkNext = "<li><a href='$category/page-$page' class='button big next'>Next Page</a></li>";
+            $linkNext = "<li><a href='/category/$category/page-$page' class='button big next'>Next Page</a></li>";
         } elseif ($page == $total){
-            $linkNext = "<li><a href='$category/page-$page' class='disabled button big next'>Next Page</a></li>";
+            $linkNext = "<li><a href='/category/$category/page-$page' class='disabled button big next'>Next Page</a></li>";
         }
         return $linkNext;
     }
@@ -151,9 +151,9 @@ class News
         $linkPrev = '';
         if($page != 1){
             --$page;
-            $linkPrev = "<li><a href='$category/page-$page' class='button big previous'>Previous Page</a></li>";
+            $linkPrev = "<li><a href='/category/$category/page-$page' class='button big previous'>Previous Page</a></li>";
         } elseif ($page == 1){
-            $linkPrev = "<li><a href='$category/page-$page' class='disabled button big previous'>Previous Page</a></li>";
+            $linkPrev = "<li><a href='/category/$category/page-$page' class='disabled button big previous'>Previous Page</a></li>";
         }
         return $linkPrev;
     }

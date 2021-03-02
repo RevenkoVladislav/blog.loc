@@ -4,7 +4,7 @@
         <ul>
             <?php foreach($categories as $category):?>
                 <?php $link = "/category/{$category['categoryName']}";
-                if($link == $_SERVER['REQUEST_URI']){
+                if(preg_match("#$link#", $_SERVER['REQUEST_URI'])){
                     $class = 'disabled';
                 } else {
                     $class = '';
