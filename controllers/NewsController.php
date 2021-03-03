@@ -2,11 +2,6 @@
 
 class NewsController
 {
-    public function actionIndex()
-    {
-
-    }
-
     public function actionView($id){
         $categories = Category::getCategories();
         

@@ -42,13 +42,13 @@
         <ul class="links">
             <li>
                 <a href="#">
-                    <h3>Возможно сюда лк</h3>
+                    <h3>Ссылка в лк</h3>
                     <p>Feugiat tempus veroeros dolor</p>
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <h3>Регистрация и т.д</h3>
+                    <h3>Добавить статью</h3>
                     <p>Sed vitae justo condimentum</p>
                 </a>
             </li>
@@ -58,7 +58,7 @@
     <!-- Actions -->
     <section>
         <ul class="actions vertical">
-            <li><a href="#" class="button big fit">Log In</a></li>
+            <li><a href="/user/register" class="button big fit">Log In</a></li>
         </ul>
     </section>
 </section>

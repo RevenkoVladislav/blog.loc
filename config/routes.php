@@ -1,6 +1,8 @@
 <?php
 return
     [
+        'user/register' => 'user/register', //actionRegister в UserController
+
         'news/([0-9]+)' => 'news/view/$1', //actionView в NewsController
 
         'category/([a-z]+)/page-([0-9])' => 'category/index/$1/$2', //actionIndex в CategoryController
