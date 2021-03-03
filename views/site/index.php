@@ -13,7 +13,7 @@
                 <header>
                     <div class="title">
                         <h2><a href="/news/<?=$newsItem['id'];?>"><?=$newsItem['stateName'];?></a></h2>
-                        <p>Category: <?=$newsItem['stateCategory'];?></p>
+                        <p class="myLink">Category: <a href="/category/<?=$newsItem['stateCategory'];?>"</a><?=$newsItem['stateCategory'];?></p>
                     </div>
                     <div class="meta">
                         <time class="published" datetime="<?=$newsItem['stateDate'];?>"><?=$newsItem['stateDate'];?></time>
