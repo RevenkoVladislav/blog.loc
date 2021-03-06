@@ -54,7 +54,7 @@
 
                 <div class="6u$ 12u$">
                     <ul class="actions fit">
-                        <li><input class="fit" type="submit" value="Register" /></li>
+                        <li><input class="fit" name="register" type="submit" value="Register" /></li>
                         <li><input type="reset" value="Reset" /></li>
                     </ul>
                 </div>
