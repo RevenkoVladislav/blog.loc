@@ -3456,3 +3456,13 @@
 	p.myLink {
 		margin: unset;
 	}
+
+	h2.stateName {
+		margin: unset;
+		margin-bottom: 12.5px;
+	}
+
+	time.stateDate {
+		padding: 5px;
+		margin: 2px;
+	}

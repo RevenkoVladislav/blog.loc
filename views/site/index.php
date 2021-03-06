@@ -12,11 +12,11 @@
             <article class="post">
                 <header>
                     <div class="title">
-                        <h2><a href="/news/<?=$newsItem['id'];?>"><?=$newsItem['stateName'];?></a></h2>
+                        <h2 class = "stateName"><a href="/news/<?=$newsItem['id'];?>"><?=$newsItem['stateName'];?></a></h2>
                         <p class="myLink">Category: <a href="/category/<?=$newsItem['stateCategory'];?>"</a><?=$newsItem['stateCategory'];?></p>
                     </div>
                     <div class="meta">
-                        <time class="published" datetime="<?=$newsItem['stateDate'];?>"><?=$newsItem['stateDate'];?></time>
+                        <time class="published stateDate" datetime="<?=$newsItem['stateDate'];?>"><?=$newsItem['stateDate'];?></time>
                         <a href="#" class="author"><span class="name"><?=$newsItem['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
                     </div>
                 </header>
