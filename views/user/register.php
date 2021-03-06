@@ -27,27 +27,32 @@
                     <label for="email">Ваш email</label>
                     <input type="email" name="email" id="email" value="" placeholder="Email" required/>
                 </div>
-                <div class="6u$ 12u$(xsmall)">
+                <div class="6u$ 16u$(xsmall)">
                     <label for="password">Ваш пароль</label>
                     <input type="password" name="password" id="password" value="" placeholder="Password" required/>
                 </div>
-                <div class="6u$ 12u$(xsmall)">
+                <div class="6u$ 16u$(xsmall)">
                     <label for="repeatPassword">Повторите пароль еще раз</label>
                     <input type="password" name="repeatPassword" id="repeatPassword" value="" placeholder="Repeat Password" required/>
                 </div>
 
                 <div class="12u$">
                     <label for="messageSelf">Расскажите о себе</label>
-                    <textarea name="messageSelf" id="messageSelf" placeholder="tell us about yourself" rows="6" required></textarea>
+                    <textarea name="messageSelf" id="messageSelf" placeholder="Tell us about yourself" rows="6" required></textarea>
                 </div>
 
-                <div class="6u$ 12u$(small)">
+                <div class="4u$ 12u$(small)">
+                    <input type="checkbox" id="autoLog" name="autoLog">
+                    <label for="autoLog">Login upon successful registration ?</label>
+                </div>
+
+                <div class="4u$ 12u$(small)">
                     <label for="captcha">Подтвердите, что вы не робот</label>
-                    <input type="checkbox" id="captcha" name="captcha" required>
+                    <input type="checkbox" id="captcha" name="captcha">
                     <label for="captcha">Not a robot</label>
                 </div>
 
-                <div class="12u$">
+                <div class="6u$ 12u$">
                     <ul class="actions fit">
                         <li><input class="fit" type="submit" value="Register" /></li>
                         <li><input type="reset" value="Reset" /></li>
