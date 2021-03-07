@@ -10,6 +10,15 @@
         <section>
         <h3>Регистрация</h3>
         <form method="post" action="">
+            <?php if(!empty($errors)): ?>
+                <div class="4u$ 12u$(small)">
+                    <label>Ой, произошли следующие ошибки:</label>
+                    <?php foreach($errors as $error): ?>
+                        <p class="error">* <?=$error;?></p>
+                    <?php endforeach;?>
+                </div>
+            <?php endif;?>
+
             <div class="row uniform">
                 <div class="6u 12u$(xsmall)">
                     <label for="name">Ваше имя</label>

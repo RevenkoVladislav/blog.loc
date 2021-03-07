@@ -27,15 +27,7 @@ class UserController
                 $captcha = htmlspecialchars($_POST['captcha']);
             }
 
-            echo $name . "<br>";
-            echo $surname . "<br>";
-            echo $login . "<br>";
-            echo $email . "<br>";
-            echo $password . "<br>";
-            echo $repeatPassword . "<br>";
-            echo $messageSelf . "<br>";
-            echo $autoLog . "<br>";
-            echo $captcha . "<br>";
+            $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha);
         }
 
         require_once(ROOT . '/views/user/register.php');

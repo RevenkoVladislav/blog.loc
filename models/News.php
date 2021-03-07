@@ -59,7 +59,7 @@ class News
         }
     }
 
-    public static function getHotNews()
+        public static function getHotNews()
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT id, author, stateName, stateDescription FROM `blog.loc`.news ORDER BY likes DESC LIMIT 5");

@@ -3466,3 +3466,8 @@
 		padding: 5px;
 		margin: 2px;
 	}
+
+	p.error{
+		font-size: large;
+		color: darkred;
+	}
