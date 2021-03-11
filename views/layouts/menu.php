@@ -58,7 +58,12 @@
     <!-- Actions -->
     <section>
         <ul class="actions vertical">
-            <li><a href="/user/register" class="button big fit">Log In</a></li>
+            <?php if(!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])): ?>
+            <li><a href="/user/logout" class="button big fit">Sign OUT</a></li>
+            <?php else: ?>
+            <li><a href="/user/login" class="button big fit">Sign IN</a></li>
+            <li><a href="/user/register" class="button big fit">Sign UP</a></li>
+            <?php endif; ?>
         </ul>
     </section>
 </section>

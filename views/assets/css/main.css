@@ -3471,3 +3471,8 @@
 		font-size: large;
 		color: darkred;
 	}
+
+	p.succes{
+		font-size: large;
+		color: lightseagreen;
+	}

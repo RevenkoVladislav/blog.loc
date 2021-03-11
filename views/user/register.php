@@ -19,22 +19,26 @@
                 </div>
             <?php endif;?>
 
+            <?php if($register): ?>
+                <p class="succes">Вы успешно зарегистрированы ! <a href="/">Вернуться на главную.</a></p>
+            <?php endif;?>
+
             <div class="row uniform">
                 <div class="6u 12u$(xsmall)">
                     <label for="name">Ваше имя</label>
-                    <input type="text" name="name" id="name" value="" placeholder="Name" required/>
+                    <input type="text" name="name" id="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name'];?>" placeholder="Name" required/>
                 </div>
                 <div class="6u 12u$(xsmall)">
                     <label for="surname">Ваша фамилия</label>
-                    <input type="text" name="surname" id="surname" value="" placeholder="Surname" required/>
+                    <input type="text" name="surname" id="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname'];?>" placeholder="Surname" required/>
                 </div>
                 <div class="6u 12u$(xsmall)">
                     <label for="login">Ваш логин</label>
-                    <input type="text" name="login" id="login" value="" placeholder="Login" required/>
+                    <input type="text" name="login" id="login" value="<?php if(!empty($_POST['login'])) echo $_POST['login'];?>" placeholder="Login" required/>
                 </div>
                 <div class="6u$ 12u$(xsmall)">
                     <label for="email">Ваш email</label>
-                    <input type="email" name="email" id="email" value="" placeholder="Email" required/>
+                    <input type="email" name="email" id="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email'];?>" placeholder="Email" required/>
                 </div>
                 <div class="6u$ 16u$(xsmall)">
                     <label for="password">Ваш пароль</label>
@@ -47,11 +51,11 @@
 
                 <div class="12u$">
                     <label for="messageSelf">Расскажите о себе</label>
-                    <textarea name="messageSelf" id="messageSelf" placeholder="Tell us about yourself" rows="6" required></textarea>
+                    <textarea name="messageSelf" id="messageSelf" placeholder="Tell us about yourself" rows="6" required><?php if(!empty($_POST['messageSelf'])) echo $_POST['messageSelf'];?></textarea>
                 </div>
 
                 <div class="4u$ 12u$(small)">
-                    <input type="checkbox" id="autoLog" name="autoLog">
+                    <input type="checkbox" id="autoLog" name="autoLog" <?php if(!empty($_POST['autoLog'])) echo 'checked';?>>
                     <label for="autoLog">Login upon successful registration ?</label>
                 </div>
 

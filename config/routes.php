@@ -2,6 +2,8 @@
 return
     [
         'user/register' => 'user/register', //actionRegister в UserController
+        'user/login' => 'user/login', //actionLogin в UserController
+        'user/logout' => 'user/logout', //actionLogout в UserController
 
         'news/([0-9]+)' => 'news/view/$1', //actionView в NewsController
 

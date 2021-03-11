@@ -61,6 +61,31 @@ class User
         $result = $db->query("SELECT userLogin FROM `blog.loc`.users WHERE userLogin = '$login'")->fetch();
 
         return $result;
+    }
 
+    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf){
+        $db = DB::dbConnection();
+
+        $sql = "INSERT INTO `blog.loc`.users (userName, userSurname, userLogin, userEmail, userPassword, userMessageSelf) VALUES (:userName, :userSurname, :userLogin, :userEmail, :userPassword, :userMessageSelf)";
+        $result = $db->prepare($sql);
+
+        $result->bindParam(':userName', $userName, PDO::PARAM_STR);
+        $result->bindParam(':userSurname', $userSurname, PDO::PARAM_STR);
+        $result->bindParam(':userLogin', $userLogin, PDO::PARAM_STR);
+        $result->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
+        $result->bindParam(':userPassword', $userPassword, PDO::PARAM_STR);
+        $result->bindParam(':userMessageSelf', $userMessageSelf, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
+
+    public static function getUserId($login){
+        $db = DB::dbConnection();
+        $id = '';
+
+        $result = $db->query("SELECT id FROM `blog.loc`.users WHERE userLogin = '$login'")->fetch();
+        $id = $result['id'];
+
+        return $id;
     }
 }

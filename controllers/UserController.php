@@ -5,8 +5,12 @@ class UserController
     public function actionRegister()
     {
         $categories = Category::getCategories();
-        $result = false;
+        $register = false;
         $errors = [];
+
+        if(!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])){
+            header("Location: /");
+        }
 
         if(!empty($_POST['register'])){
             $name = htmlspecialchars($_POST['name']);
@@ -28,9 +32,23 @@ class UserController
             }
 
             $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha);
+
+            if(empty($errors)){
+                $register = User::register($name, $surname, $login, $email, $password, $messageSelf);
+
+                if(!empty($autoLog)){
+                    $_SESSION['userId'] = User::getUserId($login);
+                    $_SESSION['userLogin'] = $login;
+                }
+            }
         }
 
         require_once(ROOT . '/views/user/register.php');
         return true;
+    }
+
+    public function actionLogout(){
+        unset ($_SESSION['userId'], $_SESSION['userLogin']);
+        header("Location: /");
     }
 }
