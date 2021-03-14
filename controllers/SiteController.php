@@ -15,6 +15,12 @@ class SiteController
         //все статьи получаем
         $news = News::getAllNews($page);
 
+        if(User::checkAuth()) {
+            $userLogin = 'Здравствуй, ' . $_SESSION['userLogin'];
+        } else {
+            $userLogin = 'Добро пожаловать, гость';
+        }
+
         //пагинация
         $nextPage = News::getNextPage($page);
         $prevPage = News::getPrevPage($page);

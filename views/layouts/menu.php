@@ -41,7 +41,7 @@
     <section>
         <ul class="links">
             <li>
-                <a href="#">
+                <a href="/user/cabinet">
                     <h3>Ссылка в лк</h3>
                     <p>Feugiat tempus veroeros dolor</p>
                 </a>

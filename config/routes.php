@@ -1,6 +1,7 @@
 <?php
 return
     [
+        'user/cabinet' => 'user/cabinet', //actionCabinet в UserController
         'user/register' => 'user/register', //actionRegister в UserController
         'user/login' => 'user/login', //actionLogin в UserController
         'user/logout' => 'user/logout', //actionLogout в UserController
