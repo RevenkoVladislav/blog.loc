@@ -66,6 +66,8 @@ class User
     public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf){
         $db = DB::dbConnection();
 
+        $userPassword = md5(md5($userPassword));
+
         $sql = "INSERT INTO `blog.loc`.users (userName, userSurname, userLogin, userEmail, userPassword, userMessageSelf) VALUES (:userName, :userSurname, :userLogin, :userEmail, :userPassword, :userMessageSelf)";
         $result = $db->prepare($sql);
 
@@ -87,5 +89,41 @@ class User
         $id = $result['id'];
 
         return $id;
+    }
+
+    public static function userAuth($login)
+    {
+        $_SESSION['userId'] = self::getUserId($login);
+        $_SESSION['userLogin'] = $login;
+    }
+
+    public static function checkAuth()
+    {
+        if(!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function checkLoginData($login, $password)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT id, userLogin, userPassword FROM `blog.loc`.users WHERE userLogin = :login AND userPassword = :password";
+        $result = $db->prepare($sql);
+
+        $result->bindParam(':login', $login, PDO::PARAM_STR);
+        $result->bindParam(':password', $password, PDO::PARAM_STR);
+        $result->execute();
+
+        $in = $result->fetch();
+
+        if($in){
+            self::userAuth($login);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -36,15 +36,15 @@
                     <label for="login">Ваш логин</label>
                     <input type="text" name="login" id="login" value="<?php if(!empty($_POST['login'])) echo $_POST['login'];?>" placeholder="Login" required/>
                 </div>
-                <div class="6u$ 12u$(xsmall)">
+                <div class="6u 12u$(xsmall)">
                     <label for="email">Ваш email</label>
                     <input type="email" name="email" id="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email'];?>" placeholder="Email" required/>
                 </div>
-                <div class="6u$ 16u$(xsmall)">
+                <div class="6u 16u$(xsmall)">
                     <label for="password">Ваш пароль</label>
                     <input type="password" name="password" id="password" value="" placeholder="Password" required/>
                 </div>
-                <div class="6u$ 16u$(xsmall)">
+                <div class="6u 16u$(xsmall)">
                     <label for="repeatPassword">Повторите пароль еще раз</label>
                     <input type="password" name="repeatPassword" id="repeatPassword" value="" placeholder="Repeat Password" required/>
                 </div>

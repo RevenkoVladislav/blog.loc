@@ -8,7 +8,7 @@ class UserController
         $register = false;
         $errors = [];
 
-        if(!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])){
+        if(User::checkAuth()){
             header("Location: /");
         }
 
@@ -37,8 +37,8 @@ class UserController
                 $register = User::register($name, $surname, $login, $email, $password, $messageSelf);
 
                 if(!empty($autoLog)){
-                    $_SESSION['userId'] = User::getUserId($login);
-                    $_SESSION['userLogin'] = $login;
+                    User::userAuth($login);
+                    header("Location: /");
                 }
             }
         }
@@ -47,8 +47,42 @@ class UserController
         return true;
     }
 
-    public function actionLogout(){
+    public function actionLogout()
+    {
         unset ($_SESSION['userId'], $_SESSION['userLogin']);
         header("Location: /");
+    }
+
+    public function actionLogin()
+    {
+        $categories = Category::getCategories();
+
+        if(User::checkAuth()){
+            header("Location: /user/cabinet");
+        }
+
+        if(!empty($_POST['inSub'])){
+            $login = htmlspecialchars($_POST['inLogin']);
+            $password = md5(md5(htmlspecialchars($_POST['inPassword'])));
+
+            if(User::checkLoginData($login, $password)){
+                header("Location: /user/cabinet");
+            } else {
+                $error = 'Неверное сочетание логин-пароль';
+            }
+        }
+
+        require_once (ROOT . '/views/user/login.php');
+        return true;
+    }
+
+    public function actionCabinet()
+    {
+        if(User::checkAuth()) {
+            require_once(ROOT . '/views/user/cabinet.php');
+        } else {
+            header("Location: /user/login");
+        }
+        return true;
     }
 }
