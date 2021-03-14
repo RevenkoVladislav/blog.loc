@@ -32,7 +32,7 @@
                         <div class="-5u 7u 12u$">
                             <input type="submit" name="inSub" value="Log In" />
                         </div>
-
+                        
                         <div class="-5u -12u$ (xsmall)">
                             <p>Вы не зарегистрированы ? Тогда <a href="/user/register">кликните !</a></p>
                         </div>
