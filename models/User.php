@@ -2,7 +2,7 @@
 
 class User
 {
-    public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha)
+    public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym)
     {
         $errors = [];
 
@@ -14,7 +14,7 @@ class User
             $errors[] = 'Логин уже занят.';
         }
 
-        if(preg_match('#\w+#', $login) == false){
+        if(preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $login) == false){
             $errors[] = 'Допустимы только латинские буквы и цифры.';
         }
 
@@ -42,7 +42,28 @@ class User
             $errors[] = 'Подтвердите, что вы не робот.';
         }
 
+        if(strlen($pseudonym) < 4){
+            $errors[] = 'Короткий псевдоним (менее 4х символов';
+        }
+
+        if(preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $pseudonym) == false){
+            $errors[] = 'Для псевдонима допустимы только латинские буквы и цифры.';
+        }
+
+        if(self::checkPseudonym($pseudonym)){
+            $errors[] = 'Введенный псевдоним уже занят';
+        }
+
         return $errors;
+    }
+
+    private static function checkPseudonym($pseudonym)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT userPseudonym FROM `blog.loc`.users WHERE userPseudonym = '$pseudonym'")->fetch();
+
+        return $result;
     }
 
     private static function checkEmail($email)
@@ -63,12 +84,12 @@ class User
         return $result;
     }
 
-    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf){
+    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf, $userPseudonym){
         $db = DB::dbConnection();
 
         $userPassword = md5(md5($userPassword));
 
-        $sql = "INSERT INTO `blog.loc`.users (userName, userSurname, userLogin, userEmail, userPassword, userMessageSelf) VALUES (:userName, :userSurname, :userLogin, :userEmail, :userPassword, :userMessageSelf)";
+        $sql = "INSERT INTO `blog.loc`.users (userName, userSurname, userLogin, userEmail, userPassword, userMessageSelf, userPseudonym) VALUES (:userName, :userSurname, :userLogin, :userEmail, :userPassword, :userMessageSelf, :userPseudonym)";
         $result = $db->prepare($sql);
 
         $result->bindParam(':userName', $userName, PDO::PARAM_STR);
@@ -77,6 +98,7 @@ class User
         $result->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
         $result->bindParam(':userPassword', $userPassword, PDO::PARAM_STR);
         $result->bindParam(':userMessageSelf', $userMessageSelf, PDO::PARAM_STR);
+        $result->bindParam(':userPseudonym', $userPseudonym, PDO::PARAM_STR);
 
         return $result->execute();
     }
@@ -95,6 +117,7 @@ class User
     {
         $_SESSION['userId'] = self::getUserId($login);
         $_SESSION['userLogin'] = $login;
+        $_SESSION['userPseudonym'] = self::getUserPseudonym($login);
     }
 
     public static function checkAuth()
@@ -125,5 +148,16 @@ class User
         }
 
         return false;
+    }
+
+    private static function getUserPseudonym($login)
+    {
+        $db = DB::dbConnection();
+        $id = '';
+
+        $result = $db->query("SELECT userPseudonym FROM `blog.loc`.users WHERE userLogin = '$login'")->fetch();
+        $id = $result['userPseudonym'];
+
+        return $id;
     }
 }

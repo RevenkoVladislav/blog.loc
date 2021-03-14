@@ -48,6 +48,10 @@
                     <label for="repeatPassword">Повторите пароль еще раз</label>
                     <input type="password" name="repeatPassword" id="repeatPassword" value="" placeholder="Repeat Password" required/>
                 </div>
+                <div class="6u 16u$(xsmall)">
+                    <label for="pseudonym">Придумайте авторский псевдоним</label>
+                    <input type="text" name="pseudonym" id="pseudonym" value="<?php if(!empty($_POST['pseudonym'])) echo $_POST['pseudonym'];?>" placeholder="Pseudonym" required/>
+                </div>
 
                 <div class="12u$">
                     <label for="messageSelf">Расскажите о себе</label>

@@ -19,6 +19,7 @@ class UserController
             $email = htmlspecialchars($_POST['email']);
             $password = htmlspecialchars($_POST['password']);
             $repeatPassword = htmlspecialchars($_POST['repeatPassword']);
+            $pseudonym = htmlspecialchars($_POST['pseudonym']);
             $messageSelf = htmlspecialchars($_POST['messageSelf']);
             $autoLog = '';
             $captcha = '';
@@ -31,10 +32,10 @@ class UserController
                 $captcha = htmlspecialchars($_POST['captcha']);
             }
 
-            $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha);
+            $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym);
 
             if(empty($errors)){
-                $register = User::register($name, $surname, $login, $email, $password, $messageSelf);
+                $register = User::register($name, $surname, $login, $email, $password, $messageSelf, $pseudonym);
 
                 if(!empty($autoLog)){
                     User::userAuth($login);
@@ -49,7 +50,7 @@ class UserController
 
     public function actionLogout()
     {
-        unset ($_SESSION['userId'], $_SESSION['userLogin']);
+        unset ($_SESSION['userId'], $_SESSION['userLogin'], $_SESSION['userPseudonym']);
         header("Location: /");
     }
 

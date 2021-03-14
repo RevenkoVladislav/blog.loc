@@ -48,7 +48,7 @@
         <section id="intro">
             <a href="#" class="logo"><img src="/views/images/logo.jpg" alt="" /></a>
             <header>
-                <h2><?=$userLogin;?></h2>
+                <h2><?=$userPseudonym;?></h2>
             </header>
         </section>
 
