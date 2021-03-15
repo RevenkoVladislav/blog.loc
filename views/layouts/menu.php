@@ -42,14 +42,14 @@
         <ul class="links">
             <li>
                 <a href="/user/cabinet">
-                    <h3>Ссылка в лк</h3>
-                    <p>Feugiat tempus veroeros dolor</p>
+                    <h3>Перейти в личный кабинет</h3>
+                    <p>Посмотреть ваши публикации, изменить данные ...</p>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <h3>Добавить статью</h3>
-                    <p>Sed vitae justo condimentum</p>
+                    <p></p>
                 </a>
             </li>
         </ul>

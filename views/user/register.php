@@ -8,11 +8,11 @@
     <div id="main">
         <article class="post">
         <section>
-        <h3>Регистрация</h3>
+        <h3>Registration</h3>
         <form method="post" action="">
             <?php if(!empty($errors)): ?>
                 <div class="4u$ 12u$(small)">
-                    <label>Ой, произошли следующие ошибки:</label>
+                    <label>Oops, the following errors occurred:</label>
                     <?php foreach($errors as $error): ?>
                         <p class="error">* <?=$error;?></p>
                     <?php endforeach;?>
@@ -20,7 +20,7 @@
             <?php endif;?>
 
             <?php if($register): ?>
-                <p class="succes">Вы успешно зарегистрированы ! <a href="/">Вернуться на главную.</a></p>
+                <p class="succes">You are registered successfully ! <a href="/">Go back to the main page.</a></p>
             <?php endif;?>
 
             <div class="row uniform">

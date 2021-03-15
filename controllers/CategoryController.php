@@ -15,6 +15,12 @@ class CategoryController
         //получаем все статьи по категории
         $news = News::getAllNewsByCategory($categoryName, $page);
 
+        if(User::checkAuth()) {
+            $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
+        } else {
+            $userPseudonym = 'Welcome, guest';
+        }
+
         //пагинация
         $nextPage = News::getNextPageForCategory($categoryName, $page);
         $prevPage = News::getPrevPageForCategory($categoryName, $page);

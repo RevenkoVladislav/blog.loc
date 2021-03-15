@@ -12,7 +12,7 @@
                 <form method="post" action="">
                     <?php if(!empty($error)): ?>
                         <div class="4u$ 12u$(small)">
-                            <label>Ой, произошла ошибка:</label>
+                            <label>Oops, an error occured:</label>
                                 <p class="error">* <?=$error;?></p>
                         </div>
                     <?php endif;?>
@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="-5u -12u$ (xsmall)">
-                            <p>Вы не зарегистрированы ? Тогда <a href="/user/register">кликните !</a></p>
+                            <p>You are not registred ? Then <a href="/user/register">click !</a></p>
                         </div>
                         
                     </div>

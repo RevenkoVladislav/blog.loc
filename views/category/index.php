@@ -48,8 +48,7 @@
     <section id="intro">
         <a href="#" class="logo"><img src="/views/images/logo.jpg" alt="" /></a>
         <header>
-            <h2>Имя пользователя</h2>
-            <p>Ссылка на профиль <a href="http://html5up.net">HTML5 UP</a></p>
+            <h2><?=$userPseudonym;?></h2>
         </header>
     </section>
 

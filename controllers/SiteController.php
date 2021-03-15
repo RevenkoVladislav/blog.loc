@@ -16,9 +16,9 @@ class SiteController
         $news = News::getAllNews($page);
 
         if(User::checkAuth()) {
-            $userPseudonym = 'Здравствуй, ' . $_SESSION['userPseudonym'];
+            $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
         } else {
-            $userPseudonym = 'Добро пожаловать, гость';
+            $userPseudonym = 'Welcome, guest';
         }
 
         //пагинация
