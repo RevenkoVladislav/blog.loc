@@ -6,51 +6,51 @@ class User
     {
         $errors = [];
 
-        if(strlen($login) < 4){
+        if (strlen($login) < 4) {
             $errors[] = 'Короткий логин (менее 4х символов).';
         }
 
-        if(self::checkLogin($login)){
+        if (self::checkLogin($login)) {
             $errors[] = 'Логин уже занят.';
         }
 
-        if(preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $login) == false){
+        if (preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $login) == false) {
             $errors[] = 'Допустимы только латинские буквы и цифры.';
         }
 
-        if(filter_var($email, FILTER_VALIDATE_EMAIL) != true){
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) != true) {
             $errors[] = 'Некорректный email.';
         }
 
-        if(self::checkEmail($email)){
+        if (self::checkEmail($email)) {
             $errors[] = 'Пользователь, с данным email, уже зарегистрирован.';
         }
 
-        if($password != $repeatPassword){
+        if ($password != $repeatPassword) {
             $errors[] = 'Введенные вами пароли не совпадают.';
         }
 
-        if(strlen($password) < 5){
+        if (strlen($password) < 5) {
             $errors[] = 'слишком короткий пароль (менее 5 символов).';
         }
 
-        if(strlen($messageSelf) < 20){
+        if (strlen($messageSelf) < 20) {
             $errors[] = 'Пожалуйста, расскажите побольше о себе. Нам будет очень интересно !';
         }
 
-        if(empty($captcha)){
+        if (empty($captcha)) {
             $errors[] = 'Подтвердите, что вы не робот.';
         }
 
-        if(strlen($pseudonym) < 4){
+        if (strlen($pseudonym) < 4) {
             $errors[] = 'Короткий псевдоним (менее 4х символов';
         }
 
-        if(preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $pseudonym) == false){
+        if (preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $pseudonym) == false) {
             $errors[] = 'Для псевдонима допустимы только латинские буквы и цифры.';
         }
 
-        if(self::checkPseudonym($pseudonym)){
+        if (self::checkPseudonym($pseudonym)) {
             $errors[] = 'Введенный псевдоним уже занят';
         }
 
@@ -84,7 +84,8 @@ class User
         return $result;
     }
 
-    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf, $userPseudonym){
+    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf, $userPseudonym)
+    {
         $db = DB::dbConnection();
 
         $userPassword = md5(md5($userPassword));
@@ -103,7 +104,8 @@ class User
         return $result->execute();
     }
 
-    public static function getUserId($login){
+    public static function getUserId($login)
+    {
         $db = DB::dbConnection();
         $id = '';
 
@@ -122,7 +124,7 @@ class User
 
     public static function checkAuth()
     {
-        if(!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])){
+        if (!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])) {
             return true;
         } else {
             return false;
@@ -142,7 +144,7 @@ class User
 
         $in = $result->fetch();
 
-        if($in){
+        if ($in) {
             self::userAuth($login);
             return true;
         }
@@ -159,5 +161,56 @@ class User
         $id = $result['userPseudonym'];
 
         return $id;
+    }
+
+    public static function getUserData()
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT userName, userSurname, userLogin, userEmail, userPseudonym, userMessageSelf FROM `blog.loc`.users WHERE id = '{$_SESSION['userId']}'")->fetch();
+
+        return $result;
+    }
+
+    public static function changeData($userName, $userSurname, $userMessageSelf)
+    {
+        $db = DB::dbConnection();
+        $sql = "UPDATE `blog.loc`.users SET userName = :userName, userSurname = :userSurname, userMessageSelf = :userMessageSelf WHERE id = '{$_SESSION['userId']}'";
+
+        $result = $db->prepare($sql);
+
+        $result->bindParam(':userName', $userName, PDO::PARAM_STR);
+        $result->bindParam(':userSurname', $userSurname, PDO::PARAM_STR);
+        $result->bindParam(':userMessageSelf', $userMessageSelf, PDO::PARAM_STR);
+
+        return $result->execute();
+
+    }
+
+    public static function ValidateMessage($userMessageSelf){
+        $errors = [];
+
+        if (strlen($userMessageSelf) < 20) {
+            $errors[] = 'Пожалуйста, расскажите побольше о себе. Нам будет очень интересно !';
+        }
+
+        return $errors;
+    }
+
+    public static function getUserPublication($pseudonym)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT id, stateName, stateDescription, stateCategory FROM `blog.loc`.news WHERE author = '$pseudonym'");
+
+        $userPublications = [];
+
+        for($i = 0; $row = $result->fetch(); $i++){
+            $userPublications[$i]['id'] = $row['id'];
+            $userPublications[$i]['stateName'] = $row['stateName'];
+            $userPublications[$i]['stateDescription'] = substr($row['stateDescription'], '0', '30') . '...';
+            $userPublications[$i]['stateCategory'] = $row['stateCategory'];
+        }
+        return $userPublications;
     }
 }

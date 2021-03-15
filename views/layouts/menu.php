@@ -42,14 +42,14 @@
         <ul class="links">
             <li>
                 <a href="/user/cabinet">
-                    <h3>Перейти в личный кабинет</h3>
-                    <p>Посмотреть ваши публикации, изменить данные ...</p>
+                    <h3>Go to personal account</h3>
+                    <p>See your publications, change data ...</p>
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <h3>Добавить статью</h3>
-                    <p></p>
+                    <h3>Add article</h3>
+                    <p>Go to the publication page</p>
                 </a>
             </li>
         </ul>

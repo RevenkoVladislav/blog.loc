@@ -1,6 +1,7 @@
 <?php
 return
     [
+        'user/cabinet/([a-z]+)' => 'user/cabinet/$1', //actionCabinet в UserController
         'user/cabinet' => 'user/cabinet', //actionCabinet в UserController
         'user/register' => 'user/register', //actionRegister в UserController
         'user/login' => 'user/login', //actionLogin в UserController

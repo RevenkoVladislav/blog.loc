@@ -77,9 +77,30 @@ class UserController
         return true;
     }
 
-    public function actionCabinet()
+    public function actionCabinet($changeData = false)
     {
         if(User::checkAuth()) {
+            $categories = Category::getCategories();
+            $userData = User::getUserData();
+
+            if(!empty($_POST['changeDataForm'])){
+                $name = htmlspecialchars($_POST['dataName']);
+                $surname = htmlspecialchars($_POST['dataSurname']);
+                $messageSelf = htmlspecialchars($_POST['dataMessageSelf']);
+
+                $errors = User::ValidateMessage($messageSelf);
+
+                if(empty($errors)) {
+                    $changeUserData = User::changeData($name, $surname, $messageSelf);
+
+                    if($changeData){
+                        header("Location: /user/cabinet");
+                    }
+                }
+            }
+
+            $userPublications = User::getUserPublication($_SESSION['userPseudonym']);
+
             require_once(ROOT . '/views/user/cabinet.php');
         } else {
             header("Location: /user/login");
