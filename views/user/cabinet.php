@@ -20,34 +20,38 @@
                         </div>
                     <?php endif; ?>
 
+                    <?php if(!empty($message)): ?>
+                        <p class="succes"><?=$message;?> !</p>
+                    <?php endif;?>
+
                     <div class="row uniform">
                         <div class="6u 12u$(xsmall)">
-                            <label for="name">Ваше имя</label>
+                            <label for="name">Name</label>
                             <input type="text" name="dataName" id="name"
                                    value="<?= $userData['userName']; ?>" disabled/>
                         </div>
                         <div class="6u 12u$(xsmall)">
-                            <label for="surname">Ваша фамилия</label>
+                            <label for="surname">Surname</label>
                             <input type="text" name="dataSurname" id="surname"
                                    value="<?= $userData['userSurname']; ?>" disabled/>
                         </div>
                         <div class="6u 12u$(xsmall)">
-                            <label for="login">Ваш логин</label>
+                            <label for="login">Login</label>
                             <input type="text" name="dataLogin" id="login"
                                    value="<?= $userData['userLogin']; ?>" disabled/>
                         </div>
                         <div class="6u 12u$(xsmall)">
-                            <label for="email">Ваш email</label>
+                            <label for="email">Email</label>
                             <input type="email" name="dataEmail" id="email"
                                    value="<?= $userData['userEmail']; ?>" disabled/>
                         </div>
                         <div class="6u 12u$(xsmall)">
-                            <label for="pseudonym">Ваш псевдоним</label>
+                            <label for="pseudonym">Pseudonym</label>
                             <input type="text" name="dataPseudonym" id="pseudonym"
                                    value="<?= $userData['userPseudonym']; ?>" disabled/>
                         </div>
                         <div class="12u$">
-                            <label for="messageSelf">О вас</label>
+                            <label for="messageSelf">About you</label>
                             <textarea name="dataMessageSelf" id="messageSelf"
                                       rows="6" disabled><?= $userData['userMessageSelf']; ?></textarea>
                         </div>
@@ -82,17 +86,17 @@
 
                         <div class="row uniform">
                             <div class="6u 12u$(xsmall)">
-                                <label for="name">Изменить имя</label>
+                                <label for="name">Change name</label>
                                 <input type="text" name="dataName" id="name"
                                        value="<?= $userData['userName']; ?>" required/>
                             </div>
                             <div class="6u 12u$(xsmall)">
-                                <label for="surname">Изменить фамилию</label>
+                                <label for="surname">Chane surname</label>
                                 <input type="text" name="dataSurname" id="surname"
                                        value="<?= $userData['userSurname']; ?>" required/>
                             </div>
                             <div class="12u$">
-                                <label for="messageSelf">Изменить описание</label>
+                                <label for="messageSelf">Change descriptions</label>
                                 <textarea name="dataMessageSelf" id="messageSelf"
                                           rows="6" required><?php if (!empty($_POST['dataMessageSelf'])) {
                                         echo $_POST['dataMessageSelf'];
@@ -101,7 +105,81 @@
                                     } ?></textarea>
                             </div>
                             <div class="-3u 6u 12u">
-                                <input class="fit" type="submit" name="changeDataForm" value="Change your data"/>
+                                <input class="big fit" type="submit" name="changeDataForm" value="Change your data"/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <a href="/user/cabinet" class="button big fit">Go back</a>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+            <?php elseif($changeData === 'changePassword'): ?>
+
+                <section>
+                    <h3 class="align-center">Change password</h3>
+                    <form method="post">
+
+                        <div class="row uniform">
+                            <div class="6u 12u$(xsmall)">
+                                <label for="dataPassword">Enter password</label>
+                                <input type="password" name="dataPassword" id="dataPassword"
+                                       value="" required/>
+                            </div>
+                            <div class="6u 12u$(xsmall)">
+                                <label for="dataRepeatPassword">Repeat password</label>
+                                <input type="password" name="dataRepeatPassword" id="dataRepeatPassword"
+                                       value="" required/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <input class="big fit" type="submit" name="changePassword" value="Change your password"/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <a href="/user/cabinet" class="button big fit">Go back</a>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+            <?php elseif($changeData === 'changeLogin'): ?>
+
+                <section>
+                    <h3 class="align-center">Change login</h3>
+                    <form method="post">
+
+                        <div class="row uniform">
+                            <div class="-3u 6u 12u$(xsmall)">
+                                <label for="dataLogin">Enter login</label>
+                                <input type="text" name="dataLogin" id="dataLogin"
+                                       value="<?= $userData['userLogin'];?>" required/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <input class="big fit" type="submit" name="changeLogin" value="Change your login"/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <a href="/user/cabinet" class="button big fit">Go back</a>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+            <?php elseif($changeData === 'changeEmail'): ?>
+
+                <section>
+                    <h3 class="align-center">Change email</h3>
+                    <form method="post">
+
+                        <div class="row uniform">
+                            <div class="-3u 6u 12u$(xsmall)">
+                                <label for="dataEmail">Enter email</label>
+                                <input type="text" name="dataEmail" id="dataEmail"
+                                       value="<?= $userData['userEmail'];?>" required/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <input class="big fit" type="submit" name="changeEmail" value="Change your email"/>
+                            </div>
+                            <div class="-3u 6u 12u">
+                                <a href="/user/cabinet" class="button big fit">Go back</a>
                             </div>
                         </div>
                     </form>

@@ -88,13 +88,60 @@ class UserController
                 $surname = htmlspecialchars($_POST['dataSurname']);
                 $messageSelf = htmlspecialchars($_POST['dataMessageSelf']);
 
-                $errors = User::ValidateMessage($messageSelf);
+                $errors = User::validateMessage($messageSelf);
 
                 if(empty($errors)) {
                     $changeUserData = User::changeData($name, $surname, $messageSelf);
 
                     if($changeData){
-                        header("Location: /user/cabinet");
+                        $message = User::createMessage($changeData);
+                        header("refresh: 3; url=/user/cabinet");
+                    }
+                }
+            }
+
+            if(!empty($_POST['changePassword'])){
+                $password = htmlspecialchars($_POST['dataPassword']);
+                $repeatPassword = htmlspecialchars($_POST['dataRepeatPassword']);
+
+                $errors = User::validateChangePassword($password, $repeatPassword);
+
+                if(empty($errors)){
+                    $changeUserPassword = User::changePassword($password);
+
+                    if($changeUserPassword){
+                        $message = User::createMessage($changeData);
+                        header("refresh: 3; url=/user/cabinet");
+                    }
+                }
+            }
+
+            if(!empty($_POST['changeLogin'])){
+                $login = htmlspecialchars($_POST['dataLogin']);
+
+                $errors = User::validateLogin($login);
+
+                if(empty($errors)){
+                    $changeLogin = User::changeLogin($login);
+
+                    if($changeLogin){
+                        $message = User::createMessage($changeData);
+                        header("refresh: 3; url=/user/cabinet");
+                    }
+                }
+            }
+
+            if(!empty($_POST['changeEmail'])){
+                $email = htmlspecialchars($_POST['dataEmail']);
+
+                $errors = User::validateEmail($email);
+
+                if(empty($errors)){
+                    $changeEmail = User::changeEmail($email);
+
+                    if($changeEmail){
+                        $message = User::createMessage($changeData);
+                        header("refresh: 3; url=/user/cabinet");
                     }
                 }
             }

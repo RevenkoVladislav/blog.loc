@@ -7,51 +7,51 @@ class User
         $errors = [];
 
         if (strlen($login) < 4) {
-            $errors[] = 'Короткий логин (менее 4х символов).';
+            $errors[] = 'Short login (less than 4 characters).';
         }
 
         if (self::checkLogin($login)) {
-            $errors[] = 'Логин уже занят.';
+            $errors[] = 'Login is already taken.';
         }
 
         if (preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $login) == false) {
-            $errors[] = 'Допустимы только латинские буквы и цифры.';
+            $errors[] = 'Only Latin letters and numbers are allowed.';
         }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) != true) {
-            $errors[] = 'Некорректный email.';
+            $errors[] = 'Incorrect email.';
         }
 
         if (self::checkEmail($email)) {
-            $errors[] = 'Пользователь, с данным email, уже зарегистрирован.';
+            $errors[] = 'The user with the given email is already registered.';
         }
 
         if ($password != $repeatPassword) {
-            $errors[] = 'Введенные вами пароли не совпадают.';
+            $errors[] = 'The passwords you entered do not match.';
         }
 
-        if (strlen($password) < 5) {
-            $errors[] = 'слишком короткий пароль (менее 5 символов).';
+        if (strlen($password) < 5 OR mb_strlen($password) < 5) {
+            $errors[] = 'Too short password (less than 5 characters).';
         }
 
-        if (strlen($messageSelf) < 20) {
-            $errors[] = 'Пожалуйста, расскажите побольше о себе. Нам будет очень интересно !';
+        if (strlen($messageSelf) < 20 OR mb_strlen($messageSelf) < 20) {
+            $errors[] = 'Please tell us more about yourself. It will be very interesting for us!';
         }
 
         if (empty($captcha)) {
-            $errors[] = 'Подтвердите, что вы не робот.';
+            $errors[] = 'Confirm that you are not a robot.';
         }
 
         if (strlen($pseudonym) < 4) {
-            $errors[] = 'Короткий псевдоним (менее 4х символов';
+            $errors[] = 'Short alias (less than 4 characters).';
         }
 
         if (preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $pseudonym) == false) {
-            $errors[] = 'Для псевдонима допустимы только латинские буквы и цифры.';
+            $errors[] = 'Only Latin letters and numbers are allowed for the alias.';
         }
 
         if (self::checkPseudonym($pseudonym)) {
-            $errors[] = 'Введенный псевдоним уже занят';
+            $errors[] = 'The alias you entered is already in use.';
         }
 
         return $errors;
@@ -187,11 +187,11 @@ class User
 
     }
 
-    public static function ValidateMessage($userMessageSelf){
+    public static function validateMessage($userMessageSelf){
         $errors = [];
 
         if (strlen($userMessageSelf) < 20) {
-            $errors[] = 'Пожалуйста, расскажите побольше о себе. Нам будет очень интересно !';
+            $errors[] = 'Please tell us more about yourself. It will be very interesting for us!';
         }
 
         return $errors;
@@ -212,5 +212,118 @@ class User
             $userPublications[$i]['stateCategory'] = $row['stateCategory'];
         }
         return $userPublications;
+    }
+
+    public static function validateChangePassword($password, $repeatPassword)
+    {
+        $errors = [];
+
+        if ($password != $repeatPassword) {
+            $errors[] = 'The passwords you entered do not match.';
+        }
+
+        if (strlen($password) < 5 OR mb_strlen($password) < 5) {
+            $errors[] = 'Too short password (less than 5 characters).';
+        }
+
+        return $errors;
+    }
+
+    public static function changePassword($password)
+    {
+        $db = DB::dbConnection();
+        $password = md5(md5($password));
+
+        $sql = "UPDATE `blog.loc`.users SET userPassword = :userPassword WHERE id = '{$_SESSION['userId']}'";
+        $result = $db->prepare($sql);
+
+        $result->bindParam(':userPassword', $password, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
+
+    public static function createMessage($options)
+    {
+        if($options == 'changeForm'){
+            $_SESSION['message'] = 'Your data has been successfully changed. (please wait 3 seconds, a redirect will occur)';
+            $message = $_SESSION['message'];
+        }
+
+        if($options == 'changePassword'){
+            $_SESSION['message'] = 'Your password has been successfully changed. (please wait 3 seconds, a redirect will occur)';
+            $message = $_SESSION['message'];
+        }
+
+        if($options == 'changeLogin'){
+            $_SESSION['message'] = 'Your login has been successfully changed. (please wait 3 seconds, a redirect will occur)';
+            $message = $_SESSION['message'];
+        }
+
+        if($options == 'changeEmail'){
+            $_SESSION['message'] = 'Your email has been successfully changed. (please wait 3 seconds, a redirect will occur)';
+            $message = $_SESSION['message'];
+        }
+
+        unset($_SESSION['message']);
+
+        return $message;
+    }
+
+    public static function validateLogin($login)
+    {
+        $errors = [];
+
+        if (strlen($login) < 4) {
+            $errors[] = 'Short login (less than 4 characters).';
+        }
+
+        if (self::checkLogin($login)) {
+            $errors[] = 'Login is already taken.';
+        }
+
+        if (preg_match('#^[a-zA-Z][a-zA-Z0-9-_\.]{4,20}$#', $login) == false) {
+            $errors[] = 'Only Latin letters and numbers are allowed.';
+        }
+
+        return $errors;
+    }
+
+    public static function changeLogin($login)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc`.users SET userLogin = :userLogin WHERE id = '{$_SESSION['userId']}'";
+
+        $result = $db->prepare($sql);
+        $result->bindParam(':userLogin', $login, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
+
+    public static function validateEmail($email)
+    {
+        $errors = [];
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) != true) {
+            $errors[] = 'Incorrect email.';
+        }
+
+        if (self::checkEmail($email)) {
+            $errors[] = 'The user with the given email is already registered.';
+        }
+
+        return $errors;
+    }
+
+    public static function changeEmail($email)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc`.users SET userEmail = :userEmail WHERE id = '{$_SESSION['userId']}'";
+
+        $result = $db->prepare($sql);
+        $result->bindParam(':userEmail', $email, PDO::PARAM_STR);
+
+        return $result->execute();
     }
 }
