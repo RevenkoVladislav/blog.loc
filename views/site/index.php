@@ -55,7 +55,7 @@
         <!-- Mini Posts -->
         <section>
             <div class="mini-posts">
-                <h2>Горячие новости</h2>
+                <h2>Hot news</h2>
                 <!-- Mini Post -->
                 <?php foreach($hotNews as $miniNew): ?>
                 <article class="mini-post">
@@ -74,7 +74,7 @@
 
         <!-- Posts List -->
         <section>
-            <h2>Последние новости</h2>
+            <h2>Latest news</h2>
             <ul class="posts">
                 <?php foreach($latestNews as $miniLatestNew): ?>
                 <li>

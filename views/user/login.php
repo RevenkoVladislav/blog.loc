@@ -20,12 +20,12 @@
                     <div class="row uniform">
 
                         <div class="-5u 12u$(xsmall)">
-                            <label for="login">Ваш логин</label>
+                            <label for="login">Enter login</label>
                             <input type="text" name="inLogin" id="login" value="" placeholder="Login" required/>
                         </div>
 
                         <div class="-5u 12u$(xsmall)">
-                            <label for="password">Ваш пароль</label>
+                            <label for="password">Enter password</label>
                             <input type="password" name="inPassword" id="password" value="" placeholder="Password" required/>
                         </div>
 

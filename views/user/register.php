@@ -25,36 +25,36 @@
 
             <div class="row uniform">
                 <div class="6u 12u$(xsmall)">
-                    <label for="name">Ваше имя</label>
+                    <label for="name">Your name</label>
                     <input type="text" name="name" id="name" value="<?php if(!empty($_POST['name'])) echo $_POST['name'];?>" placeholder="Name" required/>
                 </div>
                 <div class="6u 12u$(xsmall)">
-                    <label for="surname">Ваша фамилия</label>
+                    <label for="surname">Your surname</label>
                     <input type="text" name="surname" id="surname" value="<?php if(!empty($_POST['surname'])) echo $_POST['surname'];?>" placeholder="Surname" required/>
                 </div>
                 <div class="6u 12u$(xsmall)">
-                    <label for="login">Ваш логин</label>
+                    <label for="login">Your login</label>
                     <input type="text" name="login" id="login" value="<?php if(!empty($_POST['login'])) echo $_POST['login'];?>" placeholder="Login" required/>
                 </div>
                 <div class="6u 12u$(xsmall)">
-                    <label for="email">Ваш email</label>
+                    <label for="email">Your email</label>
                     <input type="email" name="email" id="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email'];?>" placeholder="Email" required/>
                 </div>
                 <div class="6u 16u$(xsmall)">
-                    <label for="password">Ваш пароль</label>
+                    <label for="password">Your password</label>
                     <input type="password" name="password" id="password" value="" placeholder="Password" required/>
                 </div>
                 <div class="6u 16u$(xsmall)">
-                    <label for="repeatPassword">Повторите пароль еще раз</label>
+                    <label for="repeatPassword">Repeat password</label>
                     <input type="password" name="repeatPassword" id="repeatPassword" value="" placeholder="Repeat Password" required/>
                 </div>
                 <div class="6u 16u$(xsmall)">
-                    <label for="pseudonym">Придумайте авторский псевдоним</label>
+                    <label for="pseudonym">Enter pseudonym</label>
                     <input type="text" name="pseudonym" id="pseudonym" value="<?php if(!empty($_POST['pseudonym'])) echo $_POST['pseudonym'];?>" placeholder="Pseudonym" required/>
                 </div>
 
                 <div class="12u$">
-                    <label for="messageSelf">Расскажите о себе</label>
+                    <label for="messageSelf">Tell us about yourself</label>
                     <textarea name="messageSelf" id="messageSelf" placeholder="Tell us about yourself" rows="6" required><?php if(!empty($_POST['messageSelf'])) echo $_POST['messageSelf'];?></textarea>
                 </div>
 
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="4u$ 12u$(small)">
-                    <label for="captcha">Подтвердите, что вы не робот</label>
+                    <label for="captcha">Confirm that you are not a robot</label>
                     <input type="checkbox" id="captcha" name="captcha">
                     <label for="captcha">Not a robot</label>
                 </div>
