@@ -201,7 +201,7 @@ class User
     {
         $db = DB::dbConnection();
 
-        $result = $db->query("SELECT id, stateName, stateDescription, stateCategory FROM `blog.loc`.news WHERE author = '$pseudonym'");
+        $result = $db->query("SELECT id, stateName, stateDescription, stateCategory FROM `blog.loc`.news WHERE author = '$pseudonym' AND status = '1'");
 
         $userPublications = [];
 
@@ -325,5 +325,80 @@ class User
         $result->bindParam(':userEmail', $email, PDO::PARAM_STR);
 
         return $result->execute();
+    }
+
+    public static function validateArticle($stateName, $stateDescription, $state)
+    {
+        $errors = [];
+
+        if(preg_match('#^[\w\s]{4,30}$#', $stateName) == false) {
+            $errors[] = 'For the title of the article only Latin letters and numbers are allowed.';
+        }
+
+        if(strlen($stateName) < 4){
+            $errors[] = 'Short title of the article (less than 4 characters).';
+        }
+
+        if(strlen($stateName) > 30){
+            $errors[] = 'Too long article title (more than 30 characters).';
+        }
+
+        if(self::checkStateName($stateName)){
+            $errors[] = 'This article title is already in use';
+        }
+
+        if(preg_match('#^[\w\s]{4,255}$#', $stateDescription) == false) {
+            $errors[] = 'For the description of the article, only Latin letters and numbers are allowed.';
+        }
+
+        if(strlen($stateDescription) < 4){
+            $errors[] = 'Short description of the article (less than 4 characters).';
+        }
+
+        if(strlen($stateDescription) > 255){
+            $errors[] = 'Too long article description (more than 255 characters).';
+        }
+
+        if(strlen($state) < 300){
+            $errors[] = 'Too short article (less than 300 characters).';
+        }
+
+        if(strlen($state) > 10000){
+            $errors[] = 'Too long article (more than 10000 characters)';
+        }
+
+        return $errors;
+    }
+
+    private static function checkStateName($stateName)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT stateName FROM `blog.loc`.news WHERE stateName = '$stateName'")->fetch();
+
+        return $result;
+    }
+
+    public static function addArticle($stateName, $stateDescription, $state, $stateCategory)
+    {
+        $db = DB::dbConnection();
+        $stateDate = date("Y-m-d", time());
+
+        $sql = "INSERT INTO `blog.loc`.news (author, state, stateName, stateDescription, stateDate, stateCategory) VALUES (:author, :state, :stateName, :stateDescription, :stateDate, :stateCategory)";
+        $result = $db->prepare($sql);
+
+        $result->bindParam(':author', $_SESSION['userPseudonym'], PDO::PARAM_STR);
+        $result->bindParam(':state', $state, PDO::PARAM_STR);
+        $result->bindParam(':stateName', $stateName, PDO::PARAM_STR);
+        $result->bindParam(':stateDescription', $stateDescription, PDO::PARAM_STR);
+        $result->bindParam(':stateDate', $stateDate, PDO::PARAM_STR);
+        $result->bindParam(':stateCategory', $stateCategory, PDO::PARAM_STR);
+
+        if($result->execute()){
+            $id = $db->lastInsertId();
+            return $id;
+        } else {
+            return false;
+        }
     }
 }

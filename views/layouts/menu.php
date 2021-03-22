@@ -47,7 +47,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/user/publication">
                     <h3>Add article</h3>
                     <p>Go to the publication page</p>
                 </a>

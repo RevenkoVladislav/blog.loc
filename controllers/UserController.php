@@ -69,7 +69,7 @@ class UserController
             if(User::checkLoginData($login, $password)){
                 header("Location: /user/cabinet");
             } else {
-                $error = 'Неверное сочетание логин-пароль';
+                $error = 'Invalid login-password combination';
             }
         }
 
@@ -149,6 +149,37 @@ class UserController
             $userPublications = User::getUserPublication($_SESSION['userPseudonym']);
 
             require_once(ROOT . '/views/user/cabinet.php');
+        } else {
+            header("Location: /user/login");
+        }
+        return true;
+    }
+
+    public function actionPublication()
+    {
+        if(User::checkAuth()) {
+            $categories = Category::getCategories();
+            $publication = false;
+            $errors = [];
+
+            if (!empty($_POST['addArticle'])) {
+                $stateName = htmlspecialchars($_POST['stateName']);
+                $stateDescription = htmlspecialchars($_POST['stateDescription']);
+                $state = htmlspecialchars($_POST['state']);
+                $stateCategory = htmlspecialchars($_POST['stateCategory']);
+
+                $errors = User::validateArticle($stateName, $stateDescription, $state);
+
+                if(empty($errors)){
+                    $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory);
+
+                    if($publication){
+                        header("Location: /news/$publication");
+                    }
+                }
+            }
+
+            require_once(ROOT . "/views/user/publication.php");
         } else {
             header("Location: /user/login");
         }
