@@ -401,4 +401,15 @@ class User
             return false;
         }
     }
+
+    public static function getAuthorId($author)
+    {
+        $db = DB::dbConnection();
+        $id = '';
+
+        $result = $db->query("SELECT id FROM `blog.loc`.users WHERE userPseudonym = '$author'")->fetch();
+        $id = $result['id'];
+
+        return $id;
+    }
 }

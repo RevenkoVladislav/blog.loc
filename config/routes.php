@@ -1,6 +1,9 @@
 <?php
 return
     [
+        'profile/([0-9]+)' => 'profile/view/$1', //actionView в ProfileController
+        'profile' => 'profile/index', //actionIndex в ProfileController
+
         'user/cabinet/([a-z]+)' => 'user/cabinet/$1', //actionCabinet в UserController
         'user/cabinet' => 'user/cabinet', //actionCabinet в UserController
         'user/register' => 'user/register', //actionRegister в UserController

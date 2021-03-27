@@ -9,7 +9,7 @@ class News
         $offset = self::getOffset($page);
 
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id,author,stateDescription, stateName, stateCategory, stateDate, likes FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
+        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, likes FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
 
         $news = [];
         for($i = 0; $row = $result->fetch(); $i++){
@@ -21,6 +21,7 @@ class News
             $news[$i]['stateDate'] = $row['stateDate'];
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
+            $news[$i]['userId'] = User::getAuthorId($row['author']);
         }
         return $news;
     }
