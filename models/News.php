@@ -44,6 +44,7 @@ class News
             $news[$i]['stateDate'] = $row['stateDate'];
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
+            $news[$i]['userId'] = User::getAuthorId($row['author']);
         }
         return $news;
     }
@@ -53,10 +54,14 @@ class News
         $id = intval($id);
         if($id){
             $db = DB::dbConnection();
-            $result = $db->query("SELECT * FROM `blog.loc`.news WHERE id='$id'");
-            $newsById = $result->fetch();
-            //добавить проверку существования по id, если нет то либо редирект, либо просто не открывать статью, либо ошибку 404
-            return $newsById;
+            $result = $db->query("SELECT * FROM `blog.loc`.news WHERE id = '$id'")->fetch();
+
+            if(empty($result)){
+                return false;
+            }
+
+            $result['userId'] = User::getAuthorId($result['author']);
+            return $result;
         }
     }
 
@@ -118,6 +123,8 @@ class News
             $linkNext = "<li><a href='/page-$page' class='button big next'>Next Page</a></li>";
         } elseif ($page == $total){
             $linkNext = "<li><a href='/page-$page' class='disabled button big next'>Next Page</a></li>";
+        } elseif ($page > $total){
+            header("Location: /page-$total");
         }
         return $linkNext;
     }
@@ -125,10 +132,10 @@ class News
     public static function getPrevPage($page)
     {
         $linkPrev = '';
-        if($page != 1){
+        if($page > 1 AND $page > 0){
             --$page;
             $linkPrev = "<li><a href='/page-$page' class='button big previous'>Previous Page</a></li>";
-        } elseif ($page == 1){
+        } elseif ($page < 1 OR $page < 0){
             $linkPrev = "<li><a href='/page-$page' class='disabled button big previous'>Previous Page</a></li>";
         }
         return $linkPrev;
@@ -143,6 +150,8 @@ class News
             $linkNext = "<li><a href='/category/$category/page-$page' class='button big next'>Next Page</a></li>";
         } elseif ($page == $total){
             $linkNext = "<li><a href='/category/$category/page-$page' class='disabled button big next'>Next Page</a></li>";
+        } elseif ($page > $total) {
+            header("Location: /category/$category/page-$total");
         }
         return $linkNext;
     }
@@ -150,10 +159,10 @@ class News
     public static function getPrevPageForCategory($category, $page)
     {
         $linkPrev = '';
-        if($page != 1){
+        if($page > 1 AND $page > 0){
             --$page;
             $linkPrev = "<li><a href='/category/$category/page-$page' class='button big previous'>Previous Page</a></li>";
-        } elseif ($page == 1){
+        } elseif ($page < 1 OR $page < 0){
             $linkPrev = "<li><a href='/category/$category/page-$page' class='disabled button big previous'>Previous Page</a></li>";
         }
         return $linkPrev;

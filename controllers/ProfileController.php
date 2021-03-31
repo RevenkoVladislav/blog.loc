@@ -13,6 +13,8 @@ class ProfileController
         if(User::checkAuth() AND $id == $_SESSION['userId']){
             header("Location: /user/cabinet");
         }
+        $profileData = User::getProfileUserData($id);
+        $userPublications = User::getUserPublication($profileData['userPseudonym']);
 
         $categories = Category::getCategories();
 

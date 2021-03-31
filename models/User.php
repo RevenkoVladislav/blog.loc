@@ -412,4 +412,17 @@ class User
 
         return $id;
     }
+
+    public static function getProfileUserData($id)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT userName, userSurname, userEmail, userPseudonym, userMessageSelf FROM `blog.loc`.users WHERE id = '$id'")->fetch();
+
+        if(empty($result)){
+            return false;
+        }
+
+        return $result;
+    }
 }

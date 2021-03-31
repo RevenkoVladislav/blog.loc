@@ -10,14 +10,23 @@
 
 						<!-- Post -->
 							<article class="post">
-								<header>
+
+                                <?php if ($newsById === false): ?>
+                                    <div class="4u$ 12u$(small)">
+                                        <label>Oops, the following errors occurred:</label>
+                                        <p class="error">* There is no such article.</p>
+                                        <p>Go to <a href="/">home page.</a></p>
+                                    </div>
+                                    <?php die; endif; ?>
+
+                                <header>
 									<div class="title">
-										<h2 class = "stateName"><a href="#"><?=$newsById['stateName'];?></a></h2>
+										<h2 class = "stateName"><?=$newsById['stateName'];?></a></h2>
                                         <p class="myLink">CATEGORY: <a href="/category/<?=$newsById['stateCategory'];?>"</a><?=$newsById['stateCategory'];?></p>
 									</div>
 									<div class="meta">
 										<time class="published stateDate" datetime="<?=$newsById['stateDate'];?>"><?=$newsById['stateDate'];?></time>
-										<a href="#" class="author"><span class="name"><?=$newsById['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
+										<a href="/profile/<?=$newsById['userId'];?>" class="author"><span class="name"><?=$newsById['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
 									</div>
 								</header>
 								<span class="image featured"><img src="/views/images/pic01.jpg" alt="" /></span>
