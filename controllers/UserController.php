@@ -36,6 +36,7 @@ class UserController
 
             if(empty($errors)){
                 $register = User::register($name, $surname, $login, $email, $password, $messageSelf, $pseudonym);
+                User::createLikesTable($pseudonym);
 
                 if(!empty($autoLog)){
                     User::userAuth($login);
@@ -172,6 +173,9 @@ class UserController
 
                 if(empty($errors)){
                     $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory);
+
+
+                    //User::createCommentsTable();
 
                     if($publication){
                         header("Location: /news/$publication");
