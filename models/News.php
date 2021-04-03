@@ -180,4 +180,42 @@ class News
 
         return $offset;
     }
+
+    public static function renderStateText($state)
+    {
+        $len = strlen($state);
+        $counter = 0;
+        $placeToAddSymbol = 0;
+        for($i = 0; $i != $len; $i++){
+            if($counter == 160){
+                if($placeToAddSymbol == 0){
+                    $placeToAddSymbol += $counter;
+                }
+                else{
+                    $placeToAddSymbol += $counter + 4;
+                }
+                $state = substr_replace($state, "<br>", $placeToAddSymbol, 0);
+                $counter = 0;
+            }
+            $counter++;
+        }
+        return $state;
+    }
+
+    public static function getAllComments($id)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT * FROM `blog.loc`.`{$id}_comments` WHERE `status` = '1'");
+
+        $comments = [];
+            for($i = 0; $row = $result->fetch(); $i++){
+                $comments[$i]['id'] = $row['id'];
+                $comments[$i]['author'] = $row['author'];
+                $comments[$i]['comment'] = $row['comment'];
+                $comments[$i]['publishedDate'] = $row['publishedDate'];
+                $comments[$i]['userId'] = User::getAuthorId($row['author']);
+            }
+        return $comments;
+    }
 }

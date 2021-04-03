@@ -40,5 +40,17 @@
 								</footer>
 							</article>
 
+                        <?php if(!empty($comments)): ?>
+                        <article class="post">
+                                <div class="title">
+                                    <h2><a href="/profile/<?=$comments['userId'];?>"><?= $comments['author'];?></a></h2>
+                                    <p>Send comment - <?=$comments['publishedDate'];?></p>
+                                </div>
+                            <pre><code><?=$comments['comment'];?></code></pre>
+                        </article>
+
+                        <?php else : ?>
+                            <p>No comments</p>
+                        <?php endif; ?>
 					</div>
 <?php include(ROOT . '/views/layouts/footer.php');?>

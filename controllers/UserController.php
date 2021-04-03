@@ -174,8 +174,7 @@ class UserController
                 if(empty($errors)){
                     $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory);
 
-
-                    //User::createCommentsTable();
+                    User::createCommentsTable(User::getPublicationId($stateName));
 
                     if($publication){
                         header("Location: /news/$publication");

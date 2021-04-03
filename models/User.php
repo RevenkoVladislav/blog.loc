@@ -446,9 +446,21 @@ class User
                   `id` INT NOT NULL AUTO_INCREMENT ,
                   `author` VARCHAR(255) NOT NULL ,
                   `comment` TEXT NOT NULL ,
+                  `publishedDate` DATE NOT NULL ,
+                  `status` INT NULL DEFAULT 1 , 
                   PRIMARY KEY (`id`))
                   ENGINE = InnoDB; ";
 
         $db->query($query);
+    }
+
+    public static function getPublicationId($stateName)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT id FROM `blog.loc`.news WHERE stateName = '$stateName'")->fetch();
+        $id = $result['id'];
+
+        return $id;
     }
 }
