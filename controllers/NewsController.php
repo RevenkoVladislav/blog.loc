@@ -13,6 +13,19 @@ class NewsController
             } else {
                 $newsById['state'] = News::renderStateText($newsById['state']);
                 $comments = News::getAllComments($id);
+                $checkAuth = User::checkAuth();
+
+                if(!empty($_POST['commentSend'])){
+                    $comment = htmlspecialchars($_POST['comment']);
+                    $commentDate = date("Y-m-d h:i:s", time());
+                    $author = $_SESSION['userPseudonym'];
+
+                    $result = News::sendComment($author, $comment, $commentDate, $id);
+
+                    if($result){
+                        header("Refresh:0");
+                    }
+                }
             }
 
 

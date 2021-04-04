@@ -22,7 +22,7 @@
                                 <header>
 									<div class="title">
 										<h2 class = "stateName"><?=$newsById['stateName'];?></a></h2>
-                                        <p class="myLink">CATEGORY: <a href="/category/<?=$newsById['stateCategory'];?>"</a><?=$newsById['stateCategory'];?></p>
+                                        <p class="myLink">CATEGORY: <a href="/category/<?=$newsById['stateCategory'];?>"><?=$newsById['stateCategory'];?></a></p>
 									</div>
 									<div class="meta">
 										<time class="published stateDate" datetime="<?=$newsById['stateDate'];?>"><?=$newsById['stateDate'];?></time>
@@ -40,17 +40,46 @@
 								</footer>
 							</article>
 
-                        <?php if(!empty($comments)): ?>
+                        <?php if($checkAuth === true): ?>
+
                         <article class="post">
-                                <div class="title">
-                                    <h2><a href="/profile/<?=$comments['userId'];?>"><?= $comments['author'];?></a></h2>
-                                    <p>Send comment - <?=$comments['publishedDate'];?></p>
+                            <form method="post" action="">
+                                <div class="row uniform">
+
+                                    <div class="12u$">
+                                        <label for="comment">Send your comment</label>
+                                        <textarea name="comment" id="comment" placeholder="Send your comment" rows="6" required></textarea>
+                                    </div>
+
+                                    <div class="6u$ 12u$">
+                                        <ul class="actions fit">
+                                            <li><input class="fit" name="commentSend" type="submit" value="Send comment" /></li>
+                                            <li><input type="reset" value="Reset" /></li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            <pre><code><?=$comments['comment'];?></code></pre>
+                            </form>
                         </article>
 
+                            <article class="post">
+                        <?php if(!empty($comments)): ?>
+                        <?php foreach($comments as $comment): ?>
+                                <div class="title">
+                                    <h2><a href="/profile/<?=$comment['userId'];?>"><?= $comment['author'];?></a></h2>
+                                    <p>Send comment - <?=$comment['publishedDate'];?></p>
+                                </div>
+                            <pre><code><?=$comment['comment'];?></code></pre>
+                        <?php endforeach; ?>
                         <?php else : ?>
-                            <p>No comments</p>
+                            <p>This article has no comments yet.</p>
+                        <?php endif; ?>
+                            </article>
+
+                        <?php else: ?>
+                            <article class="post">
+                                <p>Only authorized users can view and post comments.</p>
+                                <p>Please <a href="/user/register">Sign up</a> or <a href="/user/login">Sign in</a></p>
+                            </article>
                         <?php endif; ?>
 					</div>
 <?php include(ROOT . '/views/layouts/footer.php');?>

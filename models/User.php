@@ -429,7 +429,7 @@ class User
     public static function createLikesTable($pseudonym)
     {
         $db = DB::dbConnection();
-        $query = "CREATE TABLE `blog.loc`.`{$pseudonym}_likes` ( 
+        $query = "CREATE TABLE `blog.loc_likes`.`{$pseudonym}_likes` ( 
                   `id` INT NOT NULL AUTO_INCREMENT ,
                   `news_id` INT NOT NULL , 
                   `user_likes` INT NOT NULL DEFAULT '0' ,
@@ -442,11 +442,11 @@ class User
     public static function createCommentsTable($tableId)
     {
         $db = DB::dbConnection();
-        $query = "CREATE TABLE `blog.loc`.`{$tableId}_comments` (
+        $query = "CREATE TABLE `blog.loc_comments`.`{$tableId}_comments` (
                   `id` INT NOT NULL AUTO_INCREMENT ,
                   `author` VARCHAR(255) NOT NULL ,
                   `comment` TEXT NOT NULL ,
-                  `publishedDate` DATE NOT NULL ,
+                  `publishedDate` DATETIME NOT NULL ,
                   `status` INT NULL DEFAULT 1 , 
                   PRIMARY KEY (`id`))
                   ENGINE = InnoDB; ";

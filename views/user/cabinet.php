@@ -213,7 +213,7 @@
                         </tbody>
 
                         <?php endforeach; } else { ?>
-                            <p class="align-center">You have not posted anything yet. Go to the <a href="#">publication page ?</a></p>
+                            <p class="align-center">You have not posted anything yet. Go to the <a href="/user/publication">publication page ?</a></p>
                         <?php };?>
 
                     </table>

@@ -206,7 +206,7 @@ class News
     {
         $db = DB::dbConnection();
 
-        $result = $db->query("SELECT * FROM `blog.loc`.`{$id}_comments` WHERE `status` = '1'");
+        $result = $db->query("SELECT * FROM `blog.loc_comments`.`{$id}_comments` WHERE `status` = '1' ORDER BY `publishedDate` DESC");
 
         $comments = [];
             for($i = 0; $row = $result->fetch(); $i++){
@@ -217,5 +217,18 @@ class News
                 $comments[$i]['userId'] = User::getAuthorId($row['author']);
             }
         return $comments;
+    }
+
+    public static function sendComment($author, $comment, $commentDate, $stateId)
+    {
+        $db = DB::dbConnection();
+
+        $query = "INSERT INTO `blog.loc_comments`.`{$stateId}_comments` SET author = '$author', comment = '$comment', publishedDate = '$commentDate'";
+
+        if($db->query($query)){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
