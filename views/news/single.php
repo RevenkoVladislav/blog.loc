@@ -33,7 +33,9 @@
 								<p><?=$newsById['state'];?></p>
 								<footer>
 									<ul class="stats">
-										<li><a href="#">General</a></li>
+                                        <?php if($checkAuth === true AND $edit === true):?>
+										<li><a href="/user/edit/<?=$id;?>">Edit</a></li>
+										<?php endif; ?>
 										<li><a href="#" class="icon fa-heart"><?=$newsById['likes'];?></a></li>
 										<li><a href="#" class="icon fa-comment">128</a></li>
 									</ul>

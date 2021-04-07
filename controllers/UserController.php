@@ -188,4 +188,36 @@ class UserController
         }
         return true;
     }
+
+    public static function actionEdit($id)
+    {
+        if(User::checkAuth()) {
+            $categories = Category::getCategories();
+            $article = News::getNewsById($id);
+            $errors = [];
+
+            if ($article['author'] == $_SESSION['userPseudonym']) {
+
+                if (!empty($_POST['editArticle'])) {
+                    $editStateDescription = htmlspecialchars($_POST['editStateDescription']);
+                    $editState = htmlspecialchars($_POST['editState']);
+
+                    $errors = User::editValidateArticle($editStateDescription, $editState);
+
+                    if (empty($errors)) {
+                        $edit = User::editArticle($editStateDescription, $editState, $id);
+
+                        if ($edit) {
+                            header("Location: /news/$id");
+                        }
+                    }
+                }
+            } else {
+                header("Location: /news/$id");
+            }
+        }
+
+        require_once (ROOT . "/views/user/edit.php");
+        return true;
+    }
 }

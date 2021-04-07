@@ -463,4 +463,49 @@ class User
 
         return $id;
     }
+
+    public static function editValidateArticle($editStateDescription, $editState)
+    {
+        $errors = [];
+
+        if(preg_match('#^[\w\s]{4,255}$#', $editStateDescription) == false) {
+            $errors[] = 'For the description of the article, only Latin letters and numbers are allowed.';
+        }
+
+        if(strlen($editStateDescription) < 4){
+            $errors[] = 'Short description of the article (less than 4 characters).';
+        }
+
+        if(strlen($editStateDescription) > 255){
+            $errors[] = 'Too long article description (more than 255 characters).';
+        }
+
+        if(strlen($editState) < 300){
+            $errors[] = 'Too short article (less than 300 characters).';
+        }
+
+        if(strlen($editState) > 10000){
+            $errors[] = 'Too long article (more than 10000 characters)';
+        }
+
+        return $errors;
+    }
+
+    public static function editArticle($editStateDescription, $editState, $id)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc`.news SET stateDescription = :editStateDescription, state = :editState WHERE id = '$id'";
+        $result = $db->prepare($sql);
+
+        $result->bindParam(':editStateDescription', $editStateDescription, PDO::PARAM_STR);
+        $result->bindParam(':editState', $editState, PDO::PARAM_STR);
+
+
+        if($result->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

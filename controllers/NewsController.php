@@ -15,6 +15,14 @@ class NewsController
                 $comments = News::getAllComments($id);
                 $checkAuth = User::checkAuth();
 
+                if($checkAuth){
+                    if($newsById['author'] == $_SESSION['userPseudonym']){
+                        $edit = true;
+                    } else {
+                        $edit = false;
+                    }
+                }
+
                 if(!empty($_POST['commentSend'])){
                     $comment = htmlspecialchars($_POST['comment']);
                     $commentDate = date("Y-m-d h:i:s", time());

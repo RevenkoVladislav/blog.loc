@@ -198,6 +198,7 @@
                             <th>Name</th>
                             <th>Description</th>
                             <th>Category</th>
+                            <th>Edit</th>
                         </tr>
                         </thead>
 
@@ -209,6 +210,7 @@
                             <td><a href="/news/<?=$publication['id'];?>"><?=$publication['stateName'];?></a></td>
                             <td><?=$publication['stateDescription'];?></td>
                             <td><?=$publication['stateCategory'];?></td>
+                            <td><a href="/user/edit/<?=$publication['id'];?>" class="fa-align-center icon fa-pencil"></a></td>
                         </tr>
                         </tbody>
 

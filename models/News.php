@@ -231,4 +231,9 @@ class News
             return false;
         }
     }
+
+    public static function editState($id)
+    {
+
+    }
 }
