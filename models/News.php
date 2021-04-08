@@ -248,8 +248,12 @@ class News
     {
         $db = DB::dbConnection();
 
-        $likeNews = $db->query("UPDATE `blog.loc`.news SET likes = likes+1 WHERE id ='$id'");
-        $likeUser = $db->query("INSERT INTO `blog.loc_likes`.`{$author}_likes` SET `news_id` = '$id', `user_likes` = '1'");
+        if(self::checkLike($id, $author)){
+            $db->query("UPDATE `blog.loc_likes`.`{$author}_likes` SET `user_likes` = '1' WHERE `news_id` = '$id'");
+        } else {
+            $db->query("INSERT INTO `blog.loc_likes`.`{$author}_likes` SET `news_id` = '$id', `user_likes` = '1'");
+        }
+        $db->query("UPDATE `blog.loc`.news SET likes = likes+1 WHERE id ='$id'");
     }
 
     public static function getLike($id, $author)
@@ -270,6 +274,22 @@ class News
         $db = DB::dbConnection();
 
         $likeNews = $db->query("UPDATE `blog.loc`.news SET likes = likes-1 WHERE id ='$id'");
-        $likeUser = $db->query("UPDATE `blog.loc_likes`.`{$author}_likes` SET `news_id` = '$id', `user_likes` = '0'");
+
+        if(self::checkLike($id, $author)) {
+            $db->query("UPDATE `blog.loc_likes`.`{$author}_likes` SET `user_likes` = '0' WHERE `news_id` = '$id'");
+        }
+    }
+
+    private static function checkLike($id, $author)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT * FROM `blog.loc_likes`.`{$author}_likes` WHERE `news_id` ='$id'")->fetch();
+
+        if($result){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
