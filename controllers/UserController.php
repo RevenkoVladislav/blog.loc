@@ -199,8 +199,8 @@ class UserController
             if ($article['author'] == $_SESSION['userPseudonym']) {
 
                 if (!empty($_POST['editArticle'])) {
-                    $editStateDescription = htmlspecialchars($_POST['editStateDescription']);
-                    $editState = htmlspecialchars($_POST['editState']);
+                    $editStateDescription = trim(htmlspecialchars($_POST['editStateDescription']));
+                    $editState = trim(htmlspecialchars($_POST['editState']));
 
                     $errors = User::editValidateArticle($editStateDescription, $editState);
 

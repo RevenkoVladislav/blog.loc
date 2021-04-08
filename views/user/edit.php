@@ -34,13 +34,7 @@
 
                         <div class="12u$">
                             <label for="editState">Article</label>
-                            <textarea name="editState" id="editState" placeholder="Article" rows="15" required>
-                                <?php if (!empty($editState)){
-                                    echo $_POST['editState'];
-                                } else {
-                                    echo $article['state'];
-                                };?>
-                            </textarea>
+                            <textarea name="editState" id="editState" placeholder="Article" rows="15" required><?php if (!empty($editState)){ echo $_POST['editState']; } else { echo $article['state']; };?></textarea>
                         </div>
 
                         <div class="6u$ 12u$">

@@ -22,6 +22,7 @@ class News
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
+            $news[$i]['comments'] = News::getTotalComments($row['id']);
         }
         return $news;
     }
@@ -45,6 +46,7 @@ class News
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
+            $news[$i]['comment'] = News::getTotalComments($row['id']);
         }
         return $news;
     }
@@ -61,6 +63,7 @@ class News
             }
 
             $result['userId'] = User::getAuthorId($result['author']);
+            $result['comment'] = News::getTotalComments($result['id']);
             return $result;
         }
     }
@@ -75,7 +78,7 @@ class News
             $hotNews[$i]['id'] = $row['id'];
             $hotNews[$i]['author'] = $row['author'];
             $hotNews[$i]['stateName'] = $row['stateName'];
-            $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '15') . '...';
+            $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '25') . '...';
         }
         return $hotNews;
     }
@@ -187,7 +190,7 @@ class News
         $counter = 0;
         $placeToAddSymbol = 0;
         for($i = 0; $i != $len; $i++){
-            if($counter == 160){
+            if($counter == 170){
                 if($placeToAddSymbol == 0){
                     $placeToAddSymbol += $counter;
                 }
@@ -232,8 +235,13 @@ class News
         }
     }
 
-    public static function editState($id)
+    private static function getTotalComments($id)
     {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT count(*) FROM `blog.loc_comments`.`{$id}_comments` WHERE `status` = '1'")->fetchColumn();
+
+        return $result;
 
     }
 }

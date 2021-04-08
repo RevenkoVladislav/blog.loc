@@ -27,9 +27,8 @@
                         <li><a href="/news/<?=$newsItem['id'];?>" class="button big">Continue Reading</a></li>
                     </ul>
                     <ul class="stats">
-                        <li><a href="#">General</a></li>
                         <li><a href="#" class="icon fa-heart"><?=$newsItem['likes'];?></a></li>
-                        <li><a href="#" class="icon fa-comment">128</a></li>
+                        <li><a href="/news/<?=$newsItem['id'];?>" class="icon fa-comment"><?=$newsItem['comment'];?></a></li>
                     </ul>
                 </footer>
             </article>

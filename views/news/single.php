@@ -37,7 +37,7 @@
 										<li><a href="/user/edit/<?=$id;?>">Edit</a></li>
 										<?php endif; ?>
 										<li><a href="#" class="icon fa-heart"><?=$newsById['likes'];?></a></li>
-										<li><a href="#" class="icon fa-comment">128</a></li>
+                                        <li><a href="#" class="icon fa-comment"><?=$newsById['comment'];?></a></li>
 									</ul>
 								</footer>
 							</article>
