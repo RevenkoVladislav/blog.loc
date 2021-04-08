@@ -431,7 +431,7 @@ class User
         $db = DB::dbConnection();
         $query = "CREATE TABLE `blog.loc_likes`.`{$pseudonym}_likes` ( 
                   `id` INT NOT NULL AUTO_INCREMENT ,
-                  `news_id` INT NOT NULL , 
+                  `news_id` INT NOT NULL UNIQUE , 
                   `user_likes` INT NOT NULL DEFAULT '0' ,
                    PRIMARY KEY (`id`))
                    ENGINE = InnoDB;";

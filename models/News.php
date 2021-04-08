@@ -242,6 +242,34 @@ class News
         $result = $db->query("SELECT count(*) FROM `blog.loc_comments`.`{$id}_comments` WHERE `status` = '1'")->fetchColumn();
 
         return $result;
+    }
 
+    public static function like($id, $author)
+    {
+        $db = DB::dbConnection();
+
+        $likeNews = $db->query("UPDATE `blog.loc`.news SET likes = likes+1 WHERE id ='$id'");
+        $likeUser = $db->query("INSERT INTO `blog.loc_likes`.`{$author}_likes` SET `news_id` = '$id', `user_likes` = '1'");
+    }
+
+    public static function getLike($id, $author)
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT `user_likes` FROM `blog.loc_likes`.`{$author}_likes` WHERE `news_id` ='$id'")->fetch();
+
+        if($result['user_likes'] == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function unlike($id, $author)
+    {
+        $db = DB::dbConnection();
+
+        $likeNews = $db->query("UPDATE `blog.loc`.news SET likes = likes-1 WHERE id ='$id'");
+        $likeUser = $db->query("UPDATE `blog.loc_likes`.`{$author}_likes` SET `news_id` = '$id', `user_likes` = '0'");
     }
 }

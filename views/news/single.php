@@ -30,13 +30,17 @@
 									</div>
 								</header>
 								<span class="image featured"><img src="/views/images/pic01.jpg" alt="" /></span>
-								<p><?=$newsById['state'];?></p>
+								<p><?=$newsById['state'];?><br id="like"></p>
 								<footer>
 									<ul class="stats">
                                         <?php if($checkAuth === true AND $edit === true):?>
 										<li><a href="/user/edit/<?=$id;?>">Edit</a></li>
 										<?php endif; ?>
-										<li><a href="#" class="icon fa-heart"><?=$newsById['likes'];?></a></li>
+                                        <?php if($likeCount === true): ?>
+										<li><a href="/news/<?=$newsById['id'];?>/1" class="fa fa-heart disabledIcon "> <?=$newsById['likes'];?></a></li>
+										<?php else: ?>
+										<li><a href="/news/<?=$newsById['id'];?>/2" class="icon fa-heart likes"><?=$newsById['likes'];?></a></li>
+										<?php endif;?>
                                         <li><a href="#" class="icon fa-comment"><?=$newsById['comment'];?></a></li>
 									</ul>
 								</footer>

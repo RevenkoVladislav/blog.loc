@@ -2069,7 +2069,7 @@
 			font-family: FontAwesome;
 			font-style: normal;
 			font-weight: normal;
-			text-transform: none !important;
+			text-transform: none;
 		}
 
 		.icon > .label {
@@ -3475,4 +3475,11 @@
 	p.succes{
 		font-size: large;
 		color: lightseagreen;
+	}
+
+	.disabledIcon{
+		color: lightseagreen !important;
+		user-select: none;
+		border: none;
+		outline: none;
 	}

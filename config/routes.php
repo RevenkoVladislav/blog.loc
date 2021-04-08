@@ -12,6 +12,8 @@ return
         'user/logout' => 'user/logout', //actionLogout в UserController
         'user/publication' => 'user/publication', //actionPublication в UserController
 
+        'news/like/([0-9]+)' => 'news/like/$1', //actionLike в NewsController
+        'news/([0-9]+)/([0-1])' => 'news/view/$1/$2', //actionView в NewsController с добавлением Like
         'news/([0-9]+)' => 'news/view/$1', //actionView в NewsController
 
         'category/([a-z]+)/page-([0-9])' => 'category/index/$1/$2', //actionIndex в CategoryController

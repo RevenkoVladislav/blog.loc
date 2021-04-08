@@ -2,7 +2,7 @@
 
 class NewsController
 {
-    public function actionView($id){
+    public function actionView($id, $like = 0){
         $categories = Category::getCategories();
         
         if($id) {
@@ -23,10 +23,11 @@ class NewsController
                     }
                 }
 
+                $author = $_SESSION['userPseudonym'];
+
                 if(!empty($_POST['commentSend'])){
                     $comment = htmlspecialchars($_POST['comment']);
                     $commentDate = date("Y-m-d h:i:s", time());
-                    $author = $_SESSION['userPseudonym'];
 
                     $result = News::sendComment($author, $comment, $commentDate, $id);
 
@@ -34,8 +35,19 @@ class NewsController
                         header("Refresh:0");
                     }
                 }
-            }
 
+                $likeCount = News::getLike($id, $author);
+
+                if($like == 2 AND $checkAuth === true AND $likeCount === false){
+                    News::like($id, $author);
+                    header("Refresh:0; url=/news/$id" . "#like");
+                }
+
+                if($like == 1 AND $checkAuth === true AND $likeCount == true){
+                    News::unlike($id, $author);
+                    header("Refresh:0; url=/news/$id" . "#like");
+                }
+            }
 
             require_once (ROOT . '/views/news/single.php');
         }
