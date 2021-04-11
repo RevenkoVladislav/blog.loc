@@ -4,6 +4,16 @@ class CategoryController
 {
     public function actionIndex($categoryName, $page = 1)
     {
+        $checkAuth = User::checkAuth();
+
+        if($checkAuth) {
+            $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
+            $userAuthor = $_SESSION['userPseudonym'];
+        } else {
+            $userPseudonym = 'Welcome, guest';
+            $userAuthor = false;
+        }
+
         $categories = Category::getCategories();
 
         //получаем статьи с большим кол-вом лайков
@@ -13,13 +23,7 @@ class CategoryController
         $latestNews = News::getLatestNews();
 
         //получаем все статьи по категории
-        $news = News::getAllNewsByCategory($categoryName, $page);
-
-        if(User::checkAuth()) {
-            $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
-        } else {
-            $userPseudonym = 'Welcome, guest';
-        }
+        $news = News::getAllNewsByCategory($categoryName, $page, $userAuthor);
 
         //пагинация
         $nextPage = News::getNextPageForCategory($categoryName, $page);

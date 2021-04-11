@@ -4,7 +4,7 @@ class News
 {
     const SHOW_NEWS = 3;
 
-    public static function getAllNews($page)
+    public static function getAllNews($page, $userAuthor = false)
     {
         $offset = self::getOffset($page);
 
@@ -22,12 +22,15 @@ class News
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
-            $news[$i]['comments'] = News::getTotalComments($row['id']);
+            $news[$i]['comments'] = self::getTotalComments($row['id']);
+            if($userAuthor != false){
+                $news[$i]['isArticleLike'] = self::getLike($row['id'], $userAuthor);
+            }
         }
         return $news;
     }
 
-    public static function getAllNewsByCategory($category, $page)
+    public static function getAllNewsByCategory($category, $page, $userAuthor = false)
     {
         $category = htmlspecialchars($category);
         $offset = self::getOffset($page);
@@ -46,7 +49,10 @@ class News
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
-            $news[$i]['comment'] = News::getTotalComments($row['id']);
+            $news[$i]['comment'] = self::getTotalComments($row['id']);
+            if($userAuthor != false){
+                $news[$i]['isArticleLike'] = self::getLike($row['id'], $userAuthor);
+            }
         }
         return $news;
     }

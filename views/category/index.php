@@ -27,8 +27,16 @@
                         <li><a href="/news/<?=$newsItem['id'];?>" class="button big">Continue Reading</a></li>
                     </ul>
                     <ul class="stats">
-                        <li><a href="#" class="icon fa-heart"><?=$newsItem['likes'];?></a></li>
-                        <li><a href="/news/<?=$newsItem['id'];?>" class="icon fa-comment"><?=$newsItem['comment'];?></a></li>
+                        <?php if($checkAuth){
+                            if($newsItem['isArticleLike']){ ?>
+                                <li><a href="/news/<?=$newsItem['id'];?>#like" class="fa fa-heart disabledIcon"> <?=$newsItem['likes'];?></a></li>
+                            <?php } else { ?>
+                                <li><a href="/news/<?=$newsItem['id'];?>#like" class="icon fa-heart"><?=$newsItem['likes'];?></a></li>
+                            <?php }
+                        } else { ?>
+                            <li><a href="/news/<?=$newsItem['id'];?>#like" class="icon fa-heart"><?=$newsItem['likes'];?></a></li>
+                            <?php } ?>
+                        <li><a href="/news/<?=$newsItem['id'];?>#comments" class="icon fa-comment"><?=$newsItem['comment'];?></a></li>
                     </ul>
                 </footer>
             </article>

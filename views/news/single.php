@@ -33,22 +33,28 @@
 								<p><?=$newsById['state'];?><br id="like"></p>
 								<footer>
 									<ul class="stats">
-                                        <?php if($checkAuth === true AND $edit === true):?>
-										<li><a href="/user/edit/<?=$id;?>">Edit</a></li>
-										<?php endif; ?>
-                                        <?php if($likeCount === true): ?>
-										<li><a href="/news/<?=$newsById['id'];?>/1" class="fa fa-heart disabledIcon "> <?=$newsById['likes'];?></a></li>
-										<?php else: ?>
-										<li><a href="/news/<?=$newsById['id'];?>/2" class="icon fa-heart likes"><?=$newsById['likes'];?></a></li>
-										<?php endif;?>
-                                        <li><a href="#" class="icon fa-comment"><?=$newsById['comment'];?></a></li>
+                                        <?php if($checkAuth === true){
+                                            if($edit === true){ ?>
+                                                <li><a href="/user/edit/<?=$id;?>">Edit</a></li>
+                                            <?php }
+
+                                            if($likeCount === true){ ?>
+                                                <li><a href="/news/<?=$newsById['id'];?>/1" class="fa fa-heart disabledIcon "> <?=$newsById['likes'];?></a></li>
+                                            <?php } elseif($likeCount === false){ ?>
+                                            <li><a href="/news/<?=$newsById['id'];?>/2" class="icon fa-heart likes"><?=$newsById['likes'];?></a></li>
+                                            <?php }
+                                        } else { ?>
+                                            <li><a href="" class="icon fa-heart disabled"><?=$newsById['likes'];?></a></li>
+                                        <?php } ?>
+                                            <li><a href="#comments" class="icon fa-comment"><?=$newsById['comment'];?></a></li>
+
 									</ul>
 								</footer>
 							</article>
 
                         <?php if($checkAuth === true): ?>
 
-                        <article class="post">
+                        <article class="post" id="comments">
                             <form method="post" action="">
                                 <div class="row uniform">
 
@@ -82,7 +88,7 @@
                             </article>
 
                         <?php else: ?>
-                            <article class="post">
+                            <article class="post" id="comments">
                                 <p>Only authorized users can view and post comments.</p>
                                 <p>Please <a href="/user/register">Sign up</a> or <a href="/user/login">Sign in</a></p>
                             </article>

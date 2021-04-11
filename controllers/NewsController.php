@@ -23,10 +23,8 @@ class NewsController
                     }
                 }
 
-
                 if ($checkAuth) {
                     $author = $_SESSION['userPseudonym'];
-
                     if (!empty($_POST['commentSend'])) {
                         $comment = htmlspecialchars($_POST['comment']);
                         $commentDate = date("Y-m-d h:i:s", time());
@@ -45,7 +43,7 @@ class NewsController
                         header("Refresh:0; url=/news/$id" . "#like");
                     }
 
-                    if ($like == 1 AND $checkAuth === true AND $likeCount == true) {
+                    if ($like == 1 AND $checkAuth === true AND $likeCount === true) {
                         News::unlike($id, $author);
                         header("Refresh:0; url=/news/$id" . "#like");
                     }

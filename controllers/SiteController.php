@@ -4,6 +4,15 @@ class SiteController
 {
     public function actionIndex($page = 1)
     {
+        $checkAuth = User::checkAuth();
+        if($checkAuth) {
+            $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
+            $userAuthor = $_SESSION['userPseudonym'];
+        } else {
+            $userPseudonym = 'Welcome, guest';
+            $userAuthor = false;
+        }
+
         $categories = Category::getCategories();
 
         //получаем статьи с большим кол-вом лайков
@@ -13,13 +22,7 @@ class SiteController
         $latestNews = News::getLatestNews();
 
         //все статьи получаем
-        $news = News::getAllNews($page);
-
-        if(User::checkAuth()) {
-            $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
-        } else {
-            $userPseudonym = 'Welcome, guest';
-        }
+        $news = News::getAllNews($page, $userAuthor);
 
         //пагинация
         $nextPage = News::getNextPage($page);
