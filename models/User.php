@@ -508,4 +508,27 @@ class User
             return false;
         }
     }
+
+    public static function getUserEmail()
+    {
+        if(self::checkAuth()){
+            $db = DB::dbConnection();
+            $sql = "SELECT userEmail FROM `blog.loc`.users WHERE userPseudonym='{$_SESSION['userPseudonym']}'";
+            $result = $db->query($sql)->fetch();
+            return $result['userEmail'];
+        } else {
+            return false;
+        }
+    }
+
+    public static function validateEmailForContact($email)
+    {
+        $errors = [];
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) != true) {
+            $errors[] = 'Incorrect email.';
+        }
+
+        return $errors;
+    }
 }

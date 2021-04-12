@@ -102,7 +102,7 @@
             <h2>About</h2>
             <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at phasellus sed ultricies.</p>
             <ul class="actions">
-                <li><a href="#" class="button">Contact us</a></li>
+                <li><a href="/contact" class="button">Contact us</a></li>
             </ul>
         </section>
 <?php include(ROOT . '/views/layouts/footer.php');?>

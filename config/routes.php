@@ -1,6 +1,8 @@
 <?php
 return
     [
+        'contact' => 'contact/index', //actionIndex в ContactController
+
         'profile/([0-9]+)' => 'profile/view/$1', //actionView в ProfileController
         'profile' => 'profile/index', //actionIndex в ProfileController
 
