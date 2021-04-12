@@ -169,12 +169,21 @@ class UserController
                 $state = htmlspecialchars($_POST['state']);
                 $stateCategory = htmlspecialchars($_POST['stateCategory']);
 
-                $errors = User::validateArticle($stateName, $stateDescription, $state);
+                $tmpImage = $_FILES['stateImage']['tmp_name'];
+                $imageSize = getimagesize($tmpImage);
+                $imageName = md5_file($tmpImage);
+                $imageExtension = image_type_to_extension($imageSize[2]);
+                $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+
+                $finalImageName = $imageName . $imageFormat;
+
+                $errors = User::validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize);
 
                 if(empty($errors)){
-                    $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory);
-
+                    $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory, $finalImageName);
                     User::createCommentsTable(User::getPublicationId($stateName));
+                    User::uploadImage($tmpImage, $imageName, $imageFormat);
+
 
                     if($publication){
                         header("Location: /news/$publication");

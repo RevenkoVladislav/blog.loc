@@ -327,7 +327,7 @@ class User
         return $result->execute();
     }
 
-    public static function validateArticle($stateName, $stateDescription, $state)
+    public static function validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize)
     {
         $errors = [];
 
@@ -367,6 +367,26 @@ class User
             $errors[] = 'Too long article (more than 10000 characters)';
         }
 
+        $file = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = (string) finfo_file($file, $tmpImage);
+
+        if (strpos($mime, 'image') === false){
+            $errors[] = 'Only image files can be uploaded';
+        }
+
+        $limitBytes  = 1024 * 1024 * 5;
+        $limitWidth  = 1280;
+        $limitHeight = 768;
+
+        if (filesize($tmpImage) > $limitBytes){
+            $errors[] = 'Image size must not exceed 5 MB.';
+        }
+        if ($imageSize[1] > $limitHeight){
+            $errors[] = 'Image height should not exceed 768 pixels.';
+        }
+        if ($imageSize[0] > $limitWidth){
+            $errors[] = 'Image width should not exceed 1280 dots.';
+        }
         return $errors;
     }
 
@@ -379,12 +399,12 @@ class User
         return $result;
     }
 
-    public static function addArticle($stateName, $stateDescription, $state, $stateCategory)
+    public static function addArticle($stateName, $stateDescription, $state, $stateCategory, $finalImageName)
     {
         $db = DB::dbConnection();
         $stateDate = date("Y-m-d", time());
 
-        $sql = "INSERT INTO `blog.loc`.news (author, state, stateName, stateDescription, stateDate, stateCategory) VALUES (:author, :state, :stateName, :stateDescription, :stateDate, :stateCategory)";
+        $sql = "INSERT INTO `blog.loc`.news (author, state, stateName, stateDescription, stateDate, stateCategory, imagePath) VALUES (:author, :state, :stateName, :stateDescription, :stateDate, :stateCategory, :finalImageName)";
         $result = $db->prepare($sql);
 
         $result->bindParam(':author', $_SESSION['userPseudonym'], PDO::PARAM_STR);
@@ -393,6 +413,7 @@ class User
         $result->bindParam(':stateDescription', $stateDescription, PDO::PARAM_STR);
         $result->bindParam(':stateDate', $stateDate, PDO::PARAM_STR);
         $result->bindParam(':stateCategory', $stateCategory, PDO::PARAM_STR);
+        $result->bindParam(':finalImageName', $finalImageName, PDO::PARAM_STR);
 
         if($result->execute()){
             $id = $db->lastInsertId();
@@ -530,5 +551,10 @@ class User
         }
 
         return $errors;
+    }
+
+    public static function uploadImage($tmpImage, $imageName, $imageFormat)
+    {
+        move_uploaded_file($tmpImage, ROOT . '/views/images/' . $imageName . $imageFormat);
     }
 }

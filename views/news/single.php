@@ -29,7 +29,7 @@
 										<a href="/profile/<?=$newsById['userId'];?>" class="author"><span class="name"><?=$newsById['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
 									</div>
 								</header>
-								<span class="image featured"><img src="/views/images/pic01.jpg" alt="" /></span>
+								<span class="image featured"><img src="/views/images/<?=$newsById['imagePath'];?>" alt="" /></span>
 								<p><?=$newsById['state'];?><br id="like"></p>
 								<footer>
 									<ul class="stats">

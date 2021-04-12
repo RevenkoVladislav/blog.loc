@@ -9,7 +9,7 @@
         <article class="post">
             <section>
                 <h3 class="align-center">Add article</h3>
-                <form method="post" action="">
+                <form method="post" action="" enctype="multipart/form-data">
                     <?php if(!empty($errors)): ?>
                         <div class="4u$ 12u$(small)">
                             <label>Oops, the following errors occurred:</label>
@@ -38,6 +38,11 @@
                                 <option <?php if(!empty($stateCategory) AND $stateCategory == $category['categoryName']) echo 'selected';?> value="<?=$category['categoryName'];?>"><?=$category['categoryName'];?></option>
                                 <?php endforeach;?>
                             </select>
+                        </div>
+
+                        <div class="6u 12u$(xsmall)">
+                        <label for="stateImage">Upload image</label>
+                            <input type="file" name="stateImage" id="stateImage">
                         </div>
 
                         <div class="12u$">
