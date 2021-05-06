@@ -1,4 +1,7 @@
 <?php
+/**
+ * Класс отвечающий за вывод статей по категориям
+ */
 
 class CategoryController
 {
@@ -14,6 +17,7 @@ class CategoryController
             $userAuthor = false;
         }
 
+        //получаем категории
         $categories = Category::getCategories();
 
         //получаем статьи с большим кол-вом лайков

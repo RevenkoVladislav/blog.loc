@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * контроллер для обратной связи, отправки email
+*/
 
 class ContactController
 {
@@ -8,11 +10,17 @@ class ContactController
         $categories = Category::getCategories();
         $result = false;
 
+        //доступ только авторизованным пользователям
         if(!User::checkAuth()){
             header("Location: /");
         }
 
+        //получаем Email авторизованного пользователя
         $userEmail = User::getUserEmail();
+
+        /**
+         * валидация формы, формирование массива ошибок, отправка сообщения
+         */
 
         if(!empty($_POST['contactUs'])){
             $email = htmlspecialchars($_POST['contactEmail']);

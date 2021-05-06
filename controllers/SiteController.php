@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Контроллер главной страницы
+ */
 class SiteController
 {
     public function actionIndex($page = 1)

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Контроллер пользователя, регистрация, добавление и редактирование статей
+ */
 
 class UserController
 {
@@ -12,6 +15,9 @@ class UserController
             header("Location: /");
         }
 
+        /**
+         * Валидация при ригестрации, создание таблицы likes по псевдониму
+         */
         if(!empty($_POST['register'])){
             $name = htmlspecialchars($_POST['name']);
             $surname = htmlspecialchars($_POST['surname']);
@@ -38,6 +44,7 @@ class UserController
                 $register = User::register($name, $surname, $login, $email, $password, $messageSelf, $pseudonym);
                 User::createLikesTable($pseudonym);
 
+                //авторизация после регистрации если выбрано $autoLog
                 if(!empty($autoLog)){
                     User::userAuth($login);
                     header("Location: /");
@@ -67,6 +74,10 @@ class UserController
             $login = htmlspecialchars($_POST['inLogin']);
             $password = md5(md5(htmlspecialchars($_POST['inPassword'])));
 
+            /**
+             * Проверка при авторизации
+             */
+
             if(User::checkLoginData($login, $password)){
                 header("Location: /user/cabinet");
             } else {
@@ -84,6 +95,9 @@ class UserController
             $categories = Category::getCategories();
             $userData = User::getUserData();
 
+            /**
+             * Изменение данных пользователя
+             */
             if(!empty($_POST['changeDataForm'])){
                 $name = htmlspecialchars($_POST['dataName']);
                 $surname = htmlspecialchars($_POST['dataSurname']);
@@ -101,6 +115,9 @@ class UserController
                 }
             }
 
+            /**
+             * Изменение пароля
+             */
             if(!empty($_POST['changePassword'])){
                 $password = htmlspecialchars($_POST['dataPassword']);
                 $repeatPassword = htmlspecialchars($_POST['dataRepeatPassword']);
@@ -117,6 +134,9 @@ class UserController
                 }
             }
 
+            /**
+             * Изменение логина
+             */
             if(!empty($_POST['changeLogin'])){
                 $login = htmlspecialchars($_POST['dataLogin']);
 
@@ -132,6 +152,9 @@ class UserController
                 }
             }
 
+            /**
+             * Изменение email
+             */
             if(!empty($_POST['changeEmail'])){
                 $email = htmlspecialchars($_POST['dataEmail']);
 
@@ -147,6 +170,7 @@ class UserController
                 }
             }
 
+            //получаем публикации
             $userPublications = User::getUserPublication($_SESSION['userPseudonym']);
 
             require_once(ROOT . '/views/user/cabinet.php');
@@ -158,6 +182,9 @@ class UserController
 
     public function actionPublication()
     {
+        /**
+         * Публикация статьи, валидация, проверка mime типа картинки, создание таблицы комментариев для статьи, загрузка картинки
+         */
         if(User::checkAuth()) {
             $categories = Category::getCategories();
             $publication = false;
@@ -200,6 +227,9 @@ class UserController
 
     public static function actionEdit($id)
     {
+        /**
+         * редактирование статьи
+         */
         if(User::checkAuth()) {
             $categories = Category::getCategories();
             $article = News::getNewsById($id);

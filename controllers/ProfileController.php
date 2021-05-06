@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Контроллер для просмотра чужого профиля
+ */
 class ProfileController
 {
     public function actionIndex()
@@ -10,9 +13,16 @@ class ProfileController
 
     public function actionView($id)
     {
+        /**
+         * Если мы переходим к просмотру своего профиля то переходим в ЛК
+         */
         if(User::checkAuth() AND $id == $_SESSION['userId']){
             header("Location: /user/cabinet");
         }
+
+        /**
+         * Получаем данные пользователя и публикации пользователя
+         */
         $profileData = User::getProfileUserData($id);
         $userPublications = User::getUserPublication($profileData['userPseudonym']);
 
