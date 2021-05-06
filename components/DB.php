@@ -3,6 +3,9 @@
 class DB
 {
 public static function dbConnection()
+    /**
+     * подключение к базе данных
+     */
 {
     $params = require (ROOT . '/config/db_params.php');
     $dsn = "mysql:host={$params['host']};dbname={$params['dbname']};charset=utf8";

@@ -5,6 +5,10 @@ class News
     const SHOW_NEWS = 3;
 
     public static function getAllNews($page, $userAuthor = false)
+        /**
+         * Получаем все новости,
+         * если пользователь авторизован получаем поставвленные пользователем лайки
+         */
     {
         $offset = self::getOffset($page);
 
@@ -31,6 +35,10 @@ class News
     }
 
     public static function getAllNewsByCategory($category, $page, $userAuthor = false)
+        /**
+         * получаем все статьи по категориям,
+         * если пользователь авторизован получаем поставвленные пользователем лайки
+         */
     {
         $category = htmlspecialchars($category);
         $offset = self::getOffset($page);
@@ -58,6 +66,9 @@ class News
     }
 
     public static function getNewsById($id)
+        /**
+         * Получаем одну статью по id
+         */
     {
         $id = intval($id);
         if($id){
@@ -75,6 +86,9 @@ class News
     }
 
         public static function getHotNews()
+            /**
+             * Получаем горячие новости (где больше лайков)
+             */
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT id, author, stateName, stateDescription FROM `blog.loc`.news ORDER BY likes DESC LIMIT 5");
@@ -90,6 +104,9 @@ class News
     }
 
     public static function getLatestNews()
+        /**
+         * Получаем последние статьи, по дате и времени
+         */
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT id, stateName, stateDate FROM `blog.loc`.news ORDER BY stateDate DESC LIMIT 5");
@@ -104,6 +121,9 @@ class News
     }
 
     public static function getTotalNewsList()
+        /**
+         * Получаем общее количество новостей
+         */
     {
         $db = DB::dbConnection();
         $result = $db->query("SELECT count(id) AS count FROM `blog.loc`.news WHERE status='1'");
@@ -113,6 +133,9 @@ class News
     }
 
     public static function getTotalNewsListByCategory($category)
+        /**
+         * Получаем общее количество новостей по категориям
+         */
     {
         $category = htmlspecialchars($category);
 
@@ -124,6 +147,9 @@ class News
     }
 
     public static function getNextPage($page)
+        /**
+         * Метод для вывода пагинации следующей страницы
+         */
     {
         $total = self::getTotalNewsList();
         $linkNext = '';
@@ -139,6 +165,9 @@ class News
     }
 
     public static function getPrevPage($page)
+        /**
+         * Метод для вывода пагинации предыдущей страницы
+         */
     {
         $linkPrev = '';
         if($page > 1 AND $page > 0){
@@ -151,6 +180,9 @@ class News
     }
 
     public static function getNextPageForCategory($category, $page)
+        /**
+         * Метод для вывода следующей страницы с учетом категории
+         */
     {
         $total = self::getTotalNewsListByCategory($category);
         $linkNext = '';
@@ -166,6 +198,9 @@ class News
     }
 
     public static function getPrevPageForCategory($category, $page)
+        /**
+         * Метод для вывода предыдущей страницы с учетом категории
+         */
     {
         $linkPrev = '';
         if($page > 1 AND $page > 0){
@@ -178,6 +213,9 @@ class News
     }
 
     private static function getOffset($page)
+        /**
+         * Получаем оффсет для формирования пагинации
+         */
     {
         $page = intval($page);
 
@@ -191,6 +229,10 @@ class News
     }
 
     public static function renderStateText($state)
+        /**
+         * Рендер текста для корректного отображения в блоке,
+         * Формируется перенос строки при достижении Заданого $counter
+         */
     {
         $len = strlen($state);
         $counter = 0;
@@ -212,6 +254,10 @@ class News
     }
 
     public static function getAllComments($id)
+        /**
+         * Получаем все комментарии для статьи,
+         * по @id статьи
+         */
     {
         $db = DB::dbConnection();
 
@@ -229,6 +275,9 @@ class News
     }
 
     public static function sendComment($author, $comment, $commentDate, $stateId)
+        /**
+         * Отправляем комментарий
+         */
     {
         $db = DB::dbConnection();
 
@@ -242,6 +291,9 @@ class News
     }
 
     private static function getTotalComments($id)
+        /**
+         * Получаем количество всех комментариев по @id статьи
+         */
     {
         $db = DB::dbConnection();
 
@@ -251,6 +303,10 @@ class News
     }
 
     public static function like($id, $author)
+        /**
+         * Метод для лайка,
+         * Происходит проверка лайка статьи по @id от пользователя @author
+         */
     {
         $db = DB::dbConnection();
 
@@ -263,6 +319,9 @@ class News
     }
 
     public static function getLike($id, $author)
+        /**
+         * Получаем все лайки по @id от @author для отображения
+         */
     {
         $db = DB::dbConnection();
 
@@ -276,6 +335,10 @@ class News
     }
 
     public static function unlike($id, $author)
+        /**
+         * Дизлайк,
+         * Происходит проверка лайка статьи по @id от пользователя @author
+         */
     {
         $db = DB::dbConnection();
 
@@ -287,6 +350,9 @@ class News
     }
 
     private static function checkLike($id, $author)
+        /**
+         * Проверка, есть ли лайк от @author для статьи по @id
+         */
     {
         $db = DB::dbConnection();
 
