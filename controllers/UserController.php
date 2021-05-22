@@ -196,15 +196,15 @@ class UserController
                 $state = htmlspecialchars($_POST['state']);
                 $stateCategory = htmlspecialchars($_POST['stateCategory']);
 
-                $tmpImage = $_FILES['stateImage']['tmp_name'];
-                $imageSize = getimagesize($tmpImage);
-                $imageName = md5_file($tmpImage);
-                $imageExtension = image_type_to_extension($imageSize[2]);
+                $tmpImage = $_FILES['stateImage']['tmp_name']; //бинарный файл
+                $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
                 $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
 
                 $finalImageName = $imageName . $imageFormat;
 
-                $errors = User::validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize);
+                $errors = User::validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName);
 
                 if(empty($errors)){
                     $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory, $finalImageName);

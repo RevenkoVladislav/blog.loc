@@ -3,6 +3,9 @@
 class User
 {
     public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym)
+        /**
+         * проводим валидацию @login, @email, @password, @message, $captcha, $pseudonym
+         */
     {
         $errors = [];
 
@@ -58,6 +61,9 @@ class User
     }
 
     private static function checkPseudonym($pseudonym)
+        /**
+         * проверка @pseudonym на занятость
+         */
     {
         $db = DB::dbConnection();
 
@@ -67,6 +73,9 @@ class User
     }
 
     private static function checkEmail($email)
+        /**
+         * проверка @email На занятость
+         */
     {
         $db = DB::dbConnection();
 
@@ -76,6 +85,9 @@ class User
     }
 
     private static function checkLogin($login)
+        /**
+         * проверка @login На занятость
+         */
     {
         $db = DB::dbConnection();
 
@@ -85,6 +97,9 @@ class User
     }
 
     public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf, $userPseudonym)
+        /**
+         * регистрация, хешируем пароль, создаем запись в таблице пользователей
+         */
     {
         $db = DB::dbConnection();
 
@@ -105,6 +120,9 @@ class User
     }
 
     public static function getUserId($login)
+        /**
+         * получаем @userId по его @login
+         */
     {
         $db = DB::dbConnection();
         $id = '';
@@ -116,6 +134,9 @@ class User
     }
 
     public static function userAuth($login)
+        /**
+         * проводим авторизацию, получаем @userId, @userLogin, @userPseudonym
+         */
     {
         $_SESSION['userId'] = self::getUserId($login);
         $_SESSION['userLogin'] = $login;
@@ -123,6 +144,9 @@ class User
     }
 
     public static function checkAuth()
+        /**
+         * проверяет авторизован ли пользователь
+         */
     {
         if (!empty($_SESSION['userId']) OR !empty($_SESSION['userLogin'])) {
             return true;
@@ -132,6 +156,9 @@ class User
     }
 
     public static function checkLoginData($login, $password)
+        /**
+         * проверка введенных данных пользователя для входа. Если все верно то вызывается метод авторизации.
+         */
     {
         $db = DB::dbConnection();
 
@@ -153,6 +180,9 @@ class User
     }
 
     private static function getUserPseudonym($login)
+        /**
+         * получает @pseudonym пользователя по его @login
+         */
     {
         $db = DB::dbConnection();
         $id = '';
@@ -164,6 +194,9 @@ class User
     }
 
     public static function getUserData()
+        /**
+         * получаем данные о пользователе @name, @surname, @login, @email, @pseudonym
+         */
     {
         $db = DB::dbConnection();
 
@@ -173,6 +206,9 @@ class User
     }
 
     public static function changeData($userName, $userSurname, $userMessageSelf)
+        /**
+         * меняем данные пользователя - @name, @surname, @messageSelf
+         */
     {
         $db = DB::dbConnection();
         $sql = "UPDATE `blog.loc`.users SET userName = :userName, userSurname = :userSurname, userMessageSelf = :userMessageSelf WHERE id = '{$_SESSION['userId']}'";
@@ -187,7 +223,11 @@ class User
 
     }
 
-    public static function validateMessage($userMessageSelf){
+    public static function validateMessage($userMessageSelf)
+        /**
+         * проверка @messageSelf
+         */
+    {
         $errors = [];
 
         if (strlen($userMessageSelf) < 20) {
@@ -198,6 +238,9 @@ class User
     }
 
     public static function getUserPublication($pseudonym)
+        /**
+         * получаем публикации пользователя по его @pseudonym
+         */
     {
         $db = DB::dbConnection();
 
@@ -215,6 +258,9 @@ class User
     }
 
     public static function validateChangePassword($password, $repeatPassword)
+        /**
+         * валидация @password при замене пароля
+         */
     {
         $errors = [];
 
@@ -230,6 +276,9 @@ class User
     }
 
     public static function changePassword($password)
+        /**
+         * метод изменяющий пароль
+         */
     {
         $db = DB::dbConnection();
         $password = md5(md5($password));
@@ -243,6 +292,9 @@ class User
     }
 
     public static function createMessage($options)
+        /**
+         * метод для отображения блоков внутри html странички личного кабинет, в @options автоматически попадает часть из url по типу того, что хотим заменить. На основе этого строится итоговый @message для пользователя
+         */
     {
         if($options == 'changeForm'){
             $_SESSION['message'] = 'Your data has been successfully changed. (please wait 3 seconds, a redirect will occur)';
@@ -270,6 +322,9 @@ class User
     }
 
     public static function validateLogin($login)
+        /**
+         * валидация @login
+         */
     {
         $errors = [];
 
@@ -289,6 +344,9 @@ class User
     }
 
     public static function changeLogin($login)
+        /**
+         * изменение @login
+         */
     {
         $db = DB::dbConnection();
 
@@ -301,6 +359,9 @@ class User
     }
 
     public static function validateEmail($email)
+        /**
+         * валидация @email
+         */
     {
         $errors = [];
 
@@ -316,6 +377,9 @@ class User
     }
 
     public static function changeEmail($email)
+        /**
+         * изменение @email
+         */
     {
         $db = DB::dbConnection();
 
@@ -327,7 +391,10 @@ class User
         return $result->execute();
     }
 
-    public static function validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize)
+    public static function validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName)
+        /**
+         * проверка статьи, на кол-во символов, имя, допустимые символы, и проверка загружаемой картинки.
+         */
     {
         $errors = [];
 
@@ -367,13 +434,14 @@ class User
             $errors[] = 'Too long article (more than 10000 characters)';
         }
 
-        $file = finfo_open(FILEINFO_MIME_TYPE);
-        $mime = (string) finfo_file($file, $tmpImage);
+        $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
+        $mime = (string) finfo_file($file, $tmpImage); //получаем mime тип
 
-        if (strpos($mime, 'image') === false){
+        if (strpos($mime, 'image') === false){ //проверяем Mime Тип
             $errors[] = 'Only image files can be uploaded';
         }
 
+        //проверяем допустимые размеры картинки
         $limitBytes  = 1024 * 1024 * 5;
         $limitWidth  = 1280;
         $limitHeight = 768;
@@ -381,16 +449,26 @@ class User
         if (filesize($tmpImage) > $limitBytes){
             $errors[] = 'Image size must not exceed 5 MB.';
         }
+
         if ($imageSize[1] > $limitHeight){
             $errors[] = 'Image height should not exceed 768 pixels.';
         }
+
         if ($imageSize[0] > $limitWidth){
             $errors[] = 'Image width should not exceed 1280 dots.';
         }
+
+        if(self::checkFileName($finalImageName)){
+            $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
+        }
+
         return $errors;
     }
 
     private static function checkStateName($stateName)
+        /**
+         * проверка @stateName На занятость
+         */
     {
         $db = DB::dbConnection();
 
@@ -400,6 +478,9 @@ class User
     }
 
     public static function addArticle($stateName, $stateDescription, $state, $stateCategory, $finalImageName)
+        /**
+         * метод, добавляющий статью в базу данных
+         */
     {
         $db = DB::dbConnection();
         $stateDate = date("Y-m-d", time());
@@ -424,6 +505,9 @@ class User
     }
 
     public static function getAuthorId($author)
+        /**
+         * получаем @id автора по @author
+         */
     {
         $db = DB::dbConnection();
         $id = '';
@@ -435,6 +519,9 @@ class User
     }
 
     public static function getProfileUserData($id)
+        /**
+         * получаем данные профиля @name, @surname, @email, @pseudonym, @messageSelf
+         */
     {
         $db = DB::dbConnection();
 
@@ -448,6 +535,9 @@ class User
     }
 
     public static function createLikesTable($pseudonym)
+        /**
+         * создание таблицы лайков по @pseudonym пользователя
+         */
     {
         $db = DB::dbConnection();
         $query = "CREATE TABLE `blog.loc_likes`.`{$pseudonym}_likes` ( 
@@ -461,6 +551,9 @@ class User
     }
 
     public static function createCommentsTable($tableId)
+        /**
+         * создание таблицы комментариев по @tableId статьи
+         */
     {
         $db = DB::dbConnection();
         $query = "CREATE TABLE `blog.loc_comments`.`{$tableId}_comments` (
@@ -476,6 +569,9 @@ class User
     }
 
     public static function getPublicationId($stateName)
+        /**
+         * получаем @id публикации по ее @stateName
+         */
     {
         $db = DB::dbConnection();
 
@@ -486,6 +582,9 @@ class User
     }
 
     public static function editValidateArticle($editStateDescription, $editState)
+        /**
+         * проверка изминений статьи при редактировании
+         */
     {
         $errors = [];
 
@@ -513,6 +612,9 @@ class User
     }
 
     public static function editArticle($editStateDescription, $editState, $id)
+        /**
+         * изминение статьи пользователем
+         */
     {
         $db = DB::dbConnection();
 
@@ -531,6 +633,9 @@ class User
     }
 
     public static function getUserEmail()
+        /**
+         * получаем @email авторизованного пользователя
+         */
     {
         if(self::checkAuth()){
             $db = DB::dbConnection();
@@ -543,6 +648,9 @@ class User
     }
 
     public static function validateEmailForContact($email)
+        /**
+         * валидация введенного @email для обратной связи
+         */
     {
         $errors = [];
 
@@ -554,7 +662,22 @@ class User
     }
 
     public static function uploadImage($tmpImage, $imageName, $imageFormat)
+        /**
+         * метод перемещающий загруженный файл
+         */
     {
         move_uploaded_file($tmpImage, ROOT . '/views/images/' . $imageName . $imageFormat);
+    }
+
+    private static function checkFileName($finalImageName)
+        /**
+         * проверка @fileName для загружаемого файла
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE imagePath = '$finalImageName'";
+        $result = $db->query($sql)->fetch();
+        return $result;
     }
 }

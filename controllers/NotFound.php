@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Геральт
- * Date: 02.03.2021
- * Time: 7:34
- */
 
 class NotFound
 {
