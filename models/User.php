@@ -443,8 +443,8 @@ class User
 
         //проверяем допустимые размеры картинки
         $limitBytes  = 1024 * 1024 * 5;
-        $limitWidth  = 1280;
-        $limitHeight = 768;
+        $limitWidth  = 1920;
+        $limitHeight = 1080;
 
         if (filesize($tmpImage) > $limitBytes){
             $errors[] = 'Image size must not exceed 5 MB.';

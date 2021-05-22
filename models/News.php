@@ -13,7 +13,7 @@ class News
         $offset = self::getOffset($page);
 
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, likes FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
+        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, likes, imagePath FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
 
         $news = [];
         for($i = 0; $row = $result->fetch(); $i++){
@@ -27,6 +27,7 @@ class News
             $news[$i]['likes'] = $row['likes'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
             $news[$i]['comments'] = self::getTotalComments($row['id']);
+            $news[$i]['imagePath'] = $row['imagePath'];
             if($userAuthor != false){
                 $news[$i]['isArticleLike'] = self::getLike($row['id'], $userAuthor);
             }

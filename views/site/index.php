@@ -20,7 +20,7 @@
                         <a href="/profile/<?=$newsItem['userId'];?>" class="author"><span class="name"><?=$newsItem['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
                     </div>
                 </header>
-                <a href="/news/<?=$newsItem['id'];?>" class="image featured"><img src="/views/images/pic01.jpg" alt="" /></a>
+                <a href="/news/<?=$newsItem['id'];?>" class="image featured"><img src="/views/images/<?=$newsItem['imagePath'];?>" alt="" /></a>
                 <p><?=$newsItem['stateDescription'];?></p>
                 <footer>
                     <ul class="actions">
