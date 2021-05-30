@@ -241,10 +241,29 @@ class UserController
                     $editStateDescription = trim(htmlspecialchars($_POST['editStateDescription']));
                     $editState = trim(htmlspecialchars($_POST['editState']));
 
-                    $errors = User::editValidateArticle($editStateDescription, $editState);
+                    if(!empty($_FILES['editImage']['size'])){
+                        $tmpImage = $_FILES['editImage']['tmp_name']; //бинарный файл
+                        $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                        $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                        $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                        $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                        $finalImageName = $imageName . $imageFormat;
+                        $fileUpload = true;
+                    } else {
+                        $tmpImage = false;
+                        $imageSize = false;
+                        $finalImageName = false;
+                        $fileUpload = false;
+                    }
+
+                    $errors = User::editValidateArticle($editStateDescription, $editState, $fileUpload, $tmpImage, $imageSize, $finalImageName);
 
                     if (empty($errors)) {
-                        $edit = User::editArticle($editStateDescription, $editState, $id);
+                        if($fileUpload) {
+                            User::uploadImage($tmpImage, $imageName, $imageFormat);
+                        }
+
+                        $edit = User::editArticle($editStateDescription, $editState, $id, $finalImageName);
 
                         if ($edit) {
                             header("Location: /news/$id");

@@ -451,11 +451,11 @@ class User
         }
 
         if ($imageSize[1] > $limitHeight){
-            $errors[] = 'Image height should not exceed 768 pixels.';
+            $errors[] = 'Image height should not exceed 1080 pixels.';
         }
 
         if ($imageSize[0] > $limitWidth){
-            $errors[] = 'Image width should not exceed 1280 dots.';
+            $errors[] = 'Image width should not exceed 1920 dots.';
         }
 
         if(self::checkFileName($finalImageName)){
@@ -581,9 +581,9 @@ class User
         return $id;
     }
 
-    public static function editValidateArticle($editStateDescription, $editState)
+    public static function editValidateArticle($editStateDescription, $editState, $fileUpload, $tmpImage, $imageSize, $finalImageName)
         /**
-         * проверка изминений статьи при редактировании
+         * проверка изминений статьи и картинки при редактировании
          */
     {
         $errors = [];
@@ -608,22 +608,62 @@ class User
             $errors[] = 'Too long article (more than 10000 characters)';
         }
 
+        if($fileUpload) {
+
+            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
+            $mime = (string) finfo_file($file, $tmpImage); //получаем mime тип
+
+            if (strpos($mime, 'image') === false){ //проверяем Mime Тип
+                $errors[] = 'Only image files can be uploaded';
+            }
+
+            //проверяем допустимые размеры картинки
+            $limitBytes  = 1024 * 1024 * 5;
+            $limitWidth  = 1920;
+            $limitHeight = 1080;
+
+            if (filesize($tmpImage) > $limitBytes) {
+                $errors[] = 'Image size must not exceed 5 MB.';
+            }
+
+            if ($imageSize[1] > $limitHeight) {
+                $errors[] = 'Image height should not exceed 1080 pixels.';
+            }
+
+            if ($imageSize[0] > $limitWidth) {
+                $errors[] = 'Image width should not exceed 1920 dots.';
+            }
+
+            if (self::checkFileName($finalImageName)) {
+                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
+            }
+        }
+
         return $errors;
     }
 
-    public static function editArticle($editStateDescription, $editState, $id)
+    public static function editArticle($editStateDescription, $editState, $id, $finalImageName)
         /**
          * изминение статьи пользователем
          */
     {
         $db = DB::dbConnection();
 
-        $sql = "UPDATE `blog.loc`.news SET stateDescription = :editStateDescription, state = :editState WHERE id = '$id'";
-        $result = $db->prepare($sql);
+        if($finalImageName != false) {
+            $sql = "UPDATE `blog.loc`.news SET stateDescription = :editStateDescription, state = :editState, imagePath = :finalImagePath WHERE id = '$id'";
+            $result = $db->prepare($sql);
 
-        $result->bindParam(':editStateDescription', $editStateDescription, PDO::PARAM_STR);
-        $result->bindParam(':editState', $editState, PDO::PARAM_STR);
+            $result->bindParam(':editStateDescription', $editStateDescription, PDO::PARAM_STR);
+            $result->bindParam(':editState', $editState, PDO::PARAM_STR);
+            $result->bindParam(':finalImagePath', $finalImageName, PDO::PARAM_STR);
 
+        } else {
+            $sql = "UPDATE `blog.loc`.news SET stateDescription = :editStateDescription, state = :editState WHERE id = '$id'";
+            $result = $db->prepare($sql);
+
+            $result->bindParam(':editStateDescription', $editStateDescription, PDO::PARAM_STR);
+            $result->bindParam(':editState', $editState, PDO::PARAM_STR);
+        }
 
         if($result->execute()){
             return true;

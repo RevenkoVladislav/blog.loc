@@ -4,7 +4,6 @@
 <div id="wrapper">
     <!-- Header -->
     <?php include (ROOT . '/views/layouts/menu.php');?>
-
     <div id="main">
         <article class="post">
             <section>
