@@ -2,7 +2,7 @@
 
 class User
 {
-    public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym)
+    public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym, $tmpImage, $imageSize, $finalImageName, $fileUpload)
         /**
          * проводим валидацию @login, @email, @password, @message, $captcha, $pseudonym
          */
@@ -57,6 +57,36 @@ class User
             $errors[] = 'The alias you entered is already in use.';
         }
 
+        if($fileUpload) {
+
+            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
+            $mime = (string)finfo_file($file, $tmpImage); //получаем mime тип
+
+            if (strpos($mime, 'image') === false) { //проверяем Mime Тип
+                $errors[] = 'Only image files can be uploaded';
+            }
+
+            //проверяем допустимые размеры картинки
+            $limitBytes = 1024 * 1024 * 5;
+            $limitWidth = 256;
+            $limitHeight = 256;
+
+            if (filesize($tmpImage) > $limitBytes) {
+                $errors[] = 'Image size must not exceed 5 MB.';
+            }
+
+            if ($imageSize[1] > $limitHeight) {
+                $errors[] = 'Image height should not exceed 256 pixels.';
+            }
+
+            if ($imageSize[0] > $limitWidth) {
+                $errors[] = 'Image width should not exceed 256 dots.';
+            }
+
+            if (self::checkFileName($finalImageName)) {
+                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
+            }
+        }
         return $errors;
     }
 
@@ -96,7 +126,7 @@ class User
         return $result;
     }
 
-    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf, $userPseudonym)
+    public static function register($userName, $userSurname, $userLogin, $userEmail, $userPassword, $userMessageSelf, $userPseudonym, $finalImageName)
         /**
          * регистрация, хешируем пароль, создаем запись в таблице пользователей
          */
@@ -105,7 +135,7 @@ class User
 
         $userPassword = md5(md5($userPassword));
 
-        $sql = "INSERT INTO `blog.loc`.users (userName, userSurname, userLogin, userEmail, userPassword, userMessageSelf, userPseudonym) VALUES (:userName, :userSurname, :userLogin, :userEmail, :userPassword, :userMessageSelf, :userPseudonym)";
+        $sql = "INSERT INTO `blog.loc`.users (userName, userSurname, userLogin, userEmail, userPassword, userMessageSelf, userPseudonym, userAvatar) VALUES (:userName, :userSurname, :userLogin, :userEmail, :userPassword, :userMessageSelf, :userPseudonym, :userAvatar)";
         $result = $db->prepare($sql);
 
         $result->bindParam(':userName', $userName, PDO::PARAM_STR);
@@ -115,6 +145,7 @@ class User
         $result->bindParam(':userPassword', $userPassword, PDO::PARAM_STR);
         $result->bindParam(':userMessageSelf', $userMessageSelf, PDO::PARAM_STR);
         $result->bindParam(':userPseudonym', $userPseudonym, PDO::PARAM_STR);
+        $result->bindParam(':userAvatar', $finalImageName, PDO::PARAM_STR);
 
         return $result->execute();
     }
@@ -391,7 +422,7 @@ class User
         return $result->execute();
     }
 
-    public static function validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName)
+    public static function validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName, $fileUpload)
         /**
          * проверка статьи, на кол-во символов, имя, допустимые символы, и проверка загружаемой картинки.
          */
@@ -434,32 +465,34 @@ class User
             $errors[] = 'Too long article (more than 10000 characters)';
         }
 
-        $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
-        $mime = (string) finfo_file($file, $tmpImage); //получаем mime тип
+        if($fileUpload) {
+            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
+            $mime = (string)finfo_file($file, $tmpImage); //получаем mime тип
 
-        if (strpos($mime, 'image') === false){ //проверяем Mime Тип
-            $errors[] = 'Only image files can be uploaded';
-        }
+            if (strpos($mime, 'image') === false) { //проверяем Mime Тип
+                $errors[] = 'Only image files can be uploaded';
+            }
 
-        //проверяем допустимые размеры картинки
-        $limitBytes  = 1024 * 1024 * 5;
-        $limitWidth  = 1920;
-        $limitHeight = 1080;
+            //проверяем допустимые размеры картинки
+            $limitBytes = 1024 * 1024 * 5;
+            $limitWidth = 1500;
+            $limitHeight = 1000;
 
-        if (filesize($tmpImage) > $limitBytes){
-            $errors[] = 'Image size must not exceed 5 MB.';
-        }
+            if (filesize($tmpImage) > $limitBytes) {
+                $errors[] = 'Image size must not exceed 5 MB.';
+            }
 
-        if ($imageSize[1] > $limitHeight){
-            $errors[] = 'Image height should not exceed 1080 pixels.';
-        }
+            if ($imageSize[1] > $limitHeight) {
+                $errors[] = 'Image height should not exceed 1080 pixels.';
+            }
 
-        if ($imageSize[0] > $limitWidth){
-            $errors[] = 'Image width should not exceed 1920 dots.';
-        }
+            if ($imageSize[0] > $limitWidth) {
+                $errors[] = 'Image width should not exceed 1920 dots.';
+            }
 
-        if(self::checkFileName($finalImageName)){
-            $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
+            if (self::checkFileName($finalImageName)) {
+                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
+            }
         }
 
         return $errors;
@@ -619,8 +652,8 @@ class User
 
             //проверяем допустимые размеры картинки
             $limitBytes  = 1024 * 1024 * 5;
-            $limitWidth  = 1920;
-            $limitHeight = 1080;
+            $limitWidth  = 1500;
+            $limitHeight = 1000;
 
             if (filesize($tmpImage) > $limitBytes) {
                 $errors[] = 'Image size must not exceed 5 MB.';
@@ -719,5 +752,17 @@ class User
         $sql = "SELECT imagePath FROM `blog.loc`.news WHERE imagePath = '$finalImageName'";
         $result = $db->query($sql)->fetch();
         return $result;
+    }
+
+    public static function getUserAvatar($author)
+        /**
+         * получаем аватарку пользователя
+         */
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT userAvatar FROM `blog.loc`.users WHERE userPseudonym = '$author'")->fetch();
+
+        return $result['userAvatar'];
     }
 }

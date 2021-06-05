@@ -9,7 +9,7 @@
         <article class="post">
         <section>
         <h3>Registration</h3>
-        <form method="post" action="">
+        <form method="post" action="" enctype="multipart/form-data">
             <?php if(!empty($errors)): ?>
                 <div class="4u$ 12u$(small)">
                     <label>Oops, the following errors occurred:</label>
@@ -52,7 +52,10 @@
                     <label for="pseudonym">Enter pseudonym</label>
                     <input type="text" name="pseudonym" id="pseudonym" value="<?php if(!empty($_POST['pseudonym'])) echo $_POST['pseudonym'];?>" placeholder="Pseudonym" required/>
                 </div>
-
+                <div class="6u 16u$(xsmall)">
+                    <label for="avatar">Upload avatar</label>
+                    <input type="file" name="avatar" id="avatar">
+                </div>
                 <div class="12u$">
                     <label for="messageSelf">Tell us about yourself</label>
                     <textarea name="messageSelf" id="messageSelf" placeholder="Tell us about yourself" rows="6" required><?php if(!empty($_POST['messageSelf'])) echo $_POST['messageSelf'];?></textarea>

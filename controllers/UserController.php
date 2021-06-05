@@ -38,10 +38,29 @@ class UserController
                 $captcha = htmlspecialchars($_POST['captcha']);
             }
 
-            $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym);
+            if(!empty($_FILES['avatar']['size'])){
+                $tmpImage = $_FILES['avatar']['tmp_name']; //бинарный файл
+                $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                $finalImageName = $imageName . $imageFormat;
+                $fileUpload = true;
+            } else {
+                $tmpImage = false;
+                $imageSize = false;
+                $finalImageName = 'avatar.jpg';
+                $fileUpload = false;
+            }
+
+
+            $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym, $tmpImage, $imageSize, $finalImageName, $fileUpload);
 
             if(empty($errors)){
-                $register = User::register($name, $surname, $login, $email, $password, $messageSelf, $pseudonym);
+                if($fileUpload){
+                    User::uploadImage($tmpImage, $imageName, $imageFormat);
+                }
+                $register = User::register($name, $surname, $login, $email, $password, $messageSelf, $pseudonym, $finalImageName);
                 User::createLikesTable($pseudonym);
 
                 //авторизация после регистрации если выбрано $autoLog
@@ -196,21 +215,29 @@ class UserController
                 $state = htmlspecialchars($_POST['state']);
                 $stateCategory = htmlspecialchars($_POST['stateCategory']);
 
-                $tmpImage = $_FILES['stateImage']['tmp_name']; //бинарный файл
-                $imageSize = getimagesize($tmpImage); //узнаем размер файла
-                $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
-                $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
-                $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                if (!empty($_FILES['stateImage']['size'])) {
+                    $tmpImage = $_FILES['stateImage']['tmp_name']; //бинарный файл
+                    $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                    $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                    $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                    $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                    $finalImageName = $imageName . $imageFormat;
+                    $fileUpload = true;
+                } else {
+                    $tmpImage = false;
+                    $imageSize = false;
+                    $finalImageName = 'default.jpg';
+                    $fileUpload = false;
+                }
 
-                $finalImageName = $imageName . $imageFormat;
-
-                $errors = User::validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName);
+                $errors = User::validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName, $fileUpload);
 
                 if(empty($errors)){
+                    if($fileUpload) {
+                        User::uploadImage($tmpImage, $imageName, $imageFormat);
+                    }
                     $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory, $finalImageName);
                     User::createCommentsTable(User::getPublicationId($stateName));
-                    User::uploadImage($tmpImage, $imageName, $imageFormat);
-
 
                     if($publication){
                         header("Location: /news/$publication");

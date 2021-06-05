@@ -28,6 +28,7 @@ class News
             $news[$i]['userId'] = User::getAuthorId($row['author']);
             $news[$i]['comments'] = self::getTotalComments($row['id']);
             $news[$i]['imagePath'] = $row['imagePath'];
+            $news[$i]['userAvatar'] = User::getUserAvatar($row['author']);
             if($userAuthor != false){
                 $news[$i]['isArticleLike'] = self::getLike($row['id'], $userAuthor);
             }
@@ -45,7 +46,7 @@ class News
         $offset = self::getOffset($page);
 
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, likes FROM `blog.loc`.news WHERE status = '1' AND stateCategory = '$category' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
+        $result = $db->query("SELECT id, author, stateDescription, stateName, stateCategory, stateDate, likes, imagePath FROM `blog.loc`.news WHERE status = '1' AND stateCategory = '$category' ORDER BY stateDate LIMIT " . self::SHOW_NEWS . " OFFSET " . $offset);
 
         $news = [];
         for($i = 0; $row = $result->fetch(); $i++){
@@ -57,6 +58,7 @@ class News
             $news[$i]['stateDate'] = $row['stateDate'];
             $news[$i]['stateCategory'] = $row['stateCategory'];
             $news[$i]['likes'] = $row['likes'];
+            $news[$i]['stateImage'] = $row['imagePath'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
             $news[$i]['comment'] = self::getTotalComments($row['id']);
             if($userAuthor != false){
@@ -92,7 +94,7 @@ class News
              */
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateName, stateDescription FROM `blog.loc`.news ORDER BY likes DESC LIMIT 5");
+        $result = $db->query("SELECT id, author, stateName, stateDescription, imagePath FROM `blog.loc`.news ORDER BY likes DESC LIMIT 5");
         $hotNews = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
@@ -100,6 +102,7 @@ class News
             $hotNews[$i]['author'] = $row['author'];
             $hotNews[$i]['stateName'] = $row['stateName'];
             $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '25') . '...';
+            $hotNews[$i]['stateImage'] = $row['imagePath'];
         }
         return $hotNews;
     }
@@ -110,13 +113,14 @@ class News
          */
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, stateName, stateDate FROM `blog.loc`.news ORDER BY stateDate DESC LIMIT 5");
+        $result = $db->query("SELECT id, stateName, stateDate, imagePath FROM `blog.loc`.news ORDER BY stateDate DESC LIMIT 5");
         $latestNews = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
             $latestNews[$i]['id'] = $row['id'];
             $latestNews[$i]['stateName'] = $row['stateName'];
             $latestNews[$i]['stateDate'] = $row['stateDate'];
+            $latestNews[$i]['stateImage'] = $row['imagePath'];
         }
         return $latestNews;
     }

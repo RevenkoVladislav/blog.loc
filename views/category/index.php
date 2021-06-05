@@ -20,7 +20,7 @@
                         <a href="/profile/<?=$newsItem['userId'];?>" class="author"><span class="name"><?=$newsItem['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
                     </div>
                 </header>
-                <a href="/news/<?=$newsItem['id'];?>" class="image featured"><img src="/views/images/pic01.jpg" alt="" /></a>
+                <a href="/news/<?=$newsItem['id'];?>" class="image featured"><img src="/views/images/<?=$newsItem['stateImage'];?>" alt="" /></a>
                 <p><?=$newsItem['stateDescription'];?></p>
                 <footer>
                     <ul class="actions">
@@ -72,7 +72,7 @@
                         <p><?=$miniNew['stateDescription'];?></p>
                         <a href="#" class="author"><img src="/views/images/avatar.jpg" alt="" /></a>
                     </header>
-                    <a href="/news/<?=$miniNew['id'];?>" class="image"><img src="/views/images/pic04.jpg" alt="" /></a>
+                    <a href="/news/<?=$miniNew['id'];?>" class="image"><img src="/views/images/<?=$miniNew['stateImage'];?>" alt="" /></a>
 
                 </article>
             <?php endforeach; ?>
@@ -90,7 +90,7 @@
                             <h3><a href="/news/<?=$miniLatestNew['id'];?>"><?=$miniLatestNew['stateName'];?></a></h3>
                             <time class="published" datetime="<?=$miniLatestNew['stateDate'];?>"><?=$miniLatestNew['stateDate'];?></time>
                         </header>
-                        <a href="/news/<?=$miniLatestNew['id'];?>" class="image"><img src="/views/images/pic08.jpg" alt="" /></a>
+                        <a href="/news/<?=$miniLatestNew['id'];?>" class="image"><img src="/views/images/<?=$miniLatestNew['stateImage'];?>" alt="" /></a>
                     </article>
                 </li>
             <?php endforeach; ?>
