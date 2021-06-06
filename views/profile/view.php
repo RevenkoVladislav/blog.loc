@@ -40,6 +40,10 @@
                             <input type="text" name="dataPseudonym" id="pseudonym"
                                    value="<?= $profileData['userPseudonym']; ?>" disabled/>
                         </div>
+                        <div class="1u 12u$(xsmall)">
+                            <label for="avatar">Avatar</label>
+                            <p class="author" id="avatar"><img src="/views/images/<?=$profileData['userAvatar'];?>" alt="" /></p>
+                        </div>
                         <div class="12u$">
                             <label for="messageSelf">About you</label>
                             <textarea name="dataMessageSelf" id="messageSelf"

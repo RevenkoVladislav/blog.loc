@@ -2,9 +2,9 @@
 
 class User
 {
-    public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym, $tmpImage, $imageSize, $finalImageName, $fileUpload)
+    public static function formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym)
         /**
-         * проводим валидацию @login, @email, @password, @message, $captcha, $pseudonym
+         * проводим валидацию @login, @email, @password, @message, @captcha, @pseudonym
          */
     {
         $errors = [];
@@ -55,37 +55,6 @@ class User
 
         if (self::checkPseudonym($pseudonym)) {
             $errors[] = 'The alias you entered is already in use.';
-        }
-
-        if($fileUpload) {
-
-            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
-            $mime = (string)finfo_file($file, $tmpImage); //получаем mime тип
-
-            if (strpos($mime, 'image') === false) { //проверяем Mime Тип
-                $errors[] = 'Only image files can be uploaded';
-            }
-
-            //проверяем допустимые размеры картинки
-            $limitBytes = 1024 * 1024 * 5;
-            $limitWidth = 256;
-            $limitHeight = 256;
-
-            if (filesize($tmpImage) > $limitBytes) {
-                $errors[] = 'Image size must not exceed 5 MB.';
-            }
-
-            if ($imageSize[1] > $limitHeight) {
-                $errors[] = 'Image height should not exceed 256 pixels.';
-            }
-
-            if ($imageSize[0] > $limitWidth) {
-                $errors[] = 'Image width should not exceed 256 dots.';
-            }
-
-            if (self::checkFileName($finalImageName)) {
-                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
-            }
         }
         return $errors;
     }
@@ -231,7 +200,7 @@ class User
     {
         $db = DB::dbConnection();
 
-        $result = $db->query("SELECT userName, userSurname, userLogin, userEmail, userPseudonym, userMessageSelf FROM `blog.loc`.users WHERE id = '{$_SESSION['userId']}'")->fetch();
+        $result = $db->query("SELECT userName, userSurname, userLogin, userEmail, userPseudonym, userMessageSelf, userAvatar FROM `blog.loc`.users WHERE id = '{$_SESSION['userId']}'")->fetch();
 
         return $result;
     }
@@ -347,6 +316,11 @@ class User
             $message = $_SESSION['message'];
         }
 
+        if($options == 'changeAvatar'){
+            $_SESSION['message'] = 'Your avatar has been successfully changed. (please wait 3 seconds, a redirect will occur)';
+            $message = $_SESSION['message'];
+        }
+
         unset($_SESSION['message']);
 
         return $message;
@@ -422,7 +396,7 @@ class User
         return $result->execute();
     }
 
-    public static function validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName, $fileUpload)
+    public static function validateArticle($stateName, $stateDescription, $state)
         /**
          * проверка статьи, на кол-во символов, имя, допустимые символы, и проверка загружаемой картинки.
          */
@@ -463,36 +437,6 @@ class User
 
         if(strlen($state) > 10000){
             $errors[] = 'Too long article (more than 10000 characters)';
-        }
-
-        if($fileUpload) {
-            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
-            $mime = (string)finfo_file($file, $tmpImage); //получаем mime тип
-
-            if (strpos($mime, 'image') === false) { //проверяем Mime Тип
-                $errors[] = 'Only image files can be uploaded';
-            }
-
-            //проверяем допустимые размеры картинки
-            $limitBytes = 1024 * 1024 * 5;
-            $limitWidth = 1500;
-            $limitHeight = 1000;
-
-            if (filesize($tmpImage) > $limitBytes) {
-                $errors[] = 'Image size must not exceed 5 MB.';
-            }
-
-            if ($imageSize[1] > $limitHeight) {
-                $errors[] = 'Image height should not exceed 1080 pixels.';
-            }
-
-            if ($imageSize[0] > $limitWidth) {
-                $errors[] = 'Image width should not exceed 1920 dots.';
-            }
-
-            if (self::checkFileName($finalImageName)) {
-                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
-            }
         }
 
         return $errors;
@@ -553,12 +497,12 @@ class User
 
     public static function getProfileUserData($id)
         /**
-         * получаем данные профиля @name, @surname, @email, @pseudonym, @messageSelf
+         * получаем данные профиля @name, @surname, @email, @pseudonym, @messageSelf, @avatar
          */
     {
         $db = DB::dbConnection();
 
-        $result = $db->query("SELECT userName, userSurname, userEmail, userPseudonym, userMessageSelf FROM `blog.loc`.users WHERE id = '$id'")->fetch();
+        $result = $db->query("SELECT userName, userSurname, userEmail, userPseudonym, userMessageSelf, userAvatar FROM `blog.loc`.users WHERE id = '$id'")->fetch();
 
         if(empty($result)){
             return false;
@@ -614,7 +558,7 @@ class User
         return $id;
     }
 
-    public static function editValidateArticle($editStateDescription, $editState, $fileUpload, $tmpImage, $imageSize, $finalImageName)
+    public static function editValidateArticle($editStateDescription, $editState)
         /**
          * проверка изминений статьи и картинки при редактировании
          */
@@ -640,38 +584,6 @@ class User
         if(strlen($editState) > 10000){
             $errors[] = 'Too long article (more than 10000 characters)';
         }
-
-        if($fileUpload) {
-
-            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
-            $mime = (string) finfo_file($file, $tmpImage); //получаем mime тип
-
-            if (strpos($mime, 'image') === false){ //проверяем Mime Тип
-                $errors[] = 'Only image files can be uploaded';
-            }
-
-            //проверяем допустимые размеры картинки
-            $limitBytes  = 1024 * 1024 * 5;
-            $limitWidth  = 1500;
-            $limitHeight = 1000;
-
-            if (filesize($tmpImage) > $limitBytes) {
-                $errors[] = 'Image size must not exceed 5 MB.';
-            }
-
-            if ($imageSize[1] > $limitHeight) {
-                $errors[] = 'Image height should not exceed 1080 pixels.';
-            }
-
-            if ($imageSize[0] > $limitWidth) {
-                $errors[] = 'Image width should not exceed 1920 dots.';
-            }
-
-            if (self::checkFileName($finalImageName)) {
-                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
-            }
-        }
-
         return $errors;
     }
 
@@ -764,5 +676,60 @@ class User
         $result = $db->query("SELECT userAvatar FROM `blog.loc`.users WHERE userPseudonym = '$author'")->fetch();
 
         return $result['userAvatar'];
+    }
+
+    public static function fileValidate( $tmpImage, $imageSize, $finalImageName, $fileUpload, $imageType)
+        /**
+         * проверка файла
+         */
+    {
+        $errors = [];
+        if($fileUpload) {
+            $file = finfo_open(FILEINFO_MIME_TYPE); //создаем ресурс файл инфо
+            $mime = (string)finfo_file($file, $tmpImage); //получаем mime тип
+
+            if (strpos($mime, 'image') === false) { //проверяем Mime Тип
+                $errors[] = 'Only image files can be uploaded';
+            }
+
+            //проверяем допустимые размеры картинки
+            $limitBytes = 1024 * 1024 * 5;
+            if($imageType == 'image') {
+                $limitWidth = 1500;
+                $limitHeight = 1000;
+            } elseif ($imageType == 'avatar'){
+                $limitWidth = 256;
+                $limitHeight = 256;
+            }
+
+            if (filesize($tmpImage) > $limitBytes) {
+                $errors[] = 'Image size must not exceed 5 MB.';
+            }
+
+            if ($imageSize[1] > $limitHeight) {
+                $errors[] = "Image height should not exceed $limitHeight pixels.";
+            }
+
+            if ($imageSize[0] > $limitWidth) {
+                $errors[] = "Image width should not exceed $limitWidth pixels.";
+            }
+
+            if (self::checkFileName($finalImageName)) {
+                $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
+            }
+        }
+        return $errors;
+    }
+
+    public static function changeAvatar($filePath)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc`.users SET userAvatar = :userAvatar WHERE id = '{$_SESSION['userId']}'";
+
+        $result = $db->prepare($sql);
+        $result->bindParam(':userAvatar', $filePath, PDO::PARAM_STR);
+
+        return $result->execute();
     }
 }

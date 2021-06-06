@@ -53,8 +53,9 @@ class UserController
                 $fileUpload = false;
             }
 
-
-            $errors = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym, $tmpImage, $imageSize, $finalImageName, $fileUpload);
+            $errorsForm = User::formValidate($login, $email, $password, $repeatPassword, $messageSelf, $captcha, $pseudonym);
+            $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'avatar');
+            $errors = array_merge($errorsForm, $errorsFile);
 
             if(empty($errors)){
                 if($fileUpload){
@@ -127,7 +128,7 @@ class UserController
                 if(empty($errors)) {
                     $changeUserData = User::changeData($name, $surname, $messageSelf);
 
-                    if($changeData){
+                    if($changeUserData){
                         $message = User::createMessage($changeData);
                         header("refresh: 3; url=/user/cabinet");
                     }
@@ -189,6 +190,36 @@ class UserController
                 }
             }
 
+            /**
+             * Изменение аватарки
+             */
+            if(!empty($_POST['changeAvatar'])){
+                if (!empty($_FILES['changeAvatar']['size'])) {
+                    $tmpImage = $_FILES['changeAvatar']['tmp_name']; //бинарный файл
+                    $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                    $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                    $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                    $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                    $finalImageName = $imageName . $imageFormat;
+                    $fileUpload = true;
+                } else {
+                    $tmpImage = false;
+                    $imageSize = false;
+                    $finalImageName = 'noAvatar.jpg';
+                    $fileUpload = false;
+                }
+                $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'avatar');
+                if(empty($errorsFile)){
+                    User::uploadImage($tmpImage, $imageName, $imageFormat);
+                    $changeAvatar = User::changeAvatar($finalImageName);
+
+                    if($changeAvatar){
+                        $message = User::createMessage($changeData);
+                        header("refresh: 3; url=/user/cabinet");
+                    }
+                }
+            }
+
             //получаем публикации
             $userPublications = User::getUserPublication($_SESSION['userPseudonym']);
 
@@ -230,7 +261,9 @@ class UserController
                     $fileUpload = false;
                 }
 
-                $errors = User::validateArticle($stateName, $stateDescription, $state, $tmpImage, $imageSize, $finalImageName, $fileUpload);
+                $errorsForm = User::validateArticle($stateName, $stateDescription, $state);
+                $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'image');
+                $errors = array_merge($errorsForm, $errorsFile);
 
                 if(empty($errors)){
                     if($fileUpload) {
@@ -283,7 +316,9 @@ class UserController
                         $fileUpload = false;
                     }
 
-                    $errors = User::editValidateArticle($editStateDescription, $editState, $fileUpload, $tmpImage, $imageSize, $finalImageName);
+                    $errorsForm = User::editValidateArticle($editStateDescription, $editState);
+                    $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'image');
+                    $errors = array_merge($errorsForm, $errorsFile);
 
                     if (empty($errors)) {
                         if($fileUpload) {

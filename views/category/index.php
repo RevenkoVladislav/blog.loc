@@ -17,7 +17,7 @@
                     </div>
                     <div class="meta">
                         <time class="published stateDate" datetime="<?=$newsItem['stateDate'];?>"><?=$newsItem['stateDate'];?></time>
-                        <a href="/profile/<?=$newsItem['userId'];?>" class="author"><span class="name"><?=$newsItem['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
+                        <a href="/profile/<?=$newsItem['userId'];?>" class="author"><span class="name"><?=$newsItem['author'];?></span><img src="/views/images/<?=$newsItem['userAvatar'];?>" alt="" /></a>
                     </div>
                 </header>
                 <a href="/news/<?=$newsItem['id'];?>" class="image featured"><img src="/views/images/<?=$newsItem['stateImage'];?>" alt="" /></a>
@@ -53,7 +53,7 @@
     <section id="sidebar">
     <!-- Intro -->
     <section id="intro">
-        <a href="#" class="logo"><img src="/views/images/logo.jpg" alt="" /></a>
+        <a href="/user/cabinet" class="logo"><img src="/views/images/<?=$userAvatar;?>" alt="" /></a>
         <header>
             <h2><?=$userPseudonym;?></h2>
         </header>
@@ -70,7 +70,7 @@
                     <header>
                         <h3><a href="/news/<?=$miniNew['id'];?>"><?=$miniNew['stateName'];?></a></h3>
                         <p><?=$miniNew['stateDescription'];?></p>
-                        <a href="#" class="author"><img src="/views/images/avatar.jpg" alt="" /></a>
+                        <a href="/profile/<?=$miniNew['authorId'];?>" class="author"><img src="/views/images/<?=$miniNew['authorAvatar'];?>" alt="" /></a>
                     </header>
                     <a href="/news/<?=$miniNew['id'];?>" class="image"><img src="/views/images/<?=$miniNew['stateImage'];?>" alt="" /></a>
 

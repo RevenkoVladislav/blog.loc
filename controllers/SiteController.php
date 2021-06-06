@@ -11,6 +11,7 @@ class SiteController
         if($checkAuth) {
             $userPseudonym = 'Welcome, ' . $_SESSION['userPseudonym'];
             $userAuthor = $_SESSION['userPseudonym'];
+            $userAvatar = User::getUserAvatar($userAuthor);
         } else {
             $userPseudonym = 'Welcome, guest';
             $userAuthor = false;

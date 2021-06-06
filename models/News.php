@@ -61,6 +61,7 @@ class News
             $news[$i]['stateImage'] = $row['imagePath'];
             $news[$i]['userId'] = User::getAuthorId($row['author']);
             $news[$i]['comment'] = self::getTotalComments($row['id']);
+            $news[$i]['userAvatar'] = User::getUserAvatar($row['author']);
             if($userAuthor != false){
                 $news[$i]['isArticleLike'] = self::getLike($row['id'], $userAuthor);
             }
@@ -84,6 +85,7 @@ class News
 
             $result['userId'] = User::getAuthorId($result['author']);
             $result['comment'] = News::getTotalComments($result['id']);
+            $result['authorAvatar'] = User::getUserAvatar($result['author']);
             return $result;
         }
     }
@@ -103,6 +105,8 @@ class News
             $hotNews[$i]['stateName'] = $row['stateName'];
             $hotNews[$i]['stateDescription'] = substr($row['stateDescription'], '0', '25') . '...';
             $hotNews[$i]['stateImage'] = $row['imagePath'];
+            $hotNews[$i]['authorAvatar'] = User::getUserAvatar($row['author']);
+            $hotNews[$i]['authorId'] = User::getAuthorId($row['author']);
         }
         return $hotNews;
     }

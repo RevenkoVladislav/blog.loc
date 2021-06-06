@@ -50,6 +50,10 @@
                             <input type="text" name="dataPseudonym" id="pseudonym"
                                    value="<?= $userData['userPseudonym']; ?>" disabled/>
                         </div>
+                        <div class="1u 12u$(xsmall)">
+                            <label for="avatar">Avatar</label>
+                            <p class="author" id="avatar"><img src="/views/images/<?=$userData['userAvatar'];?>" alt="" /></p>
+                        </div>
                         <div class="12u$">
                             <label for="messageSelf">About you</label>
                             <textarea name="dataMessageSelf" id="messageSelf"
@@ -75,6 +79,9 @@
                         <div class="6u 12u">
                             <a href="/user/cabinet/changeEmail" class="button big fit">Change email</a>
                         </div>
+                        <div class="6u 12u">
+                            <a href="/user/cabinet/changeAvatar" class="button big fit">Change avatar</a>
+                        </div>
                     </div>
                 </section>
 
@@ -87,17 +94,17 @@
                         <div class="row uniform">
                             <div class="6u 12u$(xsmall)">
                                 <label for="name">Change name</label>
-                                <input type="text" name="dataName" id="name"
+                                <input type="text" name="dataName" id="dataName"
                                        value="<?= $userData['userName']; ?>" required/>
                             </div>
                             <div class="6u 12u$(xsmall)">
                                 <label for="surname">Chane surname</label>
-                                <input type="text" name="dataSurname" id="surname"
+                                <input type="text" name="dataSurname" id="dataSurname"
                                        value="<?= $userData['userSurname']; ?>" required/>
                             </div>
                             <div class="12u$">
                                 <label for="messageSelf">Change descriptions</label>
-                                <textarea name="dataMessageSelf" id="messageSelf"
+                                <textarea name="dataMessageSelf" id="dataMessageSelf"
                                           rows="6" required><?php if (!empty($_POST['dataMessageSelf'])) {
                                         echo $_POST['dataMessageSelf'];
                                     } else {
@@ -184,6 +191,27 @@
                         </div>
                     </form>
                 </section>
+
+            <?php elseif($changeData === 'changeAvatar'): ?>
+
+            <section>
+                <h3 class="align-center">Change avatar</h3>
+                <form method="post" enctype="multipart/form-data">
+
+                    <div class="row uniform">
+                        <div class="-3u 6u 12u$(xsmall)">
+                            <label for="changeAvatar">Upload avatar</label>
+                            <input type="file" name="changeAvatar" id="changeAvatar" required>
+                        </div>
+                        <div class="-3u 6u 12u">
+                            <input class="big fit" type="submit" name="changeAvatar" value="Change your avatar"/>
+                        </div>
+                        <div class="-3u 6u 12u">
+                            <a href="/user/cabinet" class="button big fit">Go back</a>
+                        </div>
+                    </div>
+                </form>
+            </section>
 
             <?php endif; ?>
 

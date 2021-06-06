@@ -54,7 +54,7 @@
         <!-- Intro -->
         <section id="intro">
             <?php if($userAuthor){ ;?>
-            <a href="#" class="logo"><img src="/views/images/logo.jpg" alt="" /></a>
+            <a href="/user/cabinet" class="logo"><img src="/views/images/<?=$userAvatar;?>" alt="" /></a>
             <?php } ;?>
             <header>
                 <h2><?=$userPseudonym;?></h2>
@@ -72,7 +72,7 @@
                     <header>
                         <h3><a href="/news/<?=$miniNew['id'];?>"><?=$miniNew['stateName'];?></a></h3>
                         <p><?=$miniNew['stateDescription'];?></p>
-                        <a href="#" class="author"><img src="/views/images/avatar.jpg" alt="" /></a>
+                        <a href="/profile/<?=$miniNew['authorId'];?>" class="author"><img src="/views/images/<?=$miniNew['authorAvatar'];?>" alt="" /></a>
                     </header>
                     <a href="/news/<?=$miniNew['id'];?>" class="image"><img src="/views/images/<?=$miniNew['stateImage'];?>" alt="" /></a>
 

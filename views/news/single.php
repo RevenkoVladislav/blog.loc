@@ -26,7 +26,7 @@
 									</div>
 									<div class="meta">
 										<time class="published stateDate" datetime="<?=$newsById['stateDate'];?>"><?=$newsById['stateDate'];?></time>
-										<a href="/profile/<?=$newsById['userId'];?>" class="author"><span class="name"><?=$newsById['author'];?></span><img src="/views/images/avatar.jpg" alt="" /></a>
+										<a href="/profile/<?=$newsById['userId'];?>" class="author"><span class="name"><?=$newsById['author'];?></span><img src="/views/images/<?=$newsById['authorAvatar'];?>" alt="" /></a>
 									</div>
 								</header>
 								<span class="image featured"><img src="/views/images/<?=$newsById['imagePath'];?>" alt="" /></span>
