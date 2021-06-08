@@ -722,6 +722,9 @@ class User
     }
 
     public static function changeAvatar($filePath)
+        /**
+         * метод замены аватара пользователя
+         */
     {
         $db = DB::dbConnection();
 
@@ -731,5 +734,29 @@ class User
         $result->bindParam(':userAvatar', $filePath, PDO::PARAM_STR);
 
         return $result->execute();
+    }
+
+    public static function deleteImageWhileEdit($id, $imageType)
+        /**
+         * метод удаляющий @stateImage при редактировании профиля или статьи
+         */
+    {
+        $db = DB::dbConnection();
+
+        if($imageType == 'avatar') {
+            $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
+            $result = $db->query($sql)->fetch();
+            $filePath = $result['userAvatar'];
+            $sql = "UPDATE `blog.loc`.users SET userAvatar = 'noAvatar.jpg' WHERE id = '$id'";
+            $result = $db->query($sql);
+            } elseif($imageType == 'image'){
+            $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+            $result = $db->query($sql)->fetch();
+            $filePath = $result['imagePath'];
+            $sql = $sql = "UPDATE `blog.loc`.news SET imagePath = 'default.jpg' WHERE id = '$id'";
+            $result = $db->query($sql);
+        }
+
+        unlink(ROOT . "/views/images/$filePath");
     }
 }

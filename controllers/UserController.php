@@ -208,8 +208,9 @@ class UserController
                     $finalImageName = 'noAvatar.jpg';
                     $fileUpload = false;
                 }
-                $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'avatar');
-                if(empty($errorsFile)){
+                $errors = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'avatar');
+                if(empty($errors)){
+                    User::deleteImageWhileEdit($_SESSION['userId'], 'avatar');
                     User::uploadImage($tmpImage, $imageName, $imageFormat);
                     $changeAvatar = User::changeAvatar($finalImageName);
 
@@ -322,6 +323,7 @@ class UserController
 
                     if (empty($errors)) {
                         if($fileUpload) {
+                            User::deleteImageWhileEdit($id, 'image');
                             User::uploadImage($tmpImage, $imageName, $imageFormat);
                         }
 
