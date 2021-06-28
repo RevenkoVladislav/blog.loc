@@ -1,6 +1,8 @@
 <?php
 return
     [
+        'admin/category/([a-z]+)/([0-9]+)' => 'admin/category/$1/$2', //actionCategory в AdminController
+        'admin/category' => 'admin/category', //actionCategory в AdminController
         'admin/register' => 'admin/register', //actionRegister в AdminController
         'admin/enter' => 'admin/enter', //actionEnter в AdminController
         'admin' => 'admin/index', //actionIndex в AdminController

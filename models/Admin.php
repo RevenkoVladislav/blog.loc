@@ -67,4 +67,91 @@ class Admin
 
         return $result;
     }
+
+    public static function authAdmin($login, $password)
+    {
+        $db = DB::dbConnection();
+        $password = md5(md5($password));
+
+        $sql = "SELECT id, adminLogin, adminPassword FROM `blog.loc`.admin WHERE adminLogin = '$login' AND adminPassword = '$password'";
+        $result = $db->query($sql)->fetch();
+
+        if ($result) {
+            $_SESSION['adminId'] = $result['id'];
+            $_SESSION['adminLogin'] = $result['adminLogin'];
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getAllCategory()
+    {
+        $db = DB::dbConnection();
+
+        $categories = [];
+        $sql = "SELECT * FROM `blog.loc`.category";
+        $result = $db->query($sql);
+
+        for($i = 1; $row = $result->fetch(); $i++){
+            $categories[$i]['id'] = $row['id'];
+            $categories[$i]['categoryName'] = $row['categoryName'];
+            $categories[$i]['categoryAvailability'] = $row['categoryAvailability'];
+            $categories[$i]['categoryTotalArticles'] = self::getTotalArticlesInCategory($row['categoryName']);
+            if($row['categoryAvailability'] == 1){
+                $categories[$i]['commandHide'] = 'hide';
+                $categories[$i]['iconHide'] = 'icon fa-eye-slash';
+            } else {
+                $categories[$i]['commandHide'] = 'open';
+                $categories[$i]['iconHide'] = 'icon fa-eye';
+            }
+        }
+
+        return $categories;
+    }
+
+    public static function getTotalArticlesInCategory($categoryName)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT COUNT(stateName) as total FROM `blog.loc`.news WHERE stateCategory = '$categoryName'";
+        $result = $db->query($sql)->fetch();
+
+        return $result['total'];
+    }
+
+    public static function hideCategory($id)
+    {
+        $db = DB::dbConnection();
+
+        $categoryName = self::getCategoryName($id);
+
+        $sql = "UPDATE `blog.loc`.category SET categoryAvailability = 0 WHERE id = '$id'";
+        $db->query($sql);
+
+        $sql = "UPDATE `blog.loc`.news SET status = 0 WHERE stateCategory = '$categoryName'";
+        $db->query($sql);
+    }
+
+    public static function openCategory($id)
+    {
+        $db = DB::dbConnection();
+
+        $categoryName = self::getCategoryName($id);
+
+        $sql = "UPDATE `blog.loc`.category SET categoryAvailability = 1 WHERE id = '$id'";
+        $db->query($sql);
+
+        $sql = "UPDATE `blog.loc`.news SET status = 1 WHERE stateCategory = '$categoryName'";
+        $db->query($sql);
+    }
+
+    private static function getCategoryName($id)
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT categoryName FROM `blog.loc`.category WHERE id = '$id'";
+        $result = $db->query($sql)->fetch();
+        return $result['categoryName'];
+    }
 }
