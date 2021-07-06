@@ -77,7 +77,7 @@ class News
         $id = intval($id);
         if($id){
             $db = DB::dbConnection();
-            $result = $db->query("SELECT * FROM `blog.loc`.news WHERE id = '$id'")->fetch();
+            $result = $db->query("SELECT * FROM `blog.loc`.news WHERE id = '$id' AND status = '1'")->fetch();
 
             if(empty($result)){
                 return false;
@@ -96,7 +96,7 @@ class News
              */
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, author, stateName, stateDescription, imagePath FROM `blog.loc`.news ORDER BY likes DESC LIMIT 5");
+        $result = $db->query("SELECT id, author, stateName, stateDescription, imagePath FROM `blog.loc`.news WHERE status = '1' ORDER BY likes DESC LIMIT 5");
         $hotNews = [];
 
         for($i = 0; $row = $result->fetch(); $i++){
@@ -117,7 +117,7 @@ class News
          */
     {
         $db = DB::dbConnection();
-        $result = $db->query("SELECT id, stateName, stateDate, imagePath FROM `blog.loc`.news ORDER BY stateDate DESC LIMIT 5");
+        $result = $db->query("SELECT id, stateName, stateDate, imagePath FROM `blog.loc`.news WHERE status = '1' ORDER BY stateDate DESC LIMIT 5");
         $latestNews = [];
 
         for($i = 0; $row = $result->fetch(); $i++){

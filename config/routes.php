@@ -1,6 +1,7 @@
 <?php
 return
     [
+        'admin/news' => 'admin/news', //actionNews в AdminController
         'admin/category/([a-z]+)/([0-9]+)' => 'admin/category/$1/$2', //actionCategory в AdminController
         'admin/category' => 'admin/category', //actionCategory в AdminController
         'admin/register' => 'admin/register', //actionRegister в AdminController

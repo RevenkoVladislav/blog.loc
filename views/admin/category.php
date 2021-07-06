@@ -29,13 +29,30 @@
                                 <td class="align-center"><?=$category['categoryName'];?></td>
                                 <td class="align-center"><?=$category['categoryAvailability'];?></td>
                                 <td class="align-center"><?=$category['categoryTotalArticles'];?></td>
-                                <td class="align-center"><a href="/admin/category/<?=$category['commandHide'];?>/<?=$category['id'];?>" class="<?=$category['iconHide'];?>"></a></td>
-                                <td class="align-center"></td>
+                                <td class="align-center"><a href="/admin/category/<?=$category['commandHide'];?>/<?=$category['id'];?>" class="<?php echo $category['iconHide'] . ' '; if(!empty($category['class'])){ echo $category['class'];}?>"></a></td>
+                                <td class="align-center"><a href="/admin/category/delete/<?=$category['id'];?>" class="icon fa-trash <?php if(!empty($category['class'])){ echo $category['class'];}?>"></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
-                <h3 class="align-center"><a href="#">Add new category</a></h3>
+                <h3 class="align-center"><a href="/admin/category/addCategory">Add new category</a></h3>
+
+
+                    <?php if($command == 'addCategory'):?>
+                    <section>
+                        <form method="post" action="">
+                            <div class="row uniform">
+                                <div class="-3u 6u$">
+                                    <label for="categoryName">Category name</label>
+                                    <input type="text" name="categoryName" id="categoryName" placeholder="Category Name" required/>
+                                </div>
+                                <div class="-3u 6u$">
+                                        <input class="fit" name="addCategory" type="submit" value="Add Category" />
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                    <?php endif;?>
                 </div>
             </section>
         </article>

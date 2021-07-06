@@ -7,7 +7,10 @@
 
     <div id="main">
         <article class="post">
-        <a href="admin/category">Go to category management</a>
+        <ul>
+            <li><a href="admin/category">Go to category management</a></li>
+            <li><a href="admin/news">Go to news management</a></li>
+        </ul>
         </article>
     </div>
 <?php include(ROOT . '/views/adminLayouts/footer.php');?>

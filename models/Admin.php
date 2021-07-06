@@ -69,6 +69,9 @@ class Admin
     }
 
     public static function authAdmin($login, $password)
+        /**
+         * метод авторизации администратора
+         */
     {
         $db = DB::dbConnection();
         $password = md5(md5($password));
@@ -86,6 +89,9 @@ class Admin
     }
 
     public static function getAllCategory()
+        /**
+         * получаем массив со всеми категориями
+         */
     {
         $db = DB::dbConnection();
 
@@ -105,12 +111,18 @@ class Admin
                 $categories[$i]['commandHide'] = 'open';
                 $categories[$i]['iconHide'] = 'icon fa-eye';
             }
+            if($row['id'] == '8'){
+                $categories[$i]['class'] = 'disabled';
+            }
         }
 
         return $categories;
     }
 
     public static function getTotalArticlesInCategory($categoryName)
+        /**
+         * получаем общее количество статей в категории
+         */
     {
         $db = DB::dbConnection();
 
@@ -121,7 +133,15 @@ class Admin
     }
 
     public static function hideCategory($id)
+        /**
+         * скрыть категорию по @id и находящиеся в ней статьи,
+         * нельзя удалять/открывать/скрывать категорию с @id=8, т.к в неё попадают все статьи после удаления категории.
+         */
     {
+        if($id == 8){
+            return false;
+        }
+
         $db = DB::dbConnection();
 
         $categoryName = self::getCategoryName($id);
@@ -134,7 +154,15 @@ class Admin
     }
 
     public static function openCategory($id)
+        /**
+         * открыть категорию по @id и находящиеся в ней статьи
+         * нельзя удалять/открывать/скрывать категорию с @id=8, т.к в неё попадают все статьи после удаления категории.
+         */
     {
+        if($id == 8){
+            return false;
+        }
+
         $db = DB::dbConnection();
 
         $categoryName = self::getCategoryName($id);
@@ -147,11 +175,68 @@ class Admin
     }
 
     private static function getCategoryName($id)
+        /**
+         * получить название категории по ее @id
+         */
     {
         $db = DB::dbConnection();
 
         $sql = "SELECT categoryName FROM `blog.loc`.category WHERE id = '$id'";
         $result = $db->query($sql)->fetch();
         return $result['categoryName'];
+    }
+
+    public static function addCategory($categoryName)
+        /**
+         * добавление новой категории
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "INSERT INTO `blog.loc`.category (categoryName, categoryAvailability) VALUES ('$categoryName', '1')";
+        $db->query($sql);
+    }
+
+    public static function deleteCategory($id)
+        /**
+         * удаление категории по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $categoryName = self::getCategoryName($id);
+
+        $sql = "UPDATE `blog.loc`.news SET stateCategory = 'deleted' AND status = '0' WHERE stateCategory = '$categoryName'";
+        $db->query($sql);
+
+        $sql = "DELETE FROM `blog.loc`.category WHERE id = '$id'";
+        $db->query($sql);
+    }
+
+    public static function getAllNews()
+        /**
+         * получить массив со всеми новостями
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT * FROM `blog.loc`.news";
+        $result = $db->query($sql);
+
+        $news = [];
+        for($i = 1; $row = $result->fetch(); $i++){
+            $news[$i]['id'] = $row['id'];
+            $news[$i]['author'] = $row['author'];
+            $news[$i]['state'] = $row['state'];
+            $news[$i]['stateName'] = $row['stateName'];
+            $news[$i]['stateDescription'] = $row['stateDescription'];
+            $news[$i]['stateDate'] = $row['stateDate'];
+            $news[$i]['stateCategory'] = $row['stateCategory'];
+            $news[$i]['likes'] = $row['likes'];
+            $news[$i]['status'] = $row['status'];
+            $news[$i]['imagePath'] = $row['imagePath'];
+        }
+
+        return $news;
     }
 }

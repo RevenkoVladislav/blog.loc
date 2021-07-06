@@ -6,6 +6,9 @@
 class AdminController
 {
     public function actionIndex()
+        /**
+         * index в admin page
+         */
     {
         if(Admin::checkAdmin()){
 
@@ -17,6 +20,9 @@ class AdminController
     }
 
     public function actionEnter()
+        /**
+         * открываем доступ к админке
+         */
     {
         if(Admin::checkAdmin()){
             header("Location: /admin");
@@ -37,6 +43,9 @@ class AdminController
     }
 
     public function actionRegister()
+        /**
+         * регистрация нового админа
+         */
     {
         if(Admin::checkAdmin()) {
             if (!empty($_POST['newAdminSub'])) {
@@ -60,9 +69,14 @@ class AdminController
     }
 
     public function actionCategory($command = false, $id = false)
+        /**
+         * работа с категориями, CRUD
+         */
     {
         if(Admin::checkAdmin()){
             $categories = Admin::getAllCategory();
+
+            $command = htmlspecialchars($command);
 
             if($command == 'hide'){
                 Admin::hideCategory($id);
@@ -73,10 +87,33 @@ class AdminController
                 Admin::openCategory($id);
                 header("Location: /admin/category");
             }
+
+            if($command == 'delete'){
+                Admin::deleteCategory($id);
+                header("Location: /admin/category");
+            }
+
+            if(!empty($_POST['addCategory'])){
+                $newCategory = htmlspecialchars($_POST['categoryName']);
+                Admin::addCategory($newCategory);
+                header("Location: /admin/category");
+            }
         } else {
             die('access denied');
         }
         require_once(ROOT . '/views/admin/category.php');
+        return true;
+    }
+
+    public function actionNews()
+    {
+        if(Admin::checkAdmin()){
+            $news = Admin::getAllNews();
+
+        } else {
+            die('access denied');
+        }
+        require_once (ROOT . '/views/admin/news.php');
         return true;
     }
 }
