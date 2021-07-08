@@ -90,7 +90,7 @@ class Admin
 
     public static function getAllCategory()
         /**
-         * получаем массив со всеми категориями
+         * получаем массив со всеми категориями и данными по категориям
          */
     {
         $db = DB::dbConnection();
@@ -235,8 +235,114 @@ class Admin
             $news[$i]['likes'] = $row['likes'];
             $news[$i]['status'] = $row['status'];
             $news[$i]['imagePath'] = $row['imagePath'];
+            if($row['status'] == 1){
+                $news[$i]['commandHide'] = 'hide';
+                $news[$i]['iconHide'] = 'icon fa-eye-slash';
+            } else {
+                $news[$i]['commandHide'] = 'open';
+                $news[$i]['iconHide'] = 'icon fa-eye';
+            }
+        }
+        return $news;
+    }
+
+    public static function hideNews($id)
+        /**
+         * скрыть новость по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc`.news SET status = 0 WHERE id = '$id'";
+        $db->query($sql);
+    }
+
+    public static function openNews($id)
+        /**
+         * открыть новость по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc`.news SET status = 1 WHERE id = '$id'";
+        $db->query($sql);
+    }
+
+    public static function deleteNews($id)
+        /**
+         * удалить новость по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "DELETE FROM `blog.loc`.news WHERE id = '$id'";
+        $db->query($sql);
+    }
+
+    public static function getNewsById($id)
+        /**
+         * Получить статью по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT * FROM `blog.loc`.news WHERE id = '$id'";
+        return $db->query($sql)->fetch();
+    }
+
+    public static function editNews($stateName, $stateDescription, $author, $date, $category, $state, $finalImageName, $id)
+        /**
+         * редактирование статьи через админку
+         */
+    {
+        $db = DB::dbConnection();
+
+        if($finalImageName != false) {
+            $sql = "UPDATE `blog.loc`.news SET stateName = '$stateName', stateDescription = '$stateDescription', author = '$author', stateDate = '$date', stateCategory = '$category', state = '$state', imagePath = '$finalImageName' WHERE id = '$id'";
+            $edit = $db->query($sql);
         }
 
-        return $news;
+        if($finalImageName == false){
+            $sql = "UPDATE `blog.loc`.news SET stateName = '$stateName', stateDescription = '$stateDescription', author = '$author', stateDate = '$date', stateCategory = '$category', state = '$state' WHERE id = '$id'";
+            $edit = $db->query($sql);
+        }
+
+        if($edit){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function setDefaultImage($id)
+        /**
+         * устанавливает значение @imagePath = @default.jpg и удаляет имеющуюся картинку.
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+        $result = $db->query($sql)->fetch();
+        $image = $result['imagePath'];
+
+        if($image == 'default.jpg'){
+            return true;
+        } else {
+            $sql = "UPDATE `blog.loc`.news SET imagePath = 'default.jpg' WHERE id = '$id'";
+            self::deleteImageById($id);
+            $db->query($sql);
+        }
+    }
+
+    private static function deleteImageById($id)
+        /**
+         * Удаляет @image по @id
+         */
+    {
+        $db = DB::dbConnection();
+        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+        $result = $db->query($sql)->fetch();
+        $filePath = $result['imagePath'];
+        unlink(ROOT . "/views/images/$filePath");
     }
 }

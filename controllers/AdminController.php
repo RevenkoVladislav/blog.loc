@@ -10,7 +10,7 @@ class AdminController
          * index в admin page
          */
     {
-        if(Admin::checkAdmin()){
+        if (Admin::checkAdmin()) {
 
         } else {
             header("Location: /admin/enter");
@@ -24,14 +24,14 @@ class AdminController
          * открываем доступ к админке
          */
     {
-        if(Admin::checkAdmin()){
+        if (Admin::checkAdmin()) {
             header("Location: /admin");
         } else {
-            if(!empty($_POST['adminSub'])){
+            if (!empty($_POST['adminSub'])) {
                 $login = htmlspecialchars($_POST['adminLogin']);
                 $pass = htmlspecialchars($_POST['adminPass']);
 
-                if(Admin::authAdmin($login, $pass)){
+                if (Admin::authAdmin($login, $pass)) {
                     header("Location: /admin");
                 } else {
                     $errors[] = "wrong login or password";
@@ -47,7 +47,7 @@ class AdminController
          * регистрация нового админа
          */
     {
-        if(Admin::checkAdmin()) {
+        if (Admin::checkAdmin()) {
             if (!empty($_POST['newAdminSub'])) {
                 $login = htmlspecialchars($_POST['Login']);
                 $pass = htmlspecialchars($_POST['Pass']);
@@ -73,27 +73,28 @@ class AdminController
          * работа с категориями, CRUD
          */
     {
-        if(Admin::checkAdmin()){
+        if (Admin::checkAdmin()) {
             $categories = Admin::getAllCategory();
 
             $command = htmlspecialchars($command);
+            $id = htmlspecialchars(intval($id));
 
-            if($command == 'hide'){
+            if ($command == 'hide') {
                 Admin::hideCategory($id);
                 header("Location: /admin/category");
             }
 
-            if($command == 'open'){
+            if ($command == 'open') {
                 Admin::openCategory($id);
                 header("Location: /admin/category");
             }
 
-            if($command == 'delete'){
+            if ($command == 'delete') {
                 Admin::deleteCategory($id);
                 header("Location: /admin/category");
             }
 
-            if(!empty($_POST['addCategory'])){
+            if (!empty($_POST['addCategory'])) {
                 $newCategory = htmlspecialchars($_POST['categoryName']);
                 Admin::addCategory($newCategory);
                 header("Location: /admin/category");
@@ -105,15 +106,80 @@ class AdminController
         return true;
     }
 
-    public function actionNews()
+    public function actionNews($command = false, $id = false)
     {
-        if(Admin::checkAdmin()){
+        if (Admin::checkAdmin()) {
             $news = Admin::getAllNews();
 
+            $command = htmlspecialchars($command);
+            $id = htmlspecialchars(intval($id));
+
+            if ($command == 'open') {
+                Admin::openNews($id);
+                header("Location: /admin/news");
+            }
+
+            if ($command == 'hide') {
+                Admin::hideNews($id);
+                header("Location: /admin/news");
+            }
+
+            if ($command == 'delete') {
+                Admin::deleteNews($id);
+                header("Location: /admin/news");
+            }
+
+            if ($command == 'defaultImage') {
+                Admin::setDefaultImage($id);
+                header("Location: /admin/news");
+            }
+
+            if ($command == 'edit') {
+                $editNew = Admin::getNewsById($id);
+                $categories = Category::getCategories();
+
+                if (!empty($_POST['adminEditArticle'])) {
+                    $stateName = htmlspecialchars($_POST['editStateName']);
+                    $stateDescription = htmlspecialchars($_POST['editStateDescription']);
+                    $author = htmlspecialchars($_POST['editAuthor']);
+                    $date = $_POST['editDate'];
+                    $category = $_POST['editCategory'];
+                    $state = $_POST['editState'];
+
+                    if (!empty($_FILES['editImage']['size'])) {
+                        $tmpImage = $_FILES['editImage']['tmp_name']; //бинарный файл
+                        $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                        $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                        $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                        $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                        $finalImageName = $imageName . $imageFormat;
+                        $fileUpload = true;
+                    } else {
+                        $tmpImage = false;
+                        $imageSize = false;
+                        $finalImageName = false;
+                        $fileUpload = false;
+                    }
+
+                    $errors = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'image');
+
+                    if (empty($errors)) {
+                        if ($fileUpload) {
+                            User::deleteImageWhileEdit($id, 'image');
+                            User::uploadImage($tmpImage, $imageName, $imageFormat);
+                        }
+                        $publication = Admin::editNews($stateName, $stateDescription, $author, $date, $category, $state,
+                            $finalImageName, $id);
+                        if ($publication) {
+                            header("Location: /admin/news");
+                        }
+                    }
+                }
+            }
         } else {
             die('access denied');
         }
-        require_once (ROOT . '/views/admin/news.php');
+        require_once(ROOT . '/views/admin/news.php');
         return true;
     }
 }

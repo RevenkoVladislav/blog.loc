@@ -742,6 +742,7 @@ class User
          */
     {
         $db = DB::dbConnection();
+        $checkImage = self::checkImageOnDefault($id);
 
         if($imageType == 'avatar') {
             $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
@@ -750,13 +751,26 @@ class User
             $sql = "UPDATE `blog.loc`.users SET userAvatar = 'noAvatar.jpg' WHERE id = '$id'";
             $result = $db->query($sql);
             } elseif($imageType == 'image'){
-            $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
-            $result = $db->query($sql)->fetch();
-            $filePath = $result['imagePath'];
-            $sql = $sql = "UPDATE `blog.loc`.news SET imagePath = 'default.jpg' WHERE id = '$id'";
-            $result = $db->query($sql);
+                if($checkImage != 'default.jpg') {
+                    return false;
+                } else {
+                    $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+                    $result = $db->query($sql)->fetch();
+                    $filePath = $result['imagePath'];
+                    $sql = $sql = "UPDATE `blog.loc`.news SET imagePath = 'default.jpg' WHERE id = '$id'";
+                    $result = $db->query($sql);
+                }
         }
-
         unlink(ROOT . "/views/images/$filePath");
+    }
+
+    private static function checkImageOnDefault($id)
+        /**
+         * проверка картинки на значение 'default'
+         */
+    {
+        $db = DB::dbConnection();
+        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+        return $db->query($sql)->fetch();
     }
 }
