@@ -345,4 +345,95 @@ class Admin
         $filePath = $result['imagePath'];
         unlink(ROOT . "/views/images/$filePath");
     }
+
+    public static function getTotalCommentsAndLikes()
+        /**
+         * получаем общее количество @comments и @likes для каждой статьи
+         */
+    {
+        $db = DB::dbConnection();
+
+        $likes = [];
+        $sql = "SELECT id, likes, stateName FROM `blog.loc`.news";
+        $result = $db->query($sql);
+
+        for($i = 1; $row = $result->fetch(); $i++){
+            $likes[$i]['id'] = $row['id'];
+            $likes[$i]['stateName'] = $row['stateName'];
+            $likes[$i]['totalLike'] = $row['likes'];
+            $likes[$i]['totalComments'] = self::getTotalComments($row['id']);
+        }
+
+        return $likes;
+    }
+
+    private static function getTotalComments($id)
+        /**
+         * получаем общее количество @comments по @id
+         */
+    {
+        $db = DB::dbConnection();
+        $sql = "SELECT COUNT(`comment`) as 'comments' FROM `blog.loc_comments`.`{$id}_comments`";
+        return $db->query($sql)->fetchColumn();
+    }
+
+    public static function setLikes($quantity, $id)
+        /**
+         * устанавливаем значение @likes для статьи по @id
+         */
+    {
+        $db = DB::dbConnection();
+        $sql = "UPDATE `blog.loc`.news SET likes = '$quantity' WHERE id = '$id'";
+        $db->query($sql);
+    }
+
+    public static function getAllComments($id)
+        /**
+         * получаем все комментарии по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $result = $db->query("SELECT * FROM `blog.loc_comments`.`{$id}_comments` ORDER BY `publishedDate` DESC");
+
+        $comments = [];
+        for($i = 0; $row = $result->fetch(); $i++){
+            $comments[$i]['id'] = $row['id'];
+            $comments[$i]['author'] = $row['author'];
+            $comments[$i]['comment'] = $row['comment'];
+            $comments[$i]['publishedDate'] = $row['publishedDate'];
+            $comments[$i]['status'] = $row['status'];
+            if($row['status'] == 1){
+                $comments[$i]['commandHide'] = 'hide';
+                $comments[$i]['iconHide'] = 'icon fa-eye-slash';
+            } else {
+                $comments[$i]['commandHide'] = 'open';
+                $comments[$i]['iconHide'] = 'icon fa-eye';
+            }
+            // $comments[$i]['userId'] = User::getAuthorId($row['author']);
+        }
+        return $comments;
+    }
+
+    public static function openComment($tableId, $commentId)
+        /**
+         * открыть @comment в @tableId по @id комментария
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc_comments`.`{$tableId}_comments` SET `status` = 1 WHERE `id` = '$commentId'";
+        $db->query($sql);
+    }
+
+    public static function hideComment($tableId, $commentId)
+        /**
+         * скрыть @comment в @tableId по @id комментария
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "UPDATE `blog.loc_comments`.`{$tableId}_comments` SET `status` = 0 WHERE `id` = '$commentId'";
+        $db->query($sql);
+    }
 }

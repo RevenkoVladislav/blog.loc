@@ -182,4 +182,45 @@ class AdminController
         require_once(ROOT . '/views/admin/news.php');
         return true;
     }
+
+    public function actionComments($command = false, $id = false, $commentCommand = false, $commentId = false)
+    {
+        if(Admin::checkAdmin()){
+            $commentsAndLikes = Admin::getTotalCommentsAndLikes();
+
+            $command = htmlspecialchars($command);
+            $id = intval(htmlspecialchars($id));
+            $commentCommand = htmlspecialchars($commentCommand);
+            $commentId = intval(htmlspecialchars($commentId));
+            $setLikes = false;
+            $showComments = false;
+
+            if($command == 'setLikes'){
+                $setLikes = true;
+                if(!empty($_POST['setLikes'])){
+                    $quantity = intval(htmlspecialchars($_POST['likes']));
+                    Admin::setLikes($quantity, $id);
+                    header("Location: /admin/comments");
+                }
+            }
+
+            if($command == 'showComments'){
+                $showComments = true;
+                $comments = Admin::getAllComments($id);
+
+                if($commentCommand == 'hide'){
+                    Admin::hideComment($id, $commentId);
+                    header("Location: /admin/comments/$command/$id");
+                }
+                if($commentCommand == 'open'){
+                    Admin::openComment($id, $commentId);
+                    header("Location: /admin/comments/$command/$id");
+                }
+            }
+        } else {
+            die('access denied');
+        }
+        require_once (ROOT . '/views/admin/comments.php');
+        return true;
+    }
 }

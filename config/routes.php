@@ -1,6 +1,9 @@
 <?php
 return
     [
+        'admin/comments/([a-z]+)/([0-9]+)/([a-z]+)/([0-9]+)' => 'admin/comments/$1/$2/$3/$4', //actionComments в AdminController
+        'admin/comments/([a-z]+)/([0-9]+)' => 'admin/comments/$1/$2', //actionComments в AdminController
+        'admin/comments' => 'admin/comments', //actionComments в AdminController
         'admin/news/([a-z]+)/([0-9]+)' => 'admin/news/$1/$2', //actionNews в AdminController
         'admin/news' => 'admin/news', //actionNews в AdminController
         'admin/category/([a-z]+)/([0-9]+)' => 'admin/category/$1/$2', //actionCategory в AdminController
