@@ -270,12 +270,16 @@ class Admin
 
     public static function deleteNews($id)
         /**
-         * удалить новость по @id
+         * удалить новость по @id и удалить ВСЮ таблицу с комментариями для этой новости
+         * также удаляет загруженную картинку
          */
     {
         $db = DB::dbConnection();
 
+        self::deleteImageById($id);
         $sql = "DELETE FROM `blog.loc`.news WHERE id = '$id'";
+        $db->query($sql);
+        $sql = "DROP TABLE `blog.loc_comments`.`{$id}_comments`";
         $db->query($sql);
     }
 
@@ -395,24 +399,23 @@ class Admin
         $db = DB::dbConnection();
 
         $result = $db->query("SELECT * FROM `blog.loc_comments`.`{$id}_comments` ORDER BY `publishedDate` DESC");
-
-        $comments = [];
-        for($i = 0; $row = $result->fetch(); $i++){
-            $comments[$i]['id'] = $row['id'];
-            $comments[$i]['author'] = $row['author'];
-            $comments[$i]['comment'] = $row['comment'];
-            $comments[$i]['publishedDate'] = $row['publishedDate'];
-            $comments[$i]['status'] = $row['status'];
-            if($row['status'] == 1){
-                $comments[$i]['commandHide'] = 'hide';
-                $comments[$i]['iconHide'] = 'icon fa-eye-slash';
-            } else {
-                $comments[$i]['commandHide'] = 'open';
-                $comments[$i]['iconHide'] = 'icon fa-eye';
+            $comments = [];
+            for ($i = 0; $row = $result->fetch(); $i++) {
+                $comments[$i]['id'] = $row['id'];
+                $comments[$i]['author'] = $row['author'];
+                $comments[$i]['comment'] = $row['comment'];
+                $comments[$i]['publishedDate'] = $row['publishedDate'];
+                $comments[$i]['status'] = $row['status'];
+                if ($row['status'] == 1) {
+                    $comments[$i]['commandHide'] = 'hide';
+                    $comments[$i]['iconHide'] = 'icon fa-eye-slash';
+                } else {
+                    $comments[$i]['commandHide'] = 'open';
+                    $comments[$i]['iconHide'] = 'icon fa-eye';
+                }
+                // $comments[$i]['userId'] = User::getAuthorId($row['author']);
             }
-            // $comments[$i]['userId'] = User::getAuthorId($row['author']);
-        }
-        return $comments;
+            return $comments;
     }
 
     public static function openComment($tableId, $commentId)
@@ -435,5 +438,58 @@ class Admin
 
         $sql = "UPDATE `blog.loc_comments`.`{$tableId}_comments` SET `status` = 0 WHERE `id` = '$commentId'";
         $db->query($sql);
+    }
+
+    public static function deleteComment($tableId, $commentId)
+        /**
+         * удалить комментарий по @id
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "DELETE FROM `blog.loc_comments`.`{$tableId}_comments` WHERE `id` = '$commentId'";
+        $db->query($sql);
+    }
+
+    public static function getAllUsers()
+        /**
+         * получаем массив со всеми пользователями
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT * FROM `blog.loc`.users";
+        $result = $db->query($sql);
+
+        $users = [];
+        for($i = 1; $row = $result->fetch(); $i++){
+            $users[$i]['userName'] = $row['userName'];
+            $users[$i]['userSurname'] = $row['userSurname'];
+            $users[$i]['userId'] = $row['id'];
+            $users[$i]['userLogin'] = $row['userLogin'];
+            $users[$i]['userEmail'] = $row['userEmail'];
+            $users[$i]['userMessageSelf'] = $row['userMessageSelf'];
+            $users[$i]['userPseudonym'] = $row['userPseudonym'];
+        }
+        return $users;
+    }
+
+    public static function getUserDetails($userId)
+        /**
+         * получаем информацию о пользователе
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT * FROM `blog.loc`.users WHERE id = '$userId'";
+        return $db->query($sql)->fetch();
+    }
+
+    public static function getUserPosts($userId)
+        /**
+         * получаем опубликованные новости пользователя
+         */
+    {
+        return true;
     }
 }

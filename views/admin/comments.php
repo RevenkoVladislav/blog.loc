@@ -33,7 +33,7 @@
                                     <td class="align-center"><?=$comment['publishedDate'];?></td>
                                     <td class="align-center"><?=$comment['status'];?></td>
                                     <td class="align-center"><a href="/admin/comments/<?=$command;?>/<?=$id;?>/<?=$comment['commandHide'];?>/<?=$comment['id'];?>" class="<?php echo $comment['iconHide'] . ' '; if(!empty($comment['class'])){ echo $comment['class'];}?>"></a></td>
-                                    <td class="align-center"></td>
+                                    <td class="align-center"><a href="/admin/comments/<?=$command;?>/<?=$id;?>/delete/<?=$comment['id'];?>" class="icon fa-trash"></a></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>

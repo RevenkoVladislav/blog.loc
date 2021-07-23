@@ -119,7 +119,7 @@
                         </tbody>
                     </table>
                     <h3 class="align-center">WARNING !</h3>
-                    <p>If you need to create a new article, then you can do this through your personal account on the site and then edit it on this page</p>
+                    <p class="align-center">If you need to create a new article, then you can do this through your personal account on the site and then edit it on this page</p>
                 </div>
             </section>
         </article>

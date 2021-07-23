@@ -11,6 +11,7 @@
             <li><a href="admin/category">Go to category management</a></li>
             <li><a href="admin/news">Go to news management</a></li>
             <li><a href="admin/comments">Go to comments and likes management</a></li>
+            <li><a href="admin/users">Go to users management</a></li>
         </ul>
         </article>
     </div>

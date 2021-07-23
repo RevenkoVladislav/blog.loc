@@ -216,11 +216,36 @@ class AdminController
                     Admin::openComment($id, $commentId);
                     header("Location: /admin/comments/$command/$id");
                 }
+                if($commentCommand == 'delete'){
+                    Admin::deleteComment($id, $commentId);
+                    header("Location: /admin/comments/$command/$id");
+                }
             }
         } else {
             die('access denied');
         }
         require_once (ROOT . '/views/admin/comments.php');
+        return true;
+    }
+
+    public function actionUsers($command = false, $id = false)
+    {
+        if(Admin::checkAdmin()){
+            $users = Admin::getAllUsers();
+
+            $command = htmlspecialchars($command);
+            $id = intval(htmlspecialchars($id));
+            $showUser = false;
+
+            if($command == 'show'){
+                $showUser = true;
+                $userDetails = Admin::getUserDetails($id);
+                $userPost = Admin::getUserPosts($id);
+            }
+        } else {
+            die('access denied');
+        }
+        require_once (ROOT . '/views/admin/users.php');
         return true;
     }
 }

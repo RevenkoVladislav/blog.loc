@@ -1,6 +1,8 @@
 <?php
 return
     [
+        'admin/users/([a-z]+)/([0-9]+)' => 'admin/users/$1/$2', //actionUsers в AdminController
+        'admin/users' => 'admin/users', //actionUsers в AdminController
         'admin/comments/([a-z]+)/([0-9]+)/([a-z]+)/([0-9]+)' => 'admin/comments/$1/$2/$3/$4', //actionComments в AdminController
         'admin/comments/([a-z]+)/([0-9]+)' => 'admin/comments/$1/$2', //actionComments в AdminController
         'admin/comments' => 'admin/comments', //actionComments в AdminController
