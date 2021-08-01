@@ -11,7 +11,7 @@
 
         <?php if (!empty($showUser)): ?>
 
-            <h3 class="align-center">User Details</h3>
+            <h3 class="align-center">User Details - <?=$userDetails['userPseudonym'];?></h3>
                 <form method="post" action="" enctype="multipart/form-data">
 
             <?php if (!empty($errors)): ?>
@@ -25,37 +25,42 @@
 
                 <div class="row uniform">
 
-                    <div class="6u 12u$ (xsmall)">
+                    <div class="6u(xsmall)">
                         <label for="editUserName">User Name</label>
                         <input type="text" name="editUserName" id="editUserName" value="<?=$userDetails['userName'];?>" required>
                     </div>
 
-                    <div class="6u 12u$ (xsmall)">
+                    <div class="1u(xsmall)">
                         <label for="editUserAvatar">User Avatar</label>
                         <input type="file" name="editUserAvatar" id="editAvatar">
                     </div>
 
-                    <div class="6u 12u$ (xsmall)">
+                    <div class="1u 2u$ (xsmall)">
+                        <label for="avatar">Avatar</label>
+                        <p class="author" id="avatar"><img src="/views/images/<?=$userDetails['userAvatar'];?>" alt="" /></p>
+                    </div>
+
+                    <div class="6u(xsmall)">
                         <label for="editUserSurname">User Surname</label>
                         <input type="text" name="editUserSurname" id="editUserSurname" value="<?=$userDetails['userSurname'];?>" required>
                     </div>
 
-                    <div class="6u 12u$ (xsmall)">
+                    <div class="6u(xsmall)">
                         <label for="editUserLogin">User Login</label>
                         <input type="text" name="editUserLogin" id="editUserLogin" value="<?=$userDetails['userLogin'];?>" required>
                     </div>
 
-                    <div class="6u 12u$ (xsmall)">
+                    <div class="6u(xsmall)">
                         <label for="editUserEmail">User Email</label>
                         <input type="text" name="editUserEmail" id="editUserEmail" value="<?=$userDetails['userEmail'];?>" required>
                     </div>
 
-                    <div class="6u 12u$ (xsmall)">
+                    <div class="6u(xsmall)">
                         <label for="editUserPseudonym">User Pseudonym</label>
                         <input type="text" name="editUserPseudonym" id="editUserPseudonym" value="<?=$userDetails['userPseudonym'];?>" required>
                     </div>
 
-                    <div class="6u 12u$(xsmall)">
+                    <div class="6u 12u$ (xsmall)">
                         <label for="editUserMessageSelf">User Message</label>
                         <input type="text" name="editUserMessageSelf" id="editUserMessageSelf"
                                value="<?php if (!empty($editUserMessageSelf)) {
@@ -68,13 +73,15 @@
 
                     <div class="6u$ 12u$">
                         <ul class="actions fit">
-                            <li><input class="fit" name="adminEditUser" type="submit" value="Edit article"/></li>
+                            <li><input class="fit" name="adminEditUser" type="submit" value="Edit"/></li>
                             <li><input type="reset" value="Reset"/></li>
                         </ul>
                     </div>
                 </div>
             </form>
 
+            <h3 class="align-center">WARNING !</h3>
+            <p class="align-center">Do not change username, email and pseudonym unnecessarily</p>
             <?php endif; ?>
 
                 <h3 class="align-center">Users</h3>
@@ -90,6 +97,8 @@
                             <th class="align-center">User Pseudonym</th>
                             <th class="align-center">Show More/Edit</th>
                             <th class="align-center">Ban status</th>
+                            <th class="align-center">Default Avatar</th>
+                            <th class="align-center">Show Posts</th>
                             <th class="align-center">Delete</th>
                         </tr>
                         </thead>
@@ -104,6 +113,10 @@
                                 <td class="align-center"><?= $user['userEmail']; ?></td>
                                 <td class="align-center"><?= $user['userPseudonym']; ?></td>
                                 <td class="align-center"><a href="/admin/users/show/<?= $user['userId']; ?>" class="icon fa-eye"</td>
+                                <td class="align-center"><a href="<?=$user['banLink'];?>" class="<?=$user['banStatus'];?>"></a></td>
+                                <td class="align-center"><a href="/admin/users/defaultAvatar/<?=$user['userId'];?>" class="icon fa-image"></td>
+                                <td class="align-center">1</td>
+                                <td class="align-center"><a href="/admin/users/deleteUser/<?=$user['userId'];?>" class="icon fa-trash"></a></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

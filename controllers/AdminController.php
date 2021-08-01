@@ -230,22 +230,79 @@ class AdminController
 
     public function actionUsers($command = false, $id = false)
     {
-        if(Admin::checkAdmin()){
+        if (Admin::checkAdmin()) {
             $users = Admin::getAllUsers();
 
             $command = htmlspecialchars($command);
             $id = intval(htmlspecialchars($id));
             $showUser = false;
 
-            if($command == 'show'){
+            if ($command == 'show') {
                 $showUser = true;
                 $userDetails = Admin::getUserDetails($id);
                 $userPost = Admin::getUserPosts($id);
+
+                if (!empty($_POST['adminEditUser'])) {
+                    $userName = htmlspecialchars($_POST['editUserName']);
+                    $userSurname = htmlspecialchars($_POST['editUserSurname']);
+                    $userLogin = htmlspecialchars($_POST['editUserLogin']);
+                    $userEmail = htmlspecialchars($_POST['editUserEmail']);
+                    $userPseudonym = htmlspecialchars($_POST['editUserPseudonym']);
+                    $userMessage = htmlspecialchars($_POST['editUserMessageSelf']);
+
+                    if (!empty($_FILES['editUserAvatar']['size'])) {
+                        $tmpImage = $_FILES['editUserAvatar']['tmp_name']; //бинарный файл
+                        $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                        $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                        $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                        $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                        $finalImageName = $imageName . $imageFormat;
+                        $fileUpload = true;
+                    } else {
+                        $tmpImage = false;
+                        $imageSize = false;
+                        $finalImageName = false;
+                        $fileUpload = false;
+                    }
+                    $errors = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'avatar');
+
+                    if (empty($errors)) {
+                        if ($fileUpload) {
+                            User::deleteImageWhileEdit($id, 'avatar');
+                            User::uploadImage($tmpImage, $imageName, $imageFormat);
+                        }
+                        $editUser = Admin::editUser($userName, $userSurname, $userLogin, $userEmail, $userMessage, $userPseudonym,
+                            $finalImageName, $id);
+                        if ($editUser) {
+                            header("Location: /admin/users");
+                        }
+                    }
+                }
+            }
+
+            if($command == 'defaultAvatar'){
+                Admin::setDefaultAvatar($id);
+                header("Location: /admin/users");
+            }
+
+            if($command == 'deleteUser'){
+                Admin::deleteUsers($id);
+                header("Location: /admin/users");
+            }
+
+            if($command == 'banUser'){
+                Admin::banUser($id);
+                header("Location: /admin/users");
+            }
+
+            if($command == 'unbanUser'){
+                Admin::unbanUser($id);
+                header("Location: /admin/users");
             }
         } else {
-            die('access denied');
+                die('access denied');
+            }
+            require_once(ROOT . '/views/admin/users.php');
+            return true;
         }
-        require_once (ROOT . '/views/admin/users.php');
-        return true;
-    }
 }

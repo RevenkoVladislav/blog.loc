@@ -28,7 +28,7 @@
                             <?php foreach($comments as $comment): ?>
                                 <tr>
                                     <td class="align-center"><?=$comment['id'];?></td>
-                                    <td class="align-center"><?=$comment['author']?></td>
+                                    <td class="align-center"><a href="/admin/users/show/<?=$comment['authorId'];?>" ><?=$comment['author']?></a></td>
                                     <td class="align-center"><?=$comment['comment'];?></td>
                                     <td class="align-center"><?=$comment['publishedDate'];?></td>
                                     <td class="align-center"><?=$comment['status'];?></td>
@@ -75,7 +75,7 @@
                         <?php foreach($commentsAndLikes as $commentAndlike): ?>
                             <tr>
                                 <td class="align-center"><?=$commentAndlike['id'];?></td>
-                                <td class="align-center"><?=$commentAndlike['stateName'];?></td>
+                                <td class="align-center"><a href="/admin/news/edit/<?=$commentAndlike['id'];?>"><?=$commentAndlike['stateName'];?></a></td>
                                 <td class="align-center"><?=$commentAndlike['totalComments'];?></td>
                                 <td class="align-center"><?=$commentAndlike['totalLike'];?></td>
                                 <td class="align-center"><a href="/admin/comments/showComments/<?=$commentAndlike['id'];?>" class="icon fa-eye"></a></td>

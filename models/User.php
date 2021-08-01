@@ -742,16 +742,20 @@ class User
          */
     {
         $db = DB::dbConnection();
-        $checkImage = self::checkImageOnDefault($id);
+        $checkImage = self::checkImageOnDefault($id, $imageType);
 
         if($imageType == 'avatar') {
-            $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
-            $result = $db->query($sql)->fetch();
-            $filePath = $result['userAvatar'];
-            $sql = "UPDATE `blog.loc`.users SET userAvatar = 'noAvatar.jpg' WHERE id = '$id'";
-            $result = $db->query($sql);
+            if($checkImage == 'noAvatar.jpg') {
+                return false;
+            } else {
+                $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
+                $result = $db->query($sql)->fetch();
+                $filePath = $result['userAvatar'];
+                $sql = "UPDATE `blog.loc`.users SET userAvatar = 'noAvatar.jpg' WHERE id = '$id'";
+                $result = $db->query($sql);
+                }
             } elseif($imageType == 'image'){
-                if($checkImage != 'default.jpg') {
+                if($checkImage == 'default.jpg') {
                     return false;
                 } else {
                     $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
@@ -764,13 +768,21 @@ class User
         unlink(ROOT . "/views/images/$filePath");
     }
 
-    private static function checkImageOnDefault($id)
+    private static function checkImageOnDefault($id, $type)
         /**
          * проверка картинки на значение 'default'
          */
     {
         $db = DB::dbConnection();
-        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
-        return $db->query($sql)->fetch();
+        if($type == 'image') {
+            $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+            $result = $db->query($sql)->fetch();
+            return $result['imagePath'];
+        }
+        if($type == 'avatar'){
+            $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
+            $result = $db->query($sql)->fetch();
+            return $result['userAvatar'];
+        }
     }
 }

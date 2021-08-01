@@ -242,6 +242,7 @@ class Admin
                 $news[$i]['commandHide'] = 'open';
                 $news[$i]['iconHide'] = 'icon fa-eye';
             }
+            $news[$i]['authorId'] = User::getAuthorId($row['author']);
         }
         return $news;
     }
@@ -276,7 +277,7 @@ class Admin
     {
         $db = DB::dbConnection();
 
-        self::deleteImageById($id);
+        self::deleteImageById($id, 'image');
         $sql = "DELETE FROM `blog.loc`.news WHERE id = '$id'";
         $db->query($sql);
         $sql = "DROP TABLE `blog.loc_comments`.`{$id}_comments`";
@@ -333,20 +334,30 @@ class Admin
             return true;
         } else {
             $sql = "UPDATE `blog.loc`.news SET imagePath = 'default.jpg' WHERE id = '$id'";
-            self::deleteImageById($id);
+            self::deleteImageById($id, 'image');
             $db->query($sql);
         }
     }
 
-    private static function deleteImageById($id)
+    private static function deleteImageById($id, $type)
         /**
-         * Удаляет @image по @id
+         * Удаляет @image по @id и @type файла
          */
     {
         $db = DB::dbConnection();
-        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
-        $result = $db->query($sql)->fetch();
-        $filePath = $result['imagePath'];
+
+        if($type == 'image'){
+            $sql = "SELECT imagePath FROM `blog.loc`.news WHERE id = '$id'";
+            $result = $db->query($sql)->fetch();
+            $filePath = $result['imagePath'];
+        }
+
+        if($type == 'avatar'){
+            $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
+            $result = $db->query($sql)->fetch();
+            $filePath = $result['userAvatar'];
+        }
+
         unlink(ROOT . "/views/images/$filePath");
     }
 
@@ -413,7 +424,7 @@ class Admin
                     $comments[$i]['commandHide'] = 'open';
                     $comments[$i]['iconHide'] = 'icon fa-eye';
                 }
-                // $comments[$i]['userId'] = User::getAuthorId($row['author']);
+                    $comments[$i]['authorId'] = User::getAuthorId($row['author']);
             }
             return $comments;
     }
@@ -470,6 +481,13 @@ class Admin
             $users[$i]['userEmail'] = $row['userEmail'];
             $users[$i]['userMessageSelf'] = $row['userMessageSelf'];
             $users[$i]['userPseudonym'] = $row['userPseudonym'];
+            if(self::checkBan($row['userPseudonym']) == 0) {
+                $users[$i]['banStatus'] = 'icon fa-ban';
+                $users[$i]['banLink'] = "/admin/users/banUser/{$row['id']}";
+            } else {
+                $users[$i]['banStatus'] = 'icon fa-unlock';
+                $users[$i]['banLink'] = "/admin/users/unbanUser/{$row['id']}";
+            }
         }
         return $users;
     }
@@ -491,5 +509,113 @@ class Admin
          */
     {
         return true;
+    }
+
+    public static function editUser($userName, $userSurname, $userLogin, $userEmail, $userMessageSelf, $userPseudonym, $userAvatar, $id)
+        /**
+         * редактирование пользователя через админку
+         */
+    {
+        $db = DB::dbConnection();
+
+        if($userAvatar != false) {
+            $sql = "UPDATE `blog.loc`.users SET userName = '$userName', userSurname = '$userSurname', userLogin = '$userLogin', userEmail = '$userEmail', userMessageSelf = '$userMessageSelf', userPseudonym = '$userPseudonym', userAvatar = '$userAvatar' WHERE id = '$id'";
+            $edit = $db->query($sql);
+        }
+
+        if($userAvatar == false){
+            $sql = "UPDATE `blog.loc`.users SET userName = '$userName', userSurname = '$userSurname', userLogin = '$userLogin', userEmail = '$userEmail', userMessageSelf = '$userMessageSelf', userPseudonym = '$userPseudonym' WHERE id = '$id'";
+            $edit = $db->query($sql);
+        }
+
+        if($edit){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function setDefaultAvatar($id)
+        /**
+         * устанавливает значение @userAvatar = @noAvatar.jpg и удаляет имеющуюся картинку.
+         */
+    {
+        $db = DB::dbConnection();
+
+        $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
+        $result = $db->query($sql)->fetch();
+        $image = $result['userAvatar'];
+
+        if($image == 'noAvatar.jpg'){
+            return true;
+        } else {
+            $sql = "UPDATE `blog.loc`.users SET userAvatar = 'noAvatar.jpg' WHERE id = '$id'";
+            self::deleteImageById($id, 'avatar');
+            $db->query($sql);
+        }
+    }
+
+    public static function deleteUsers($id)
+        /**
+         * удалить пользователя по @id и @pseudonym и удалить ВСЮ таблицу с лайками для этого пользователя
+         * также удаляет загруженный аватар
+         */
+    {
+        $db = DB::dbConnection();
+        $userPseudonym = self::getUserPseudonym($id);
+
+        self::deleteImageById($id, 'avatar');
+        $sql = "DELETE FROM `blog.loc`.users WHERE id = '$id'";
+        $db->query($sql);
+        $sql = "DROP TABLE `blog.loc_likes`.`{$userPseudonym}_likes`";
+        $db->query($sql);
+    }
+
+    private static function checkBan($userPseudonym)
+        /**
+         * проверяет забанен ли пользователь по @Pseudonym
+         */
+    {
+        $db = DB::dbConnection();
+        $sql = "SELECT banStatus FROM `blog.loc`.bans WHERE userPseudonym = '$userPseudonym'";
+        $result = $db->query($sql)->fetch();
+
+        return $result['banStatus'];
+    }
+
+    public static function banUser($id)
+        /**
+         * выдает бан пользователю по @id
+         */
+    {
+        $db = DB::dbConnection();
+        $userPseudonym = self::getUserPseudonym($id);
+
+        $sql = "INSERT INTO `blog.loc`.bans SET banStatus = '1', userPseudonym = '$userPseudonym'";
+        $db->query($sql);
+    }
+
+    public static function unbanUser($id)
+        /**
+         * разбан пользователя по @id
+         */
+    {
+        $db = DB::dbConnection();
+        $userPseudonym = self::getUserPseudonym($id);
+
+        $sql = "INSERT INTO `blog.loc`.bans SET banStatus = '0', WHERE userPseudonym = '$userPseudonym'";
+        $db->query($sql);
+    }
+
+    private static function getUserPseudonym($id)
+        /**
+         * получить @pseudonym пользователя по @id
+         */
+    {
+        $db = DB::dbConnection();
+        $userPseudonym = $db->query("SELECT userPseudonym FROM `blog.loc`.users WHERE id = '$id'")->fetch();
+        $userPseudonym = $userPseudonym['userPseudonym'];
+        return $userPseudonym;
+        //доделать метод
     }
 }

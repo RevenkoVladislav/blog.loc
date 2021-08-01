@@ -45,6 +45,11 @@
                             <input type="file" name="editImage" id="editImage">
                         </div>
 
+                        <div class="1u 2u$ (xsmall)">
+                            <label for="image">Image</label>
+                            <p class="image" id="image"><img src="/views/images/<?=$editNew['imagePath'];?>" alt="" /></p>
+                        </div>
+
                         <div class="6u 12u$ (xsmall)">
                             <label for="editAuthor">Author</label>
                             <input type="text" name="editAuthor" id="editAuthor" value="<?=$editNew['author'];?>" required>
@@ -106,7 +111,7 @@
                         <?php foreach($news as $new): ;?>
                             <tr>
                                 <td class="align-center"><?=$new['id'];?></td>
-                                <td class="align-center"><?=$new['author'];?></td>
+                                <td class="align-center"><a href="/admin/users/show/<?=$new['authorId'];?>"><?=$new['author'];?></a></td>
                                 <td class="align-center"><?=$new['stateName'];?></td>
                                 <td class="align-center"><?=$new['stateCategory'];?></td>
                                 <td class="align-center"><?=$new['status'];?></td>
