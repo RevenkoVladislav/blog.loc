@@ -240,7 +240,6 @@ class AdminController
             if ($command == 'show') {
                 $showUser = true;
                 $userDetails = Admin::getUserDetails($id);
-                $userPost = Admin::getUserPosts($id);
 
                 if (!empty($_POST['adminEditUser'])) {
                     $userName = htmlspecialchars($_POST['editUserName']);
@@ -278,6 +277,12 @@ class AdminController
                         }
                     }
                 }
+            }
+
+            if($command == 'showPosts'){
+                $showPosts = true;
+                $userDetails = Admin::getUserDetails($id);
+                $userPosts = Admin::getUserPosts($userDetails['userPseudonym']);
             }
 
             if($command == 'defaultAvatar'){

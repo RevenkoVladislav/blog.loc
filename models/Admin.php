@@ -503,12 +503,26 @@ class Admin
         return $db->query($sql)->fetch();
     }
 
-    public static function getUserPosts($userId)
+    public static function getUserPosts($userPseudonym)
         /**
-         * получаем опубликованные новости пользователя
+         * получаем опубликованные новости пользователя по @userPseudonym
          */
     {
-        return true;
+        $db = DB::dbConnection();
+
+        $sql = "SELECT id, stateName, stateDescription, stateCategory FROM `blog.loc`.news WHERE author = '$userPseudonym'";
+        $result = $db->query($sql);
+
+        $posts = [];
+
+        for($i = 1; $row = $result->fetch(); $i++){
+            $posts[$i]['stateId'] = $row['id'];
+            $posts[$i]['stateName'] = $row['stateName'];
+            $posts[$i]['stateDescription'] = $row['stateDescription'];
+            $posts[$i]['stateCategory'] = $row['stateCategory'];
+        }
+
+        return $posts;
     }
 
     public static function editUser($userName, $userSurname, $userLogin, $userEmail, $userMessageSelf, $userPseudonym, $userAvatar, $id)
@@ -591,7 +605,11 @@ class Admin
         $db = DB::dbConnection();
         $userPseudonym = self::getUserPseudonym($id);
 
-        $sql = "INSERT INTO `blog.loc`.bans SET banStatus = '1', userPseudonym = '$userPseudonym'";
+        if(self::checkBan($userPseudonym) == '0'){
+            $sql = "UPDATE `blog.loc`.bans SET banStatus = '1' WHERE userPseudonym = '$userPseudonym'";
+        } else {
+            $sql = "INSERT INTO `blog.loc`.bans SET banStatus = '1', userPseudonym = '$userPseudonym'";
+        }
         $db->query($sql);
     }
 
@@ -603,7 +621,7 @@ class Admin
         $db = DB::dbConnection();
         $userPseudonym = self::getUserPseudonym($id);
 
-        $sql = "INSERT INTO `blog.loc`.bans SET banStatus = '0', WHERE userPseudonym = '$userPseudonym'";
+        $sql = "UPDATE `blog.loc`.bans SET banStatus = '0' WHERE userPseudonym = '$userPseudonym'";
         $db->query($sql);
     }
 
@@ -616,6 +634,5 @@ class Admin
         $userPseudonym = $db->query("SELECT userPseudonym FROM `blog.loc`.users WHERE id = '$id'")->fetch();
         $userPseudonym = $userPseudonym['userPseudonym'];
         return $userPseudonym;
-        //доделать метод
     }
 }

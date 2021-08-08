@@ -21,6 +21,7 @@ class NewsController
                 $newsById['state'] = News::renderStateText($newsById['state']);
                 $comments = News::getAllComments($id);
                 $checkAuth = User::checkAuth();
+                $userBan = User::getBanInfo($_SESSION['userPseudonym']);
 
                 /**
                  * если авторизованный пользователь это автор статьи, то доступна кнопка для перехода к редактированию
@@ -41,10 +42,12 @@ class NewsController
                         $comment = htmlspecialchars($_POST['comment']);
                         $commentDate = date("Y-m-d h:i:s", time());
 
-                        $result = News::sendComment($author, $comment, $commentDate, $id);
+                        if($userBan != true) {
+                            $result = News::sendComment($author, $comment, $commentDate, $id);
 
-                        if ($result) {
-                            header("Refresh:0");
+                            if ($result) {
+                                header("Refresh:0");
+                            }
                         }
                     }
 

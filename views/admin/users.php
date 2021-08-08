@@ -9,8 +9,40 @@
         <article class="post">
             <section>
 
-        <?php if (!empty($showUser)): ?>
+            <?php if(!empty($showPosts)): ?>
+            <h3 class="align-center">User Posts - <?=$userDetails['userPseudonym'];?></h3>
+                <?php if(empty($userPosts)): ?>
+                    <p class="align-center">This user has not posted anything.</p>
+                <?php else: ?>
+            <div class="table-wrapper">
+                <table class="alt">
+                    <thead>
+                    <tr>
+                        <th class="align-center">State Name</th>
+                        <th class="align-center">State Description</th>
+                        <th class="align-center">State Category</th>
+                    </tr>
+                    </thead>
 
+                    <tbody>
+
+                    <?php foreach($userPosts as $post): ?>
+                        <tr>
+                            <td class="align-center"><a href="/admin/news/edit/<?=$post['stateId'];?>"><?= $post['stateName']; ?></a></td>
+                            <td class="align-center"><?= $post['stateDescription']; ?></td>
+                            <td class="align-center"><?= $post['stateCategory']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <?php endif;?>
+        <?php endif;?>
+
+
+        <?php if (!empty($showUser)): ?>
             <h3 class="align-center">User Details - <?=$userDetails['userPseudonym'];?></h3>
                 <form method="post" action="" enctype="multipart/form-data">
 
@@ -115,7 +147,7 @@
                                 <td class="align-center"><a href="/admin/users/show/<?= $user['userId']; ?>" class="icon fa-eye"</td>
                                 <td class="align-center"><a href="<?=$user['banLink'];?>" class="<?=$user['banStatus'];?>"></a></td>
                                 <td class="align-center"><a href="/admin/users/defaultAvatar/<?=$user['userId'];?>" class="icon fa-image"></td>
-                                <td class="align-center">1</td>
+                                <td class="align-center"><a href="/admin/users/showPosts/<?=$user['userId'];?>" class="icon fa-info-circle"</td>
                                 <td class="align-center"><a href="/admin/users/deleteUser/<?=$user['userId'];?>" class="icon fa-trash"></a></td>
                             </tr>
                         <?php endforeach; ?>

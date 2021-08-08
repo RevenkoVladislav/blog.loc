@@ -238,43 +238,47 @@ class UserController
          */
         if(User::checkAuth()) {
             $categories = Category::getCategories();
+            $userBan = User::getBanInfo($_SESSION['userPseudonym']);
             $publication = false;
             $errors = [];
 
-            if (!empty($_POST['addArticle'])) {
-                $stateName = htmlspecialchars($_POST['stateName']);
-                $stateDescription = htmlspecialchars($_POST['stateDescription']);
-                $state = htmlspecialchars($_POST['state']);
-                $stateCategory = htmlspecialchars($_POST['stateCategory']);
+            if($userBan != true) {
+                if (!empty($_POST['addArticle'])) {
+                    $stateName = htmlspecialchars($_POST['stateName']);
+                    $stateDescription = htmlspecialchars($_POST['stateDescription']);
+                    $state = htmlspecialchars($_POST['state']);
+                    $stateCategory = htmlspecialchars($_POST['stateCategory']);
 
-                if (!empty($_FILES['stateImage']['size'])) {
-                    $tmpImage = $_FILES['stateImage']['tmp_name']; //бинарный файл
-                    $imageSize = getimagesize($tmpImage); //узнаем размер файла
-                    $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
-                    $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
-                    $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
-                    $finalImageName = $imageName . $imageFormat;
-                    $fileUpload = true;
-                } else {
-                    $tmpImage = false;
-                    $imageSize = false;
-                    $finalImageName = 'default.jpg';
-                    $fileUpload = false;
-                }
-
-                $errorsForm = User::validateArticle($stateName, $stateDescription, $state);
-                $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'image');
-                $errors = array_merge($errorsForm, $errorsFile);
-
-                if(empty($errors)){
-                    if($fileUpload) {
-                        User::uploadImage($tmpImage, $imageName, $imageFormat);
+                    if (!empty($_FILES['stateImage']['size'])) {
+                        $tmpImage = $_FILES['stateImage']['tmp_name']; //бинарный файл
+                        $imageSize = getimagesize($tmpImage); //узнаем размер файла
+                        $imageName = md5_file($tmpImage); //генерируем имя на основе md5-хеша
+                        $imageExtension = image_type_to_extension($imageSize[2]); //Генерируем расширение файла на основе его типа
+                        $imageFormat = str_replace('jpeg', 'jpg', $imageExtension);
+                        $finalImageName = $imageName . $imageFormat;
+                        $fileUpload = true;
+                    } else {
+                        $tmpImage = false;
+                        $imageSize = false;
+                        $finalImageName = 'default.jpg';
+                        $fileUpload = false;
                     }
-                    $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory, $finalImageName);
-                    User::createCommentsTable(User::getPublicationId($stateName));
 
-                    if($publication){
-                        header("Location: /news/$publication");
+                    $errorsForm = User::validateArticle($stateName, $stateDescription, $state);
+                    $errorsFile = User::fileValidate($tmpImage, $imageSize, $finalImageName, $fileUpload, 'image');
+                    $errors = array_merge($errorsForm, $errorsFile);
+
+                    if (empty($errors)) {
+                        if ($fileUpload) {
+                            User::uploadImage($tmpImage, $imageName, $imageFormat);
+                        }
+                        $publication = User::addArticle($stateName, $stateDescription, $state, $stateCategory,
+                            $finalImageName);
+                        User::createCommentsTable(User::getPublicationId($stateName));
+
+                        if ($publication) {
+                            header("Location: /news/$publication");
+                        }
                     }
                 }
             }

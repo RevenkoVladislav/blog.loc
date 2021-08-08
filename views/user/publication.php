@@ -7,7 +7,13 @@
     <div id="main">
         <article class="post">
             <section>
-                <h3 class="align-center">Add article</h3>
+                <?php if($userBan): ;?>
+                    <h3 class="error align-center">You profile are banned</h3>
+                    <p class="error align-center">Your profile has been banned for violating the site rules. For all your questions, you can contact us</p>
+                <?php else: ;?>
+
+                    <h3 class="align-center">Add article</h3>
+
                 <form method="post" action="" enctype="multipart/form-data">
                     <?php if(!empty($errors)): ?>
                         <div class="4u$ 12u$(small)">
@@ -57,6 +63,7 @@
                         </div>
                     </div>
                 </form>
+                <?php endif;?>
             </section>
         </article>
     </div>

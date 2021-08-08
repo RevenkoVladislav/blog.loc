@@ -55,13 +55,17 @@
                         <?php if($checkAuth === true): ?>
 
                         <article class="post" id="comments">
+                            <?php if($userBan): ?>
+                                <h3 class="error align-center">You profile are banned</h3>
+                                <p class="error align-center">Your profile has been banned for violating the site rules. For all your questions, you can contact us</p>
+                            <?php else: ?>
                             <form method="post" action="">
                                 <div class="row uniform">
 
                                     <div class="12u$">
                                         <label for="comment">Send your comment</label>
                                         <textarea name="comment" id="comment" placeholder="Send your comment" rows="6" required></textarea>
-                                    </div>
+                                            </div>
 
                                     <div class="6u$ 12u$">
                                         <ul class="actions fit">
@@ -71,6 +75,7 @@
                                     </div>
                                 </div>
                             </form>
+                            <?php endif; ?>
                         </article>
 
                             <article class="post">

@@ -654,14 +654,18 @@ class User
         move_uploaded_file($tmpImage, ROOT . '/views/images/' . $imageName . $imageFormat);
     }
 
-    private static function checkFileName($finalImageName)
+    private static function checkFileName($finalImageName, $fileType)
         /**
          * проверка @fileName для загружаемого файла
          */
     {
         $db = DB::dbConnection();
 
-        $sql = "SELECT imagePath FROM `blog.loc`.news WHERE imagePath = '$finalImageName'";
+        if($fileType == 'image'){
+            $sql = "SELECT imagePath FROM `blog.loc`.news WHERE imagePath = '$finalImageName'";
+        } elseif($fileType == 'avatar'){
+            $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE userAvatar = '$finalImageName'";
+        }
         $result = $db->query($sql)->fetch();
         return $result;
     }
@@ -714,7 +718,7 @@ class User
                 $errors[] = "Image width should not exceed $limitWidth pixels.";
             }
 
-            if (self::checkFileName($finalImageName)) {
+            if (self::checkFileName($finalImageName, $imageType)) {
                 $errors[] = 'A file with the same name already exists. Please rename the file and try uploading again';
             }
         }
@@ -783,6 +787,22 @@ class User
             $sql = "SELECT userAvatar FROM `blog.loc`.users WHERE id = '$id'";
             $result = $db->query($sql)->fetch();
             return $result['userAvatar'];
+        }
+    }
+
+    public static function getBanInfo($userPseudonym)
+        /**
+         * забанен ли пользователь с @userPseudonym
+         */
+    {
+        $db = DB::dbConnection();
+        $sql = "SELECT userPseudonym, banStatus FROM `blog.loc`.bans WHERE userPseudonym ='$userPseudonym'";
+        $result = $db->query($sql)->fetch();
+
+        if($result['banStatus'] == '0' or empty($result['banStatus']) or $result['banStatus'] == NULL){
+            return false;
+        } else {
+            return true;
         }
     }
 }
